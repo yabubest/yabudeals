@@ -6,12 +6,45 @@
     <title>YabuDeals – Beste Deals & Rabatte entdecken</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Spezifisches CSS nur für die Deals-Startseite */
         .hero { text-align: center; padding: 40px 20px 16px; max-width: 800px; margin: 0 auto; }
         .hero h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
         .hero p { color: var(--text-muted); font-size: 1.05rem; }
         
         .filter-section { max-width: 1280px; margin: 16px auto 32px; padding: 0 20px; display: flex; flex-direction: column; gap: 16px; }
+        
+        /* SHOP FILTER TABS */
+        .shop-tabs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .shop-tab-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 10px 22px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+
+        .shop-tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .shop-tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
         .search-bar-row { display: flex; gap: 12px; flex-wrap: wrap; }
         .search-bar-row input, .search-bar-row select { padding: 12px 18px; border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; outline: none; background: var(--card-bg); }
         .search-bar-row input { flex: 2; min-width: 260px; }
@@ -22,9 +55,15 @@
         .pill:hover, .pill.active { background: var(--primary); color: white; border-color: var(--primary); }
 
         .deals-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 24px; max-width: 1280px; margin: 0 auto 60px; padding: 0 20px; }
-        .deal-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
-        .badge-discount { position: absolute; top: 14px; right: 14px; background: var(--badge-red); color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; }
-        .badge-shop { position: absolute; top: 14px; left: 14px; background: #fff3e6; color: #d97706; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; border: 1px solid #fde68a; }
+        .deal-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s, box-shadow 0.2s; }
+        .deal-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+        
+        .badge-discount { position: absolute; top: 14px; right: 14px; background: #ef4444; color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; z-index: 2; }
+        
+        /* SHOP BADGES ON CARDS */
+        .badge-shop-amazon { position: absolute; top: 14px; left: 14px; background: #fff3e6; color: #d97706; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; border: 1px solid #fde68a; z-index: 2; }
+        .badge-shop-ali { position: absolute; top: 14px; left: 14px; background: #fef2f2; color: #dc2626; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; border: 1px solid #fecaca; z-index: 2; }
+
         .img-container { width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; margin: 20px 0 16px; }
         .img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
         .category-tag { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
@@ -32,7 +71,13 @@
         .price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; }
         .offer-price { font-size: 1.4rem; font-weight: 800; color: #b91c1c; }
         .regular-price { font-size: 0.88rem; color: var(--text-muted); text-decoration: line-through; }
-        .btn-buy { display: block; width: 100%; text-align: center; background: var(--btn-amazon); color: #0f1111; text-decoration: none; padding: 12px 0; border-radius: 10px; font-weight: 700; border: 1px solid #fcd200; }
+        
+        .btn-buy-amazon { display: block; width: 100%; text-align: center; background: #ffd814; color: #0f1111; text-decoration: none; padding: 12px 0; border-radius: 10px; font-weight: 700; border: 1px solid #fcd200; transition: background 0.2s; }
+        .btn-buy-amazon:hover { background: #f7ca00; }
+        
+        .btn-buy-ali { display: block; width: 100%; text-align: center; background: #ff4747; color: #ffffff; text-decoration: none; padding: 12px 0; border-radius: 10px; font-weight: 700; border: 1px solid #e03131; transition: background 0.2s; }
+        .btn-buy-ali:hover { background: #e03131; }
+
         .no-deals { text-align: center; grid-column: 1 / -1; padding: 60px 20px; color: var(--text-muted); font-size: 1.1rem; }
     </style>
 </head>
@@ -42,33 +87,43 @@
     <div id="global-header"></div>
 
     <div style="flex: 1;">
+        <!-- HERO -->
         <div class="hero">
             <h1>Beste Deals & Rabatte entdecken</h1>
-            <p>Automatisch geprüfte Schnäppchen & Top-Angebote auf einen Blick.</p>
+            <p>Die besten Schnäppchen von Amazon & AliExpress auf einen Blick.</p>
         </div>
 
         <div class="filter-section">
+            <!-- SHOP TABS (ALLE / AMAZON / ALIEXPRESS) -->
+            <div class="shop-tabs">
+                <button class="shop-tab-btn active" onclick="setShopFilter('all', this)">🛍️ Alle Shops</button>
+                <button class="shop-tab-btn" onclick="setShopFilter('amazon', this)">📦 Amazon Deals</button>
+                <button class="shop-tab-btn" onclick="setShopFilter('ali', this)">🌐 AliExpress Deals</button>
+            </div>
+
+            <!-- SEARCH & CATEGORY SELECT -->
             <div class="search-bar-row">
-                <input type="text" id="searchInput" placeholder="Produkt suchen (z.B. Hülle, Stuhl)..." onkeyup="filterDeals()">
+                <input type="text" id="searchInput" placeholder="Produkt suchen (z.B. Hülle, Stuhl, Kopfhörer)..." onkeyup="filterDeals()">
                 <select id="categoryFilter" onchange="onCategorySelectChange()">
                     <option value="">Alle 12 Kategorien</option>
                 </select>
             </div>
             
+            <!-- CATEGORY PILLS -->
             <div class="category-pills" id="categoryPills">
                 <button class="pill active" onclick="selectPill('', this)">Alle</button>
             </div>
         </div>
 
+        <!-- DEALS GRID -->
         <div class="deals-grid" id="dealsContainer">
-            <div class="no-deals">Lade aktuelle Deals...</div>
+            <div class="no-deals">Lade aktuelle Angebote...</div>
         </div>
     </div>
 
     <!-- GLOBALE FUSSZEILE -->
     <div id="global-footer"></div>
 
-    <!-- SKRIPTE -->
     <script src="components.js"></script>
     <script>
         const ALL_12_CATEGORIES = [
@@ -79,6 +134,7 @@
         ];
 
         let allDeals = [];
+        let currentShop = 'all'; // 'all', 'amazon', 'ali'
         let selectedCategory = '';
 
         function formatPrice(val) {
@@ -89,14 +145,36 @@
             return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
         }
 
-        async function fetchDeals() {
+        // BEIDE JSON-DATEIEN LASSEN SICH PARALLEL LADEN
+        async function fetchAllDeals() {
             try {
-                const response = await fetch('deals.json');
-                if (!response.ok) throw new Error('Fehler beim Laden');
-                allDeals = await response.json();
+                let amazonDeals = [];
+                let aliDeals = [];
+
+                // 1. Amazon JSON laden
+                try {
+                    const resAmz = await fetch('deals.json');
+                    if (resAmz.ok) {
+                        const amzData = await resAmz.json();
+                        amazonDeals = amzData.map(d => ({ ...d, _shop: 'amazon' }));
+                    }
+                } catch(e) {}
+
+                // 2. AliExpress JSON laden
+                try {
+                    const resAli = await fetch('aliexpress-deals.json');
+                    if (resAli.ok) {
+                        const aliData = await resAli.json();
+                        aliDeals = aliData.map(d => ({ ...d, _shop: 'ali' }));
+                    }
+                } catch(e) {}
+
+                // Kombinieren
+                allDeals = [...amazonDeals, ...aliDeals];
                 populate12Categories();
-                renderDeals(allDeals);
+                filterDeals();
             } catch (error) {
+                console.error(error);
                 document.getElementById('dealsContainer').innerHTML = 
                     '<div class="no-deals">Aktuell sind keine Deals erreichbar.</div>';
             }
@@ -118,6 +196,13 @@
                 btn.onclick = () => selectPill(cat, btn);
                 pillsContainer.appendChild(btn);
             });
+        }
+
+        function setShopFilter(shop, element) {
+            currentShop = shop;
+            document.querySelectorAll('.shop-tab-btn').forEach(b => b.classList.remove('active'));
+            if (element) element.classList.add('active');
+            filterDeals();
         }
 
         function selectPill(cat, element) {
@@ -149,32 +234,44 @@
             }
 
             container.innerHTML = deals.map(deal => {
+                const isAli = deal._shop === 'ali';
+                const shopBadge = isAli 
+                    ? `<div class="badge-shop-ali">🌐 AliExpress</div>` 
+                    : `<div class="badge-shop-amazon">📦 Amazon</div>`;
+                
+                const btnClass = isAli ? 'btn-buy-ali' : 'btn-buy-amazon';
+                
                 const title = deal['Produkt-Titel'] || deal.title || deal.kurzTitel || 'Angebot';
-                const image = deal['Bild-URL (Optional)'] || deal.image || 'https://via.placeholder.com/250';
-                const offerPriceFormatted = formatPrice(deal['Angebotspreis (€)'] || deal.offerPrice);
+                const image = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal.image || 'https://via.placeholder.com/250';
+                
+                const offerPriceFormatted = formatPrice(deal['Angebotspreis (€)'] || deal['Preis (€)'] || deal.offerPrice);
                 const rawReg = deal['Regulärer Preis (€)'] || deal.regularPrice;
                 const regPriceFormatted = rawReg ? formatPrice(rawReg) : '';
+
                 const discount = deal['Rabatt (z.B. 30% Rabatt)'] || deal.discount || '';
                 const category = deal['Kategorie'] || deal.category || 'Angebot';
-                const link = deal['Link: ybbst-21'] || deal.link_ybbst || '#';
+                const link = deal['Link: ybbst-21'] || deal['Link'] || deal.link_ybbst || '#';
 
                 return `
                     <div class="deal-card">
-                        <div class="badge-shop">📦 Amazon</div>
+                        ${shopBadge}
                         ${discount ? `<div class="badge-discount">${discount}</div>` : ''}
+                        
                         <div class="img-container">
                             <img src="${image}" alt="${title}" loading="lazy">
                         </div>
+                        
                         <div>
                             <div class="category-tag">${category}</div>
                             <div class="deal-title" title="${title}">${title}</div>
                         </div>
+
                         <div>
                             <div class="price-row">
                                 <span class="offer-price">${offerPriceFormatted}</span>
                                 ${regPriceFormatted ? `<span class="regular-price">statt ${regPriceFormatted}</span>` : ''}
                             </div>
-                            <a href="${link}" target="_blank" rel="nofollow" class="btn-buy">Zum Angebot &rarr;</a>
+                            <a href="${link}" target="_blank" rel="nofollow" class="${btnClass}">Zum Angebot &rarr;</a>
                         </div>
                     </div>
                 `;
@@ -183,17 +280,26 @@
 
         function filterDeals() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
             const filtered = allDeals.filter(deal => {
+                // Shop Filter
+                if (currentShop === 'amazon' && deal._shop !== 'amazon') return false;
+                if (currentShop === 'ali' && deal._shop !== 'ali') return false;
+
+                // Suche & Kategorie
                 const title = (deal['Produkt-Titel'] || deal.title || '').toLowerCase();
                 const category = deal['Kategorie'] || deal.category || '';
+                
                 const matchesSearch = title.includes(searchTerm);
                 const matchesCategory = selectedCategory === '' || category.toLowerCase().includes(selectedCategory.toLowerCase());
+
                 return matchesSearch && matchesCategory;
             });
+
             renderDeals(filtered);
         }
 
-        fetchDeals();
+        fetchAllDeals();
     </script>
 </body>
 </html>
