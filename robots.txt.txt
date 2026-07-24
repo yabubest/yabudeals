@@ -1,0 +1,14 @@
+robots.txt für https://www.yabubest.de/
+User-agent: * Allow: /
+Sitemap-Referenz
+Sitemap: https://www.yabubest.de/sitemap.xml
+KI-Search-Bots & Crawler Freigabe
+User-agent: GPTBot Allow: /
+User-agent: ChatGPT-User Allow: /
+User-agent: PerplexityBot Allow: /
+User-agent: ClaudeBot Allow: /
+User-agent: Google-Extended Allow: /
+User-agent: CCBot Allow: /
+expand
+tune
+chatspark
