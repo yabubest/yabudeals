@@ -14,7 +14,10 @@
             --text-muted: #64748b;
             --border: #e2e8f0;
             --badge-red: #ef4444;
-            --badge-green: #22c55e;
+            --badge-amazon: #ff9900;
+            --badge-ali: #ff4747;
+            --btn-amazon: #ffd814;
+            --btn-amazon-hover: #f7ca00;
         }
 
         * {
@@ -27,125 +30,216 @@
         body {
             background-color: var(--bg-gray);
             color: var(--text-main);
-            padding-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
+        /* HEADER */
         header {
             background: var(--card-bg);
             border-bottom: 1px solid var(--border);
-            padding: 15px 20px;
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.6rem;
+            font-weight: 800;
             color: var(--primary);
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         nav a {
-            margin-left: 15px;
             text-decoration: none;
             color: var(--text-muted);
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s;
         }
 
         nav a:hover, nav a.active {
             color: var(--primary);
         }
 
+        /* HERO */
         .hero {
             text-align: center;
-            padding: 40px 20px 20px;
+            padding: 48px 20px 16px;
             max-width: 800px;
             margin: 0 auto;
         }
 
         .hero h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            letter-spacing: -0.8px;
         }
 
         .hero p {
             color: var(--text-muted);
+            font-size: 1.1rem;
         }
 
-        .search-container {
-            max-width: 1000px;
-            margin: 20px auto 30px;
+        /* SEARCH & FILTER SECTION */
+        .filter-section {
+            max-width: 1280px;
+            margin: 16px auto 32px;
             padding: 0 20px;
             display: flex;
-            gap: 10px;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .search-bar-row {
+            display: flex;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
-        .search-container input, .search-container select {
-            padding: 12px 16px;
+        .search-bar-row input, .search-bar-row select {
+            padding: 12px 18px;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
             outline: none;
             background: var(--card-bg);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: border-color 0.2s;
         }
 
-        .search-container input {
+        .search-bar-row input:focus, .search-bar-row select:focus {
+            border-color: var(--primary);
+        }
+
+        .search-bar-row input {
+            flex: 2;
+            min-width: 260px;
+        }
+
+        .search-bar-row select {
             flex: 1;
-            min-width: 250px;
+            min-width: 180px;
+        }
+
+        /* CATEGORY PILLS */
+        .category-pills {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: thin;
+        }
+
+        .pill {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .pill:hover, .pill.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* DEALS GRID */
+        .main-content {
+            flex: 1;
         }
 
         .deals-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 24px;
+            max-width: 1280px;
+            margin: 0 auto 60px;
             padding: 0 20px;
         }
 
         .deal-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 16px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .deal-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
         }
 
         .badge-discount {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 14px;
+            right: 14px;
             background: var(--badge-red);
             color: white;
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 4px 10px;
+            border-radius: 8px;
             font-size: 0.8rem;
-            font-weight: bold;
+            font-weight: 700;
+            z-index: 2;
+        }
+
+        .badge-shop {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: #fff3e6;
+            color: #d97706;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 2;
+            border: 1px solid #fde68a;
         }
 
         .img-container {
             width: 100%;
-            height: 180px;
+            height: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 15px;
+            margin: 20px 0 16px;
+            padding: 10px;
         }
 
         .img-container img {
@@ -158,36 +252,39 @@
             font-size: 0.75rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 5px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            margin-bottom: 6px;
         }
 
         .deal-title {
             font-size: 0.95rem;
             font-weight: 600;
-            line-height: 1.4;
-            margin-bottom: 15px;
+            line-height: 1.45;
+            color: var(--text-main);
+            margin-bottom: 16px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            height: 2.8em;
         }
 
         .price-row {
             display: flex;
             align-items: baseline;
-            gap: 8px;
-            margin-bottom: 15px;
+            gap: 10px;
+            margin-bottom: 18px;
         }
 
         .offer-price {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--text-main);
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #b91c1c;
         }
 
         .regular-price {
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             color: var(--text-muted);
             text-decoration: line-through;
         }
@@ -196,74 +293,221 @@
             display: block;
             width: 100%;
             text-align: center;
-            background: #ffd814;
+            background: var(--btn-amazon);
             color: #0f1111;
             text-decoration: none;
-            padding: 10px 0;
-            border-radius: 8px;
-            font-weight: bold;
+            padding: 12px 0;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
             border: 1px solid #fcd200;
-            transition: background 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background 0.2s, transform 0.1s;
         }
 
         .btn-buy:hover {
-            background: #f7ca00;
+            background: var(--btn-amazon-hover);
         }
 
         .no-deals {
             text-align: center;
             grid-column: 1 / -1;
-            padding: 40px;
+            padding: 60px 20px;
             color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 48px 20px 24px;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3, .footer-col h4 {
+            color: #f8fafc;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+
+        .footer-col p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul li a:hover {
+            color: #ffffff;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            background: #1e293b;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: background 0.2s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 24px;
+            border-top: 1px solid #1e293b;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #64748b;
         }
     </style>
 </head>
 <body>
 
+    <!-- HEADER -->
     <header>
-        <a href="/" class="logo">🚀 YabuDeals</a>
-        <nav>
-            <a href="/" class="active">Startseite</a>
-            <a href="/blog.html">Blog & Ratgeber</a>
-        </nav>
+        <div class="header-content">
+            <a href="/" class="logo">🚀 YabuDeals</a>
+            <nav>
+                <a href="/" class="active">Startseite</a>
+                <a href="/blog.html">Blog & Ratgeber</a>
+            </nav>
+        </div>
     </header>
 
-    <div class="hero">
-        <h1>Beste Deals & Rabatte entdecken</h1>
-        <p>Automatisch aktualisierte Top-Angebote direkt aus unserer Community.</p>
+    <div class="main-content">
+        <!-- HERO -->
+        <div class="hero">
+            <h1>Beste Deals & Rabatte entdecken</h1>
+            <p>Schnäppchen & Top-Angebote automatisch aktualisiert auf einen Blick.</p>
+        </div>
+
+        <!-- SEARCH & FILTER SECTION -->
+        <div class="filter-section">
+            <div class="search-bar-row">
+                <input type="text" id="searchInput" placeholder="Produkt suchen (z.B. Hülle, Stuhl, Spiegel)..." onkeyup="filterDeals()">
+                <select id="categoryFilter" onchange="onCategorySelectChange()">
+                    <option value="">Alle Kategorien</option>
+                </select>
+            </div>
+            <!-- Dynamic Category Pills -->
+            <div class="category-pills" id="categoryPills">
+                <button class="pill active" onclick="selectPill('', this)">Alle</button>
+            </div>
+        </div>
+
+        <!-- DEALS GRID -->
+        <div class="deals-grid" id="dealsContainer">
+            <div class="no-deals">Lade aktuelle Deals...</div>
+        </div>
     </div>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Produkt suchen (z.B. Hülle, Stuhl, Teppich)..." onkeyup="filterDeals()">
-        <select id="categoryFilter" onchange="filterDeals()">
-            <option value="">Alle Kategorien</option>
-        </select>
-    </div>
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>🚀 YabuDeals</h3>
+                <p>Deine Plattform für die besten Schnäppchen, Rabatte und Angebote aus dem Netz. Automatisch geprüft und aktualisiert.</p>
+                <div class="social-links">
+                    <a href="https://t.me/yabubest_deals" target="_blank" title="Telegram">✈️</a>
+                    <a href="#" target="_blank" title="TikTok">🎵</a>
+                    <a href="#" target="_blank" title="YouTube">▶️</a>
+                </div>
+            </div>
 
-    <div class="deals-grid" id="dealsContainer">
-        <div class="no-deals">Lade aktuelle Deals...</div>
-    </div>
+            <div class="footer-col">
+                <h4>Kategorien</h4>
+                <ul>
+                    <li><a href="#" onclick="filterByCat('Elektronik & Foto'); return false;">Elektronik & Foto</a></li>
+                    <li><a href="#" onclick="filterByCat('Küche, Haushalt & Wohnen'); return false;">Küche & Wohnen</a></li>
+                    <li><a href="#" onclick="filterByCat('Möbel & Einrichtung'); return false;">Möbel & Einrichtung</a></li>
+                    <li><a href="#" onclick="filterByCat('Schuhe & Handtaschen'); return false;">Schuhe & Fashion</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Informationen</h4>
+                <ul>
+                    <li><a href="/blog.html">Blog & Ratgeber</a></li>
+                    <li><a href="/impressum.html">Impressum</a></li>
+                    <li><a href="/datenschutz.html">Datenschutz</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 YabuDeals. Alle Rechte vorbehalten. Alle Preise inkl. MwSt. zzgl. Versandkosten.</p>
+        </div>
+    </footer>
 
     <script>
         let allDeals = [];
+        let selectedCategory = '';
 
-        // Deals aus der von n8n generierten deals.json laden
+        // Preise formatieren
+        function formatPrice(val) {
+            if (!val && val !== 0) return '';
+            let str = String(val).replace('€', '').trim();
+            let num = parseFloat(str.replace(',', '.'));
+            if (isNaN(num)) return str + ' €';
+            return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+        }
+
+        // Deals laden
         async function fetchDeals() {
             try {
                 const response = await fetch('deals.json');
-                if (!response.ok) throw new Error('Netzwerk-Fehler beim Laden der deals.json');
+                if (!response.ok) throw new Error('Fehler beim Laden');
                 
                 allDeals = await response.json();
                 populateCategories();
                 renderDeals(allDeals);
             } catch (error) {
-                console.error('Fehler:', error);
+                console.error(error);
                 document.getElementById('dealsContainer').innerHTML = 
                     '<div class="no-deals">Aktuell sind keine Deals erreichbar. Bitte später erneut versuchen.</div>';
             }
         }
 
-        // Dynamisch Kategorien für das Filter-Menü erstellen
+        // Kategorien in Dropdown & Pills eintragen
         function populateCategories() {
             const categories = new Set();
             allDeals.forEach(deal => {
@@ -272,15 +516,55 @@
             });
 
             const select = document.getElementById('categoryFilter');
+            const pillsContainer = document.getElementById('categoryPills');
+
             categories.forEach(cat => {
+                // Dropdown Option
                 const option = document.createElement('option');
                 option.value = cat;
                 option.textContent = cat;
                 select.appendChild(option);
+
+                // Pill Button
+                const btn = document.createElement('button');
+                btn.className = 'pill';
+                btn.textContent = cat;
+                btn.onclick = () => selectPill(cat, btn);
+                pillsContainer.appendChild(btn);
             });
         }
 
-        // Deals auf der Seite rendern
+        function selectPill(cat, element) {
+            selectedCategory = cat;
+            document.getElementById('categoryFilter').value = cat;
+
+            document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+            if (element) element.classList.add('active');
+
+            filterDeals();
+        }
+
+        function onCategorySelectChange() {
+            const cat = document.getElementById('categoryFilter').value;
+            selectedCategory = cat;
+
+            document.querySelectorAll('.pill').forEach(p => {
+                if (p.textContent === cat || (cat === '' && p.textContent === 'Alle')) {
+                    p.classList.add('active');
+                } else {
+                    p.classList.remove('active');
+                }
+            });
+
+            filterDeals();
+        }
+
+        function filterByCat(cat) {
+            selectPill(cat, Array.from(document.querySelectorAll('.pill')).find(p => p.textContent === cat));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Deals auf Seite zeichnen
         function renderDeals(deals) {
             const container = document.getElementById('dealsContainer');
             if (!deals || deals.length === 0) {
@@ -289,38 +573,46 @@
             }
 
             container.innerHTML = deals.map(deal => {
-                const title = deal['Produkt-Titel'] || deal.title || deal.kurzTitel || 'Amazon Angebot';
+                const title = deal['Produkt-Titel'] || deal.title || deal.kurzTitel || 'Angebot';
                 const image = deal['Bild-URL (Optional)'] || deal.image || 'https://via.placeholder.com/250';
-                const offerPrice = deal['Angebotspreis (€)'] || deal.offerPrice || 'N/A';
-                const regPrice = deal['Regulärer Preis (€)'] || deal.regularPrice || '';
-                const discount = deal['Rabatt (z.B. 30% Rabatt)'] || deal.discount || '';
-                const category = deal['Kategorie'] || deal.category || 'Deal';
                 
-                // Nutzt den ersten verfügbaren Affiliate-Link
+                const offerPriceFormatted = formatPrice(deal['Angebotspreis (€)'] || deal.offerPrice);
+                const rawReg = deal['Regulärer Preis (€)'] || deal.regularPrice;
+                const regPriceFormatted = rawReg ? formatPrice(rawReg) : '';
+
+                const discount = deal['Rabatt (z.B. 30% Rabatt)'] || deal.discount || '';
+                const category = deal['Kategorie'] || deal.category || 'Angebot';
                 const link = deal['Link: ybbst-21'] || deal.link_ybbst || deal['Link: yabubestshop00-21'] || '#';
 
                 return `
                     <div class="deal-card">
+                        <div class="badge-shop">📦 Amazon</div>
                         ${discount ? `<div class="badge-discount">${discount}</div>` : ''}
+                        
                         <div class="img-container">
                             <img src="${image}" alt="${title}" loading="lazy">
                         </div>
-                        <div class="category-tag">${category}</div>
-                        <div class="deal-title" title="${title}">${title}</div>
-                        <div class="price-row">
-                            <span class="offer-price">${offerPrice}</span>
-                            ${regPrice ? `<span class="regular-price">statt ${regPrice}</span>` : ''}
+                        
+                        <div>
+                            <div class="category-tag">${category}</div>
+                            <div class="deal-title" title="${title}">${title}</div>
                         </div>
-                        <a href="${link}" target="_blank" rel="nofollow" class="btn-buy">Zum Angebot &rarr;</a>
+
+                        <div>
+                            <div class="price-row">
+                                <span class="offer-price">${offerPriceFormatted}</span>
+                                ${regPriceFormatted ? `<span class="regular-price">statt ${regPriceFormatted}</span>` : ''}
+                            </div>
+                            <a href="${link}" target="_blank" rel="nofollow" class="btn-buy">Zum Angebot &rarr;</a>
+                        </div>
                     </div>
                 `;
             }).join('');
         }
 
-        // Such- & Filterfunktion
+        // Filter anwenden
         function filterDeals() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const selectedCategory = document.getElementById('categoryFilter').value;
 
             const filtered = allDeals.filter(deal => {
                 const title = (deal['Produkt-Titel'] || deal.title || '').toLowerCase();
@@ -335,7 +627,6 @@
             renderDeals(filtered);
         }
 
-        // Beim Laden der Seite ausführen
         fetchDeals();
     </script>
 </body>
