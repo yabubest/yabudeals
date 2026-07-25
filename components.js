@@ -14,8 +14,6 @@ function loadGlobalHeader() {
                 <a href="/" class="logo">🚀 YabuDeals</a>
                 <nav class="nav-links">
                     <a href="/">Startseite</a>
-                    <a href="/amazon.html">📦 Amazon</a>
-                    <a href="/aliexpress.html">🌐 AliExpress</a>
                     <a href="/blog.html">Blog & Ratgeber</a>
                 </nav>
             </div>
