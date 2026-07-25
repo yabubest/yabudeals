@@ -69,16 +69,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ============================================================
-   DEAL-ENGINE – Flexibel für Amazon & AliExpress
+   DEAL-ENGINE – Liest alle Spaltennamen flexibel aus
    ============================================================ */
 
 function formatPrice(val) {
     if (!val && val !== 0) return '';
     if (val === 'N/A' || val === 'n/a') return 'Preis auf Anfrage';
 
-    // Entferne Eurozeichen und trimme Leerzeichen
+    // Säubert Text-Preise wie "34,99€"
     let str = String(val).replace('€', '').trim();
-    // Ersetze Komma durch Punkt für JavaScript Float-Berechnung
     let num = parseFloat(str.replace(',', '.'));
     if (isNaN(num)) return str + ' €';
     return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
@@ -87,7 +86,7 @@ function formatPrice(val) {
 function getDealDetailHref(deal) {
     const isAli = deal._shop === 'ali';
     if (isAli) {
-        const link = deal['Affiliate Link'] || deal['Link'] || '';
+        const link = deal['Affiliate Link'] || deal['Link'] || deal['Produkt-ID / AliExpress Link'] || '';
         return link ? `/deal.html?shop=ali&id=${encodeURIComponent(link)}` : '#';
     }
     const asin = deal['ASIN / Amazon Link'] || '';
@@ -102,24 +101,24 @@ function dealCardHTML(deal) {
 
     const btnClass = isAli ? 'btn-buy-ali' : 'btn-buy-amazon';
     
-    // Titel-Flexibilität (sucht nach allen möglichen Spalten-Namen)
+    // Titel aus allen möglichen Spaltenüberschriften lesen
     const title = deal['Produkt-Titel'] || deal['Titel'] || deal.title || 'Angebot';
     
-    // Bild-URL-Flexibilität
-    const image = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal['Bildvorschau'] || deal.image || 'https://via.placeholder.com/200';
+    // Bilder aus allen möglichen Spaltenüberschriften lesen (Bild-URL / Bildvorschau)
+    const image = deal['Bild-URL (Optional)'] || deal['Bildvorschau'] || deal['Bild-URL'] || deal.image || 'https://via.placeholder.com/200';
 
-    // Preis-Flexibilität
+    // Preise bereinigen
     const offerPriceFormatted = formatPrice(deal['Angebotspreis (€)'] || deal['Preis (€)'] || deal.offerPrice);
     const rawReg = deal['Regulärer Preis (€)'] || deal.regularPrice;
     const regPriceFormatted = rawReg ? formatPrice(rawReg) : '';
 
-    // Rabatt-Flexibilität
+    // Rabatt
     const discount = deal['Rabatt (z.B. 30% Rabatt)'] || deal['Rabatt'] || deal.discount || '';
     
-    // Kategorie
-    const category = deal['Kategorie'] || deal.category || 'Angebot';
+    // Kategorie (Fallback wenn leer)
+    const category = deal['Kategorie'] || deal.category || 'Angebote';
     
-    // Affiliate-Link
+    // Affiliate-Link aus allen möglichen Tabellen-Spalten
     const buyLink = deal['Affiliate Link'] || deal['Link: ybbst-21'] || deal['Link'] || '#';
     const detailHref = getDealDetailHref(deal);
 
@@ -129,7 +128,7 @@ function dealCardHTML(deal) {
             ${discount ? `<div class="badge-discount">${discount}</div>` : ''}
 
             <a href="${detailHref}" class="img-container" style="text-decoration:none;">
-                <img src="${image}" alt="${title}" loading="lazy" onerror="this.src='https://via.placeholder.com/200'">
+                <img src="${image}" alt="${title}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/200';">
             </a>
 
             <div>
