@@ -33,19 +33,19 @@ document.addEventListener("DOMContentLoaded", function () {
         footerElement.innerHTML = `
             <footer class="site-footer">
                 <div class="footer-content">
-                    <div class="footer-links">
+                    <div class="footer-left">
+                        <p>© 2026 YabuDeals (yabubest.de). Alle Rechte vorbehalten. Preise inkl. MwSt. zzgl. Versandkosten. Als Amazon-Partner verdienen wir an qualifizierten Verkäufen.</p>
+                    </div>
+                    <div class="footer-center">
+                        <a href="#" target="_blank" class="social-icon svg-icon-telegram"></a>
+                        <a href="#" target="_blank" class="social-icon svg-icon-tiktok"></a>
+                        <a href="#" target="_blank" class="social-icon svg-icon-youtube"></a>
+                    </div>
+                    <div class="footer-right">
                         <a href="#" onclick="openGlobalModal('impressumModal'); return false;">Impressum</a>
                         <span> | </span>
                         <a href="#" onclick="openGlobalModal('datenschutzModal'); return false;">Datenschutzerklärung</a>
                     </div>
-                    <div class="footer-social">
-                        <a href="https://t.me/yabubest_deals" target="_blank">✈️</a>
-                        <a href="#" target="_blank">🎵</a>
-                        <a href="#" target="_blank">▶️</a>
-                    </div>
-                </div>
-                <div class="footer-bottom">
-                    <p>© 2026 YabuDeals (yabubest.de). Alle Rechte vorbehalten. Preise inkl. MwSt. zzgl. Versandkosten. Als Amazon-Partner verdienen wir an qualifizierten Verkäufen.</p>
                 </div>
             </footer>
 
