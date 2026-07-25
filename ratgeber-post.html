@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ratgeber – YabuDeals</title>
+    <meta name="description" content="Produkttests, Tipps und Ratgeber von YabuDeals.">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <!-- GLOBALE KOPFZEILE -->
+    <div id="global-header"></div>
+
+    <div class="blog-post-container">
+        <a href="/blog.html" class="back-link">&larr; Zurück zum Blog</a>
+        <div id="postContainer">
+            <div class="no-deals">Lade Beitrag...</div>
+        </div>
+    </div>
+
+    <!-- GLOBALE FUSSZEILE -->
+    <div id="global-footer"></div>
+
+    <script src="/components.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const postSlug = params.get('post');
+
+        async function loadPost() {
+            const container = document.getElementById('postContainer');
+
+            if (!postSlug) {
+                container.innerHTML = '<p class="no-deals">Kein Beitrag angegeben.</p>';
+                return;
+            }
+
+            try {
+                const res = await fetch('/blog-posts.json');
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const posts = await res.json();
+
+                const post = posts.find(p => (p['Link'] || '') === postSlug);
+
+                if (!post) {
+                    container.innerHTML = '<p class="no-deals">Dieser Beitrag wurde nicht gefunden.</p>';
+                    return;
+                }
+
+                renderPost(post);
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<p class="no-deals">Beitrag konnte nicht geladen werden.</p>';
+            }
+        }
+
+        function renderPost(post) {
+            const container = document.getElementById('postContainer');
+
+            const title = post['Titel'] || 'Blogbeitrag';
+            const image = post['Bild-URL'] || '';
+            const category = post['Kategorie'] || 'Ratgeber';
+            const date = post['Datum'] || '';
+            const readTime = post['Lesezeit'] ? ` • ⏱️ ${post['Lesezeit']}` : '';
+            const contentHtml = post['Content_HTML'] || `<p>${post['Auszug'] || ''}</p>`;
+
+            document.title = `${title} – YabuDeals`;
+
+            container.innerHTML = `
+                ${image ? `<img src="${image}" alt="${title}" class="blog-post-hero-img">` : ''}
+                <div class="blog-post-meta">${category}${readTime}${date ? ` • ${date}` : ''}</div>
+                <h1 class="blog-post-title">${title}</h1>
+                <div class="blog-post-content">${contentHtml}</div>
+            `;
+        }
+
+        loadPost();
+    </script>
+</body>
+</html>

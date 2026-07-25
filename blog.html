@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog & Ratgeber – YabuDeals</title>
+    <meta name="description" content="Tipps, Produkttests und Shopping-Ratgeber rund um Küche, Haushalt, Elektronik und mehr – von YabuDeals.">
     <!-- ABSOLUTER PFAD FÜR UNIVERSELLE KOMPATIBILITÄT -->
     <link rel="stylesheet" href="/style.css">
 </head>
@@ -58,18 +59,20 @@
                 const date = post['Datum'] || post.date || '';
                 const category = post['Kategorie'] || 'Ratgeber';
                 const readTime = post['Lesezeit'] ? `• ⏱️ ${post['Lesezeit']}` : '';
-                
-                // Pfad zur Detailseite (aus Link-Feld)
-                const link = post['Link'] ? `/${post['Link']}` : '#';
+
+                // Dynamische Detailseite statt nicht-existierender statischer Datei
+                const link = post['Link'] ? `/ratgeber-post.html?post=${encodeURIComponent(post['Link'])}` : '#';
 
                 return `
                     <article class="deal-card">
-                        <div class="img-container">
+                        <a href="${link}" class="img-container" style="text-decoration:none;">
                             <img src="${image}" alt="${title}" loading="lazy">
-                        </div>
+                        </a>
                         <div>
                             <div class="category-tag">${category} ${readTime}</div>
-                            <h2 class="deal-title" style="font-size: 1.1rem; margin: 8px 0;" title="${title}">${title}</h2>
+                            <a href="${link}" style="text-decoration:none; color: inherit;">
+                                <h2 class="deal-title" style="font-size: 1.1rem; margin: 8px 0;" title="${title}">${title}</h2>
+                            </a>
                             <p style="font-size: 0.88rem; color: #555; line-height: 1.4; margin-bottom: 12px;">${excerpt}</p>
                         </div>
                         <div>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angebot – YabuDeals</title>
+    <meta name="description" content="Produktdetails und aktuelles Angebot bei YabuDeals.">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <!-- GLOBALE KOPFZEILE -->
+    <div id="global-header"></div>
+
+    <div class="detail-wrapper">
+        <a href="/" class="back-link">&larr; Zurück zur Übersicht</a>
+        <div id="detailContainer">
+            <div class="no-deals">Lade Angebot...</div>
+        </div>
+    </div>
+
+    <!-- GLOBALE FUSSZEILE -->
+    <div id="global-footer"></div>
+
+    <script src="/components.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const shop = params.get('shop');
+        const id = params.get('id');
+
+        async function loadDetail() {
+            const container = document.getElementById('detailContainer');
+
+            if (!shop || !id) {
+                container.innerHTML = '<p class="no-deals">Kein Angebot angegeben.</p>';
+                return;
+            }
+
+            try {
+                const url = shop === 'ali' ? '/aliexpress-deals.json' : '/deals.json';
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+
+                const deal = data.find(d => {
+                    if (shop === 'ali') {
+                        return (d['Link'] || '') === id;
+                    }
+                    return (d['ASIN / Amazon Link'] || '') === id;
+                });
+
+                if (!deal) {
+                    container.innerHTML = '<p class="no-deals">Dieses Angebot wurde nicht gefunden oder ist nicht mehr verfügbar.</p>';
+                    return;
+                }
+
+                deal._shop = shop === 'ali' ? 'ali' : 'amazon';
+                renderDetail(deal);
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<p class="no-deals">Angebot konnte nicht geladen werden.</p>';
+            }
+        }
+
+        function renderDetail(deal) {
+            const isAli = deal._shop === 'ali';
+            const container = document.getElementById('detailContainer');
+
+            const title = deal['Produkt-Titel'] || 'Angebot';
+            const image = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || 'https://via.placeholder.com/400';
+            const offerPrice = formatPrice(deal['Angebotspreis (€)'] || deal['Preis (€)']);
+            const rawReg = deal['Regulärer Preis (€)'];
+            const regPrice = rawReg ? formatPrice(rawReg) : '';
+            const discount = deal['Rabatt (z.B. 30% Rabatt)'] || deal['Rabatt'] || '';
+            const category = deal['Kategorie'] || 'Angebot';
+            const description = deal['Lange Beschreibung'] || deal['Beschreibung'] || '';
+            const link = deal['Link: ybbst-21'] || deal['Link'] || '#';
+
+            const shopBadgeStyle = isAli
+                ? 'background:#fef2f2;color:#dc2626;border:1px solid #fecaca;'
+                : 'background:#fff3e6;color:#d97706;border:1px solid #fde68a;';
+            const shopBadgeLabel = isAli ? '🌐 AliExpress' : '📦 Amazon';
+            const btnClass = isAli ? 'btn-buy-ali' : 'btn-buy-amazon';
+
+            document.title = `${title} – YabuDeals`;
+
+            container.innerHTML = `
+                <div class="detail-card">
+                    <div class="detail-image-box">
+                        <img src="${image}" alt="${title}">
+                    </div>
+                    <div>
+                        <div class="detail-badges">
+                            <span style="${shopBadgeStyle}">${shopBadgeLabel}</span>
+                            ${discount ? `<span style="background:#ef4444;color:#fff;">${discount}</span>` : ''}
+                            <span style="background:#eef2ff;color:#4338ca;">${category}</span>
+                        </div>
+                        <h1 class="detail-title">${title}</h1>
+                        <div class="detail-price-row">
+                            <span class="detail-offer-price">${offerPrice}</span>
+                            ${regPrice ? `<span class="detail-regular-price">statt ${regPrice}</span>` : ''}
+                        </div>
+                        ${description ? `<p class="detail-description">${description}</p>` : ''}
+                        <a href="${link}" target="_blank" rel="nofollow noopener sponsored" class="${btnClass} detail-cta">Zum Angebot &rarr;</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        loadDetail();
+    </script>
+</body>
+</html>

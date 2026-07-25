@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YabuDeals – Beste Deals & Rabatte entdecken</title>
+    <meta name="description" content="Die besten Amazon- und AliExpress-Angebote im Überblick: täglich aktualisierte Rabatte, Schnäppchen und Deals für Küche, Haushalt, Elektronik, Wellness & mehr.">
     <!-- ABSOLUTER PFAD FÜR CLOUDFLARE CUSTOM DOMAIN -->
     <link rel="stylesheet" href="/style.css">
 </head>
@@ -63,20 +64,10 @@
         let filteredDeals = [];
         let currentShop = 'all';
         let selectedCategory = '';
-        
+
         // EXAKT 27 ANGEBOTE PRO SEITE
         const itemsPerPage = 27;
         let currentPage = 1;
-
-        function formatPrice(val) {
-            if (!val && val !== 0) return '';
-            if (val === 'N/A' || val === 'n/a') return 'Preis auf Anfrage';
-            
-            let str = String(val).replace('€', '').trim();
-            let num = parseFloat(str.replace(',', '.'));
-            if (isNaN(num)) return str;
-            return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
-        }
 
         async function fetchAllDeals() {
             try {
@@ -104,32 +95,13 @@
                 }
 
                 allDeals = [...amazonDeals, ...aliDeals];
-                populateCategories();
+                populateCategorySelect(document.getElementById('categoryFilter'), allDeals);
                 onFilterChange();
             } catch (error) {
                 console.error(error);
-                document.getElementById('dealsContainer').innerHTML = 
+                document.getElementById('dealsContainer').innerHTML =
                     '<div class="no-deals">Aktuell sind keine Deals erreichbar.</div>';
             }
-        }
-
-        function populateCategories() {
-            const select = document.getElementById('categoryFilter');
-            select.innerHTML = '<option value="">Alle Kategorien</option>';
-            
-            // Sammelt dynamisch alle vorhandenen Kategorien aus den geladenen Deals
-            const uniqueCategories = [...new Set(
-                allDeals
-                    .map(d => d['Kategorie'] || d.category)
-                    .filter(Boolean)
-            )].sort();
-
-            uniqueCategories.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat;
-                option.textContent = cat;
-                select.appendChild(option);
-            });
         }
 
         function setShopFilter(shop, element) {
@@ -149,7 +121,7 @@
 
                 const title = (deal['Produkt-Titel'] || deal.title || '').toLowerCase();
                 const category = deal['Kategorie'] || deal.category || '';
-                
+
                 const matchesSearch = title.includes(searchTerm);
                 const matchesCategory = selectedCategory === '' || category.toLowerCase().includes(selectedCategory.toLowerCase());
 
@@ -166,7 +138,7 @@
             const pageItems = filteredDeals.slice(startIdx, endIdx);
 
             renderDeals(pageItems);
-            renderPagination(filteredDeals.length);
+            renderPaginationHTML(document.getElementById('paginationContainer'), filteredDeals.length, itemsPerPage, currentPage, 'goToPage');
         }
 
         function renderDeals(deals) {
@@ -175,69 +147,7 @@
                 container.innerHTML = '<div class="no-deals">Keine passenden Deals gefunden.</div>';
                 return;
             }
-
-            container.innerHTML = deals.map(deal => {
-                const isAli = deal._shop === 'ali';
-                const shopBadge = isAli 
-                    ? `<div class="badge-shop-ali">🌐 AliExpress</div>` 
-                    : `<div class="badge-shop-amazon">📦 Amazon</div>`;
-                
-                const btnClass = isAli ? 'btn-buy-ali' : 'btn-buy-amazon';
-                const title = deal['Produkt-Titel'] || deal.title || deal.kurzTitel || 'Angebot';
-                const image = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal.image || 'https://via.placeholder.com/200';
-                
-                const offerPriceFormatted = formatPrice(deal['Angebotspreis (€)'] || deal['Preis (€)'] || deal.offerPrice);
-                const rawReg = deal['Regulärer Preis (€)'] || deal.regularPrice;
-                const regPriceFormatted = rawReg ? formatPrice(rawReg) : '';
-
-                const discount = deal['Rabatt (z.B. 30% Rabatt)'] || deal.discount || '';
-                const category = deal['Kategorie'] || deal.category || 'Angebot';
-                const link = deal['Link: ybbst-21'] || deal['Link'] || deal.link_ybbst || '#';
-
-                return `
-                    <div class="deal-card">
-                        ${shopBadge}
-                        ${discount ? `<div class="badge-discount">${discount}</div>` : ''}
-                        
-                        <div class="img-container">
-                            <img src="${image}" alt="${title}" loading="lazy">
-                        </div>
-                        
-                        <div>
-                            <div class="category-tag">${category}</div>
-                            <div class="deal-title" title="${title}">${title}</div>
-                        </div>
-
-                        <div>
-                            <div class="price-row">
-                                <span class="offer-price">${offerPriceFormatted}</span>
-                                ${regPriceFormatted ? `<span class="regular-price">statt ${regPriceFormatted}</span>` : ''}
-                            </div>
-                            <a href="${link}" target="_blank" rel="nofollow noopener" class="${btnClass}">Zum Angebot &rarr;</a>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderPagination(totalItems) {
-            const container = document.getElementById('paginationContainer');
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-            if (totalPages <= 1) {
-                container.innerHTML = '';
-                return;
-            }
-
-            let html = `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">&laquo; Zurück</button>`;
-
-            for (let i = 1; i <= totalPages; i++) {
-                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
-            }
-
-            html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">Weiter &raquo;</button>`;
-
-            container.innerHTML = html;
+            container.innerHTML = deals.map(dealCardHTML).join('');
         }
 
         function goToPage(page) {
