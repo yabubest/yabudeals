@@ -1,86 +1,57 @@
-// GLOBALER HEADER & FOOTER FÜR ALLE SEITEN (yabubest.de)
+function loadGlobalHeader() {
+    const headerContainer = document.getElementById('global-header');
+    if (!headerContainer) return;
 
-document.addEventListener("DOMContentLoaded", function () {
-    // 1. HEADER EINBAUEN
-    const headerElement = document.getElementById("global-header");
-    if (headerElement) {
-        headerElement.innerHTML = `
-            <header class="site-header">
-                <div class="header-content">
-                    <a href="/" class="logo">🚀 YabuDeals</a>
-                    <nav class="main-nav">
-                        <a href="/" id="nav-home">Startseite</a>
-                        <a href="/blog.html" id="nav-blog">Blog & Ratgeber</a>
-                    </nav>
+    headerContainer.innerHTML = `
+        <header class="site-header">
+            <div class="header-container">
+                <a href="index.html" class="logo">🚀 YabuDeals</a>
+                <nav class="nav-links">
+                    <a href="index.html">Startseite</a>
+                    <a href="blog.html">Blog & Ratgeber</a>
+                </nav>
+            </div>
+        </header>
+    `;
+}
+
+function loadGlobalFooter() {
+    const footerContainer = document.getElementById('global-footer');
+    if (!footerContainer) return;
+
+    footerContainer.innerHTML = `
+        <footer class="site-footer">
+            <div class="footer-container">
+                <!-- LINKS: LEGAL TEXT -->
+                <div class="footer-left">
+                    © 2026 YabuDeals · Alle Rechte vorbehalten · Inkl. MwSt. zzgl. Versand · Amazon-Partner
                 </div>
-            </header>
-        `;
 
-        // Aktiven Menüpunkt markieren
-        const path = window.location.pathname;
-        if (path.includes("blog")) {
-            const blogNav = document.getElementById("nav-blog");
-            if (blogNav) blogNav.classList.add("active");
-        } else {
-            const homeNav = document.getElementById("nav-home");
-            if (homeNav) homeNav.classList.add("active");
-        }
-    }
-
-    // 2. FOOTER EINBAUEN
-    const footerElement = document.getElementById("global-footer");
-    if (footerElement) {
-        footerElement.innerHTML = `
-            <footer class="site-footer">
-                <div class="footer-content">
-                    <div class="footer-left">
-                        <p>© 2026 YabuDeals (yabubest.de). Alle Rechte vorbehalten. Preise inkl. MwSt. zzgl. Versandkosten. Als Amazon-Partner verdienen wir an qualifizierten Verkäufen.</p>
-                    </div>
-                    <div class="footer-center">
-                        <a href="#" target="_blank" class="social-icon svg-icon-telegram"></a>
-                        <a href="#" target="_blank" class="social-icon svg-icon-tiktok"></a>
-                        <a href="#" target="_blank" class="social-icon svg-icon-youtube"></a>
-                    </div>
-                    <div class="footer-right">
-                        <a href="#" onclick="openGlobalModal('impressumModal'); return false;">Impressum</a>
-                        <span> | </span>
-                        <a href="#" onclick="openGlobalModal('datenschutzModal'); return false;">Datenschutzerklärung</a>
-                    </div>
+                <!-- MITTE: SOCIAL ICONS -->
+                <div class="footer-center">
+                    <a href="https://t.me/yabudeals" target="_blank" rel="noopener" class="social-icon" title="Telegram">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.67-.52.36-.99.53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.75 3.99-1.74 6.66-2.89 8.01-3.45 3.81-1.59 4.6-1.87 5.12-1.88.11 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.21-.04.38z"/></svg>
+                    </a>
+                    <a href="https://tiktok.com/@yabudeals" target="_blank" rel="noopener" class="social-icon" title="TikTok">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68a6.34 6.34 0 0 0 10.86 4.48A6.29 6.29 0 0 0 15.84 15V8.56a8.27 8.27 0 0 0 4.75 1.51V6.69z"/></svg>
+                    </a>
+                    <a href="https://youtube.com/@yabudeals" target="_blank" rel="noopener" class="social-icon" title="YouTube">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
                 </div>
-            </footer>
 
-            <!-- IMPRESSUM MODAL -->
-            <div id="impressumModal" class="modal-overlay">
-                <div class="modal-body">
-                    <span class="close-modal-btn" onclick="closeGlobalModal('impressumModal')">&times;</span>
-                    <h2>Impressum</h2><br>
-                    <p><strong>Angaben gemäß § 5 TMG:</strong></p><br>
-                    <p>Yavuz Gülec<br>YabuDeals / Yabubest<br>Deutschland</p><br>
-                    <p><strong>Kontakt:</strong><br>E-Mail: info@yabubest.de</p><br>
-                    <p><strong>Haftungsausschluss:</strong><br>Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
+                <!-- RECHTS: SEPARATE SEITEN -->
+                <div class="footer-right">
+                    <a href="impressum.html">Impressum</a>
+                    <span class="sep">|</span>
+                    <a href="datenschutz.html">Datenschutz</a>
                 </div>
             </div>
+        </footer>
+    `;
+}
 
-            <!-- DATENSCHUTZ MODAL -->
-            <div id="datenschutzModal" class="modal-overlay">
-                <div class="modal-body">
-                    <span class="close-modal-btn" onclick="closeGlobalModal('datenschutzModal')">&times;</span>
-                    <h2>Datenschutzerklärung</h2><br>
-                    <p><strong>1. Datenschutz auf einen Blick</strong><br>Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften (DSGVO).</p><br>
-                    <p><strong>2. Datenerfassung auf unserer Website</strong><br>Diese Website nutzt statische Serverressourcen (Cloudflare Pages). Es werden keine personenbezogenen Daten ohne Ihre Zustimmung gespeichert oder verarbeitet.</p><br>
-                    <p><strong>3. Affiliate-Links</strong><br>Unsere Links zu Online-Shops (z.B. Amazon) sind sogenannte Affiliate-Links. Wenn Sie auf einen solchen Link klicken und einkaufen, erhalten wir eine kleine Provision. Für Sie ändert sich der Preis nicht.</p>
-                </div>
-            </div>
-        `;
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    loadGlobalHeader();
+    loadGlobalFooter();
 });
-
-// globale Funktionen für Rechts-Modals
-function openGlobalModal(id) { 
-    const el = document.getElementById(id);
-    if(el) el.style.display = 'flex'; 
-}
-function closeGlobalModal(id) { 
-    const el = document.getElementById(id);
-    if(el) el.style.display = 'none'; 
-}

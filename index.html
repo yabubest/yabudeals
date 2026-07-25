@@ -5,81 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YabuDeals – Beste Deals & Rabatte entdecken</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .hero { text-align: center; padding: 40px 20px 16px; max-width: 800px; margin: 0 auto; }
-        .hero h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
-        .hero p { color: var(--text-muted); font-size: 1.05rem; }
-        
-        .filter-section { max-width: 1280px; margin: 16px auto 32px; padding: 0 20px; display: flex; flex-direction: column; gap: 16px; }
-        
-        /* SHOP FILTER TABS */
-        .shop-tabs {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 8px;
-        }
-
-        .shop-tab-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 10px 22px;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-        }
-
-        .shop-tab-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .shop-tab-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
-
-        .search-bar-row { display: flex; gap: 12px; flex-wrap: wrap; }
-        .search-bar-row input, .search-bar-row select { padding: 12px 18px; border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; outline: none; background: var(--card-bg); }
-        .search-bar-row input { flex: 2; min-width: 260px; }
-        .search-bar-row select { flex: 1; min-width: 200px; }
-        
-        .category-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; }
-        .pill { background: var(--card-bg); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); cursor: pointer; white-space: nowrap; }
-        .pill:hover, .pill.active { background: var(--primary); color: white; border-color: var(--primary); }
-
-        .deals-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 24px; max-width: 1280px; margin: 0 auto 60px; padding: 0 20px; }
-        .deal-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s, box-shadow 0.2s; }
-        .deal-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
-        
-        .badge-discount { position: absolute; top: 14px; right: 14px; background: #ef4444; color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; z-index: 2; }
-        
-        /* SHOP BADGES ON CARDS */
-        .badge-shop-amazon { position: absolute; top: 14px; left: 14px; background: #fff3e6; color: #d97706; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; border: 1px solid #fde68a; z-index: 2; }
-        .badge-shop-ali { position: absolute; top: 14px; left: 14px; background: #fef2f2; color: #dc2626; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; border: 1px solid #fecaca; z-index: 2; }
-
-        .img-container { width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; margin: 20px 0 16px; }
-        .img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .category-tag { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
-        .deal-title { font-size: 0.95rem; font-weight: 600; line-height: 1.45; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.8em; }
-        .price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; }
-        .offer-price { font-size: 1.4rem; font-weight: 800; color: #b91c1c; }
-        .regular-price { font-size: 0.88rem; color: var(--text-muted); text-decoration: line-through; }
-        
-        .btn-buy-amazon { display: block; width: 100%; text-align: center; background: #ffd814; color: #0f1111; text-decoration: none; padding: 12px 0; border-radius: 10px; font-weight: 700; border: 1px solid #fcd200; transition: background 0.2s; }
-        .btn-buy-amazon:hover { background: #f7ca00; }
-        
-        .btn-buy-ali { display: block; width: 100%; text-align: center; background: #ff4747; color: #ffffff; text-decoration: none; padding: 12px 0; border-radius: 10px; font-weight: 700; border: 1px solid #e03131; transition: background 0.2s; }
-        .btn-buy-ali:hover { background: #e03131; }
-
-        .no-deals { text-align: center; grid-column: 1 / -1; padding: 60px 20px; color: var(--text-muted); font-size: 1.1rem; }
-    </style>
 </head>
 <body>
 
@@ -93,32 +18,39 @@
             <p>Die besten Schnäppchen von Amazon & AliExpress auf einen Blick.</p>
         </div>
 
+        <!-- FULL-WIDTH FILTERBAR (GESAMTE BREITE) -->
         <div class="filter-section">
-            <!-- SHOP TABS (ALLE / AMAZON / ALIEXPRESS) -->
-            <div class="shop-tabs">
-                <button class="shop-tab-btn active" onclick="setShopFilter('all', this)">🛍️ Alle Shops</button>
-                <button class="shop-tab-btn" onclick="setShopFilter('amazon', this)">📦 Amazon Deals</button>
-                <button class="shop-tab-btn" onclick="setShopFilter('ali', this)">🌐 AliExpress Deals</button>
-            </div>
+            <div class="single-filter-bar">
+                <!-- 1. SHOP TABS -->
+                <div class="shop-tabs">
+                    <button class="shop-tab-btn active" onclick="setShopFilter('all', this)">🛍️ Alle</button>
+                    <button class="shop-tab-btn" onclick="setShopFilter('amazon', this)">📦 Amazon</button>
+                    <button class="shop-tab-btn" onclick="setShopFilter('ali', this)">🌐 AliExpress</button>
+                </div>
 
-            <!-- SEARCH & CATEGORY SELECT -->
-            <div class="search-bar-row">
-                <input type="text" id="searchInput" placeholder="Produkt suchen (z.B. Hülle, Stuhl, Kopfhörer)..." onkeyup="filterDeals()">
-                <select id="categoryFilter" onchange="onCategorySelectChange()">
-                    <option value="">Alle 12 Kategorien</option>
-                </select>
-            </div>
-            
-            <!-- CATEGORY PILLS -->
-            <div class="category-pills" id="categoryPills">
-                <button class="pill active" onclick="selectPill('', this)">Alle</button>
+                <!-- 2. SUCHFELD (NIMMTS DEN RESTLICHEN PLATZ EIN) -->
+                <div class="search-input-wrapper">
+                    <input type="text" id="searchInput" placeholder="Produkt suchen (z.B. Hülle, Stuhl)..." onkeyup="onFilterChange()">
+                </div>
+
+                <!-- 3. KATEGORIE DROPDOWN -->
+                <div class="category-select-wrapper">
+                    <select id="categoryFilter" onchange="onFilterChange()">
+                        <option value="">Alle 12 Kategorien</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <!-- DEALS GRID -->
-        <div class="deals-grid" id="dealsContainer">
-            <div class="no-deals">Lade aktuelle Angebote...</div>
+        <!-- DEALS GRID (VOLLSCHIRM, 9 SPALTEN DESKTOP) -->
+        <div class="deals-grid-container">
+            <div class="deals-grid" id="dealsContainer">
+                <div class="no-deals">Lade aktuelle Angebote...</div>
+            </div>
         </div>
+
+        <!-- PAGINIERUNG (27 DEALS PRO SEITE) -->
+        <div class="pagination-container" id="paginationContainer"></div>
     </div>
 
     <!-- GLOBALE FUSSZEILE -->
@@ -134,8 +66,13 @@
         ];
 
         let allDeals = [];
-        let currentShop = 'all'; // 'all', 'amazon', 'ali'
+        let filteredDeals = [];
+        let currentShop = 'all';
         let selectedCategory = '';
+        
+        // EXAKT 27 ANGEBOTE PRO SEITE
+        const itemsPerPage = 27;
+        let currentPage = 1;
 
         function formatPrice(val) {
             if (!val && val !== 0) return '';
@@ -145,13 +82,11 @@
             return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
         }
 
-        // BEIDE JSON-DATEIEN LASSEN SICH PARALLEL LADEN
         async function fetchAllDeals() {
             try {
                 let amazonDeals = [];
                 let aliDeals = [];
 
-                // 1. Amazon JSON laden
                 try {
                     const resAmz = await fetch('deals.json');
                     if (resAmz.ok) {
@@ -160,7 +95,6 @@
                     }
                 } catch(e) {}
 
-                // 2. AliExpress JSON laden
                 try {
                     const resAli = await fetch('aliexpress-deals.json');
                     if (resAli.ok) {
@@ -169,10 +103,9 @@
                     }
                 } catch(e) {}
 
-                // Kombinieren
                 allDeals = [...amazonDeals, ...aliDeals];
                 populate12Categories();
-                filterDeals();
+                onFilterChange();
             } catch (error) {
                 console.error(error);
                 document.getElementById('dealsContainer').innerHTML = 
@@ -182,19 +115,11 @@
 
         function populate12Categories() {
             const select = document.getElementById('categoryFilter');
-            const pillsContainer = document.getElementById('categoryPills');
-
             ALL_12_CATEGORIES.forEach(cat => {
                 const option = document.createElement('option');
                 option.value = cat;
                 option.textContent = cat;
                 select.appendChild(option);
-
-                const btn = document.createElement('button');
-                btn.className = 'pill';
-                btn.textContent = cat;
-                btn.onclick = () => selectPill(cat, btn);
-                pillsContainer.appendChild(btn);
             });
         }
 
@@ -202,28 +127,37 @@
             currentShop = shop;
             document.querySelectorAll('.shop-tab-btn').forEach(b => b.classList.remove('active'));
             if (element) element.classList.add('active');
-            filterDeals();
+            onFilterChange();
         }
 
-        function selectPill(cat, element) {
-            selectedCategory = cat;
-            document.getElementById('categoryFilter').value = cat;
-            document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-            if (element) element.classList.add('active');
-            filterDeals();
-        }
+        function onFilterChange() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            selectedCategory = document.getElementById('categoryFilter').value;
 
-        function onCategorySelectChange() {
-            const cat = document.getElementById('categoryFilter').value;
-            selectedCategory = cat;
-            document.querySelectorAll('.pill').forEach(p => {
-                if (p.textContent === cat || (cat === '' && p.textContent === 'Alle')) {
-                    p.classList.add('active');
-                } else {
-                    p.classList.remove('active');
-                }
+            filteredDeals = allDeals.filter(deal => {
+                if (currentShop === 'amazon' && deal._shop !== 'amazon') return false;
+                if (currentShop === 'ali' && deal._shop !== 'ali') return false;
+
+                const title = (deal['Produkt-Titel'] || deal.title || '').toLowerCase();
+                const category = deal['Kategorie'] || deal.category || '';
+                
+                const matchesSearch = title.includes(searchTerm);
+                const matchesCategory = selectedCategory === '' || category.toLowerCase().includes(selectedCategory.toLowerCase());
+
+                return matchesSearch && matchesCategory;
             });
-            filterDeals();
+
+            currentPage = 1;
+            renderCurrentPage();
+        }
+
+        function renderCurrentPage() {
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const endIdx = startIdx + itemsPerPage;
+            const pageItems = filteredDeals.slice(startIdx, endIdx);
+
+            renderDeals(pageItems);
+            renderPagination(filteredDeals.length);
         }
 
         function renderDeals(deals) {
@@ -240,9 +174,8 @@
                     : `<div class="badge-shop-amazon">📦 Amazon</div>`;
                 
                 const btnClass = isAli ? 'btn-buy-ali' : 'btn-buy-amazon';
-                
                 const title = deal['Produkt-Titel'] || deal.title || deal.kurzTitel || 'Angebot';
-                const image = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal.image || 'https://via.placeholder.com/250';
+                const image = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal.image || 'https://via.placeholder.com/200';
                 
                 const offerPriceFormatted = formatPrice(deal['Angebotspreis (€)'] || deal['Preis (€)'] || deal.offerPrice);
                 const rawReg = deal['Regulärer Preis (€)'] || deal.regularPrice;
@@ -278,25 +211,30 @@
             }).join('');
         }
 
-        function filterDeals() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        function renderPagination(totalItems) {
+            const container = document.getElementById('paginationContainer');
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-            const filtered = allDeals.filter(deal => {
-                // Shop Filter
-                if (currentShop === 'amazon' && deal._shop !== 'amazon') return false;
-                if (currentShop === 'ali' && deal._shop !== 'ali') return false;
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
 
-                // Suche & Kategorie
-                const title = (deal['Produkt-Titel'] || deal.title || '').toLowerCase();
-                const category = deal['Kategorie'] || deal.category || '';
-                
-                const matchesSearch = title.includes(searchTerm);
-                const matchesCategory = selectedCategory === '' || category.toLowerCase().includes(selectedCategory.toLowerCase());
+            let html = `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">&laquo; Zurück</button>`;
 
-                return matchesSearch && matchesCategory;
-            });
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
 
-            renderDeals(filtered);
+            html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">Weiter &raquo;</button>`;
+
+            container.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderCurrentPage();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         fetchAllDeals();
