@@ -71,34 +71,22 @@
 
         async function fetchAllDeals() {
             try {
-                let amazonDeals = [];
-                let aliDeals = [];
+                const [resAmz, resAli] = await Promise.allSettled([
+                    fetch('/deals.json').then(r => r.ok ? r.json() : []),
+                    fetch('/aliexpress-deals.json').then(r => r.ok ? r.json() : [])
+                ]);
 
-                try {
-                    const resAmz = await fetch('/deals.json');
-                    if (resAmz.ok) {
-                        const amzData = await resAmz.json();
-                        amazonDeals = amzData.map(d => ({ ...d, _shop: 'amazon' }));
-                    }
-                } catch(e) {
-                    console.warn("Amazon Deals konnten nicht geladen werden:", e);
-                }
-
-                try {
-                    const resAli = await fetch('/aliexpress-deals.json');
-                    if (resAli.ok) {
-                        const aliData = await resAli.json();
-                        aliDeals = aliData.map(d => ({ ...d, _shop: 'ali' }));
-                    }
-                } catch(e) {
-                    console.warn("AliExpress Deals konnten nicht geladen werden:", e);
-                }
+                const amazonDeals = (resAmz.status === 'fulfilled' ? resAmz.value : []).map(d => ({ ...d, _shop: 'amazon' }));
+                const aliDeals = (resAli.status === 'fulfilled' ? resAli.value : []).map(d => ({ ...d, _shop: 'ali' }));
 
                 allDeals = [...amazonDeals, ...aliDeals];
-                populateCategorySelect(document.getElementById('categoryFilter'), allDeals);
+                
+                const catSelect = document.getElementById('categoryFilter');
+                populateCategorySelect(catSelect, allDeals);
+                
                 onFilterChange();
             } catch (error) {
-                console.error(error);
+                console.error("Fehler beim Laden der Deals:", error);
                 document.getElementById('dealsContainer').innerHTML =
                     '<div class="no-deals">Aktuell sind keine Deals erreichbar.</div>';
             }
@@ -153,7 +141,14 @@
         function goToPage(page) {
             currentPage = page;
             renderCurrentPage();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Scrolle direkt zum Filter/Grid statt ganz nach oben über den Hero
+            const filterEl = document.querySelector('.filter-section');
+            if (filterEl) {
+                filterEl.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
 
         fetchAllDeals();
