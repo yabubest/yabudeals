@@ -71,84 +71,76 @@ body {
 
 /* FOOTER */
 .site-footer {
-    background: #0f172a;
-    color: #94a3b8;
-    padding: 48px 20px 24px;
-    margin-top: auto;
+    background-color: #0f172a; /* Dezente, dunkle Hintergrundfarbe */
+    color: #94a3b8; /* Unaufdringliche Textfarbe */
+    padding: 16px 20px; /* Geringes Padding oben/unten */
+    text-align: center; /* Zentriert den gesamten Footer-Inhalt */
+    margin-top: auto; /* Schiebt den Footer an das Ende, falls Inhalt kurz ist */
+    font-size: 0.75rem; /* Kleine Schriftgröße */
 }
 
 .footer-content {
     max-width: 1280px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 32px;
-    margin-bottom: 40px;
-}
-
-.footer-col h3, .footer-col h4 {
-    color: #f8fafc;
-    font-size: 1.1rem;
-    margin-bottom: 16px;
-}
-
-.footer-col p {
-    font-size: 0.9rem;
-    line-height: 1.6;
-}
-
-.footer-col ul {
-    list-style: none;
-}
-
-.footer-col ul li {
-    margin-bottom: 10px;
-}
-
-.footer-col ul li a {
-    color: #94a3b8;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.2s;
-}
-
-.footer-col ul li a:hover {
-    color: #ffffff;
-}
-
-.social-buttons {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 12px;
+    flex-direction: column; /* Standardmäßig untereinander */
+    align-items: center; /* Zentriert die Elemente */
+    justify-content: center; /* Zentriert Elemente horizontal */
+    gap: 10px; /* Kleiner Abstand zwischen den Elementen */
 }
 
-.social-btn {
+.footer-links {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    background: #1e293b;
-    color: #f8fafc;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: background 0.2s;
+    gap: 5px; /* Abstand zwischen Links */
 }
 
-.social-btn:hover {
-    background: var(--primary);
+.footer-links a {
+    color: #94a3b8;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: var(--primary); /* Link bei Hover in var(--primary) aufleuchten */
+    text-decoration: underline;
+}
+
+.footer-social {
+    display: flex;
+    gap: 15px; /* Abstand zwischen Social-Media-Icons */
+}
+
+.footer-social a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 1.2rem; /* Größere Icons */
+    transition: color 0.2s ease-in-out; /* Sanfter Farbwechsel */
+}
+
+.footer-social a:hover {
+    color: var(--primary); /* Social-Media-Icons bei Hover in var(--primary) ändern */
 }
 
 .footer-bottom {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding-top: 24px;
-    border-top: 1px solid #1e293b;
-    text-align: center;
-    font-size: 0.85rem;
-    color: #64748b;
+    margin-top: 12px; /* Etwas mehr Abstand zur oberen Social/Link-Reihe */
+    font-size: 0.7rem; /* Noch kleinere Schriftgröße für Copyright */
+    opacity: 0.8; /* Leicht transparent */
+}
+
+/* MOBILE OPTIMIERUNG (für größere Bildschirme, die mobile Ansicht ist bereits abgedeckt) */
+@media (min-width: 768px) {
+    .footer-content {
+        flex-direction: row; /* Nebeneinander auf Desktops */
+        justify-content: space-between; /* Links und Socials verteilen */
+    }
+
+    .footer-links {
+        margin-left: 20px; /* Etwas Abstand vom linken Rand */
+    }
+
+    .footer-social {
+        margin-right: 20px; /* Etwas Abstand vom rechten Rand */
+    }
 }
 
 /* MODALS */

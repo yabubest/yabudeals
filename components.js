@@ -33,39 +33,19 @@ document.addEventListener("DOMContentLoaded", function () {
         footerElement.innerHTML = `
             <footer class="site-footer">
                 <div class="footer-content">
-                    <div class="footer-col">
-                        <h3>🚀 YabuDeals</h3>
-                        <p>Deine Community-Plattform für die besten Angebote, Rabatte und Preisfehler im Netz. Täglich automatisch aktualisiert.</p>
-                        <div class="social-buttons">
-                            <a href="https://t.me/yabubest_deals" target="_blank" rel="noopener" class="social-btn">✈️ Telegram Deals Kanal</a>
-                            <a href="#" target="_blank" rel="noopener" class="social-btn">🎵 TikTok Schnäppchen</a>
-                            <a href="#" target="_blank" rel="noopener" class="social-btn">▶️ YouTube Review Kanal</a>
-                        </div>
+                    <div class="footer-links">
+                        <a href="#" onclick="openGlobalModal('impressumModal'); return false;">Impressum</a>
+                        <span> | </span>
+                        <a href="#" onclick="openGlobalModal('datenschutzModal'); return false;">Datenschutzerklärung</a>
                     </div>
-
-                    <div class="footer-col">
-                        <h4>Top-Kategorien</h4>
-                        <ul>
-                            <li><a href="/#smartphones">Smartphones & Zubehör</a></li>
-                            <li><a href="/#elektronik">Elektronik & Foto</a></li>
-                            <li><a href="/#haushalt">Küche & Wohnen</a></li>
-                            <li><a href="/#moebel">Möbel & Einrichtung</a></li>
-                            <li><a href="/#fashion">Fashion & Mode</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-col">
-                        <h4>Rechtliches & Info</h4>
-                        <ul>
-                            <li><a href="/blog.html">Blog & Ratgeber</a></li>
-                            <li><a href="#" onclick="openGlobalModal('impressumModal'); return false;">Impressum</a></li>
-                            <li><a href="#" onclick="openGlobalModal('datenschutzModal'); return false;">Datenschutzerklärung</a></li>
-                        </ul>
+                    <div class="footer-social">
+                        <a href="https://t.me/yabubest_deals" target="_blank">✈️</a>
+                        <a href="#" target="_blank">🎵</a>
+                        <a href="#" target="_blank">▶️</a>
                     </div>
                 </div>
-
                 <div class="footer-bottom">
-                    <p>&copy; 2026 YabuDeals (yabubest.de). Alle Rechte vorbehalten. Preise inkl. MwSt. zzgl. Versandkosten. Als Amazon-Partner verdienen wir an qualifizierten Verkäufen.</p>
+                    <p>© 2026 YabuDeals (yabubest.de). Alle Rechte vorbehalten. Preise inkl. MwSt. zzgl. Versandkosten. Als Amazon-Partner verdienen wir an qualifizierten Verkäufen.</p>
                 </div>
             </footer>
 
