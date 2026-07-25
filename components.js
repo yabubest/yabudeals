@@ -22,8 +22,6 @@ function loadGlobalHeader() {
 }
 
 /* ---------- GLOBALER FOOTER ---------- */
-/* Impressum/Datenschutz sind ECHTE, crawlbare Links auf eigene Seiten
-   (keine JS-Modals mehr) – rechtlich sauberer & SEO-freundlich. */
 function loadGlobalFooter() {
     const footerContainer = document.getElementById('global-footer');
     if (!footerContainer) return;
@@ -63,9 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ============================================================
-   DEAL-ENGINE – gemeinsam genutzt von index.html, amazon.html,
-   aliexpress.html und deal.html, damit Design & Verhalten
-   auf allen Seiten IDENTISCH sind.
+   DEAL-ENGINE – gemeinsam genutzt von allen Seiten
    ============================================================ */
 
 function formatPrice(val) {
@@ -78,9 +74,6 @@ function formatPrice(val) {
     return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
 }
 
-/* Eindeutige ID für die Detailseite ermitteln:
-   - Amazon: ASIN
-   - AliExpress: die Affiliate-Link-URL (da kein ASIN vorhanden ist) */
 function getDealDetailHref(deal) {
     const isAli = deal._shop === 'ali';
     if (isAli) {
@@ -91,7 +84,6 @@ function getDealDetailHref(deal) {
     return asin ? `/deal.html?shop=amazon&id=${encodeURIComponent(asin)}` : (deal['Link: ybbst-21'] || '#');
 }
 
-/* Rendert EINE Deal-Karte. Wird von jeder Katalogseite identisch genutzt. */
 function dealCardHTML(deal) {
     const isAli = deal._shop === 'ali';
     const shopBadge = isAli
@@ -138,8 +130,6 @@ function dealCardHTML(deal) {
     `;
 }
 
-/* Rendert die Pagination-Leiste. onPageChange ist der NAME (String) einer
-   globalen Funktion, damit jede Seite ihre eigene Page-Change-Logik nutzen kann. */
 function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage, onPageChangeFnName) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -159,7 +149,6 @@ function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage
     containerEl.innerHTML = html;
 }
 
-/* Befüllt das Kategorie-Dropdown dynamisch aus den geladenen Deals. */
 function populateCategorySelect(selectEl, deals) {
     selectEl.innerHTML = '<option value="">Alle Kategorien</option>';
 
