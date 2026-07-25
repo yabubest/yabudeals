@@ -69,21 +69,47 @@
         const itemsPerPage = 27;
         let currentPage = 1;
 
+        // Hilfsfunktion: Konvertiert Datums-Strings ("25.07.2026, 09:30:56 Uhr") korrekt in Timestamps
+        function parseDate(dateStr) {
+            if (!dateStr) return 0;
+            try {
+                const clean = String(dateStr).replace('Uhr', '').trim();
+                const parts = clean.split(',');
+                const dateParts = parts[0].trim().split('.');
+                const timeParts = parts[1] ? parts[1].trim().split(':') : [0, 0, 0];
+
+                const day = parseInt(dateParts[0], 10);
+                const month = parseInt(dateParts[1], 10) - 1;
+                const year = parseInt(dateParts[2], 10);
+                const hour = parseInt(timeParts[0] || 0, 10);
+                const min = parseInt(timeParts[1] || 0, 10);
+                const sec = parseInt(timeParts[2] || 0, 10);
+
+                return new Date(year, month, day, hour, min, sec).getTime();
+            } catch (e) {
+                return 0;
+            }
+        }
+
         async function fetchAllDeals() {
             try {
+                // Paralleler Abruf beider Quellen mit Cache-Busting (?v=...)
                 const [resAmz, resAli] = await Promise.allSettled([
-                    fetch('/deals.json').then(r => r.ok ? r.json() : []),
-                    fetch('/aliexpress-deals.json').then(r => r.ok ? r.json() : [])
+                    fetch('/deals.json?v=' + Date.now()).then(r => r.ok ? r.json() : []),
+                    fetch('/aliexpress-deals.json?v=' + Date.now()).then(r => r.ok ? r.json() : [])
                 ]);
 
                 const amazonDeals = (resAmz.status === 'fulfilled' ? resAmz.value : []).map(d => ({ ...d, _shop: 'amazon' }));
                 const aliDeals = (resAli.status === 'fulfilled' ? resAli.value : []).map(d => ({ ...d, _shop: 'ali' }));
 
-                allDeals = [...amazonDeals, ...aliDeals];
-                
-                const catSelect = document.getElementById('categoryFilter');
-                populateCategorySelect(catSelect, allDeals);
-                
+                // Zusammenführen & nach neuestem Datum/Uhrzeit sortieren
+                allDeals = [...amazonDeals, ...aliDeals].sort((a, b) => {
+                    const timeA = parseDate(a['DATUM'] || a['Datum']);
+                    const timeB = parseDate(b['DATUM'] || b['Datum']);
+                    return timeB - timeA; // Neueste zuerst!
+                });
+
+                populateCategorySelect(document.getElementById('categoryFilter'), allDeals);
                 onFilterChange();
             } catch (error) {
                 console.error("Fehler beim Laden der Deals:", error);
@@ -142,7 +168,6 @@
             currentPage = page;
             renderCurrentPage();
             
-            // Scrolle direkt zum Filter/Grid statt ganz nach oben über den Hero
             const filterEl = document.querySelector('.filter-section');
             if (filterEl) {
                 filterEl.scrollIntoView({ behavior: 'smooth' });
