@@ -2,22 +2,86 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog & Ratgeber – YabuDeals</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- ABSOLUTER PFAD FÜR UNIVERSELLE KOMPATIBILITÄT -->
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-    <!-- IDENTISCHE KOPFZEILE -->
+    <!-- GLOBALE KOPFZEILE -->
     <div id="global-header"></div>
 
     <main style="max-width: 1280px; margin: 40px auto; padding: 0 20px; flex: 1;">
-        <h1>Blog & Ratgeber</h1>
-        <!-- Hier kommt dein Blog-Inhalt aus blog-posts.json -->
+        <div class="hero" style="text-align: center; margin-bottom: 40px;">
+            <h1>Blog & Ratgeber</h1>
+            <p>Tipps, Produkttests & Shopping-Ratgeber von YabuDeals.</p>
+        </div>
+
+        <!-- BLOG GRID CONTAINER -->
+        <div id="blogContainer" class="deals-grid">
+            <div class="no-deals">Lade Blogbeiträge...</div>
+        </div>
     </main>
 
-    <!-- IDENTISCHE FUSSZEILE -->
+    <!-- GLOBALE FUSSZEILE -->
     <div id="global-footer"></div>
 
-    <script src="components.js"></script>
+    <script src="/components.js"></script>
+    <script>
+        async function fetchBlogPosts() {
+            const container = document.getElementById('blogContainer');
+            try {
+                const response = await fetch('/blog-posts.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+                const posts = await response.json();
+                renderBlogPosts(posts);
+            } catch (error) {
+                console.error("Fehler beim Laden der Blogbeiträge:", error);
+                container.innerHTML = '<div class="no-deals">Aktuell konnten keine Blogbeiträge geladen werden.</div>';
+            }
+        }
+
+        function renderBlogPosts(posts) {
+            const container = document.getElementById('blogContainer');
+            if (!posts || posts.length === 0) {
+                container.innerHTML = '<div class="no-deals">Keine Blogbeiträge vorhanden.</div>';
+                return;
+            }
+
+            container.innerHTML = posts.map(post => {
+                const title = post['Titel'] || post.title || 'Blogbeitrag';
+                const image = post['Bild-URL'] || post.image || 'https://via.placeholder.com/400x200';
+                const excerpt = post['Auszug'] || post.summary || '';
+                const date = post['Datum'] || post.date || '';
+                const category = post['Kategorie'] || 'Ratgeber';
+                const readTime = post['Lesezeit'] ? `• ⏱️ ${post['Lesezeit']}` : '';
+                
+                // Pfad zur Detailseite (aus Link-Feld)
+                const link = post['Link'] ? `/${post['Link']}` : '#';
+
+                return `
+                    <article class="deal-card">
+                        <div class="img-container">
+                            <img src="${image}" alt="${title}" loading="lazy">
+                        </div>
+                        <div>
+                            <div class="category-tag">${category} ${readTime}</div>
+                            <h2 class="deal-title" style="font-size: 1.1rem; margin: 8px 0;" title="${title}">${title}</h2>
+                            <p style="font-size: 0.88rem; color: #555; line-height: 1.4; margin-bottom: 12px;">${excerpt}</p>
+                        </div>
+                        <div>
+                            ${date ? `<div style="font-size: 0.75rem; color: #888; margin-bottom: 8px;">${date}</div>` : ''}
+                            <a href="${link}" class="btn-buy-amazon">Beitrag lesen &rarr;</a>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        fetchBlogPosts();
+    </script>
 </body>
 </html>

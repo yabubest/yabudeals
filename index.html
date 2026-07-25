@@ -37,7 +37,7 @@
                 <!-- 3. KATEGORIE DROPDOWN -->
                 <div class="category-select-wrapper">
                     <select id="categoryFilter" onchange="onFilterChange()">
-                        <option value="">Alle 12 Kategorien</option>
+                        <option value="">Alle Kategorien</option>
                     </select>
                 </div>
             </div>
@@ -59,13 +59,6 @@
 
     <script src="/components.js"></script>
     <script>
-        const ALL_12_CATEGORIES = [
-            "Smartphones & Zubehör", "Elektronik & Foto", "Computer & Zubehör",
-            "Küche, Haushalt & Wohnen", "Möbel & Einrichtung", "Fashion & Mode",
-            "Schuhe & Handtaschen", "Beauty & Körperpflege", "Bürobedarf & Schreibwaren",
-            "Garten & Pflanzen", "Baumarkt & Werkzeug", "Sport & Outdoor"
-        ];
-
         let allDeals = [];
         let filteredDeals = [];
         let currentShop = 'all';
@@ -77,9 +70,11 @@
 
         function formatPrice(val) {
             if (!val && val !== 0) return '';
+            if (val === 'N/A' || val === 'n/a') return 'Preis auf Anfrage';
+            
             let str = String(val).replace('€', '').trim();
             let num = parseFloat(str.replace(',', '.'));
-            if (isNaN(num)) return str + ' €';
+            if (isNaN(num)) return str;
             return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
         }
 
@@ -94,7 +89,9 @@
                         const amzData = await resAmz.json();
                         amazonDeals = amzData.map(d => ({ ...d, _shop: 'amazon' }));
                     }
-                } catch(e) {}
+                } catch(e) {
+                    console.warn("Amazon Deals konnten nicht geladen werden:", e);
+                }
 
                 try {
                     const resAli = await fetch('/aliexpress-deals.json');
@@ -102,10 +99,12 @@
                         const aliData = await resAli.json();
                         aliDeals = aliData.map(d => ({ ...d, _shop: 'ali' }));
                     }
-                } catch(e) {}
+                } catch(e) {
+                    console.warn("AliExpress Deals konnten nicht geladen werden:", e);
+                }
 
                 allDeals = [...amazonDeals, ...aliDeals];
-                populate12Categories();
+                populateCategories();
                 onFilterChange();
             } catch (error) {
                 console.error(error);
@@ -114,9 +113,18 @@
             }
         }
 
-        function populate12Categories() {
+        function populateCategories() {
             const select = document.getElementById('categoryFilter');
-            ALL_12_CATEGORIES.forEach(cat => {
+            select.innerHTML = '<option value="">Alle Kategorien</option>';
+            
+            // Sammelt dynamisch alle vorhandenen Kategorien aus den geladenen Deals
+            const uniqueCategories = [...new Set(
+                allDeals
+                    .map(d => d['Kategorie'] || d.category)
+                    .filter(Boolean)
+            )].sort();
+
+            uniqueCategories.forEach(cat => {
                 const option = document.createElement('option');
                 option.value = cat;
                 option.textContent = cat;
@@ -205,7 +213,7 @@
                                 <span class="offer-price">${offerPriceFormatted}</span>
                                 ${regPriceFormatted ? `<span class="regular-price">statt ${regPriceFormatted}</span>` : ''}
                             </div>
-                            <a href="${link}" target="_blank" rel="nofollow" class="${btnClass}">Zum Angebot &rarr;</a>
+                            <a href="${link}" target="_blank" rel="nofollow noopener" class="${btnClass}">Zum Angebot &rarr;</a>
                         </div>
                     </div>
                 `;
