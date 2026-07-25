@@ -7,20 +7,21 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .legal-page-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 40px auto;
-            padding: 24px;
+            padding: 32px;
             background: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border, #e2e8f0);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
             color: #0f172a;
             line-height: 1.6;
         }
         .legal-page-container h1 { font-size: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px; }
-        .legal-page-container h2 { font-size: 1.2rem; margin-top: 24px; color: #1e293b; }
+        .legal-page-container h2 { font-size: 1.15rem; margin-top: 24px; color: #1e293b; }
         .legal-page-container a { color: #2563eb; text-decoration: none; }
         .legal-page-container a:hover { text-decoration: underline; }
-        .back-link { display: inline-block; margin-bottom: 20px; font-weight: 600; }
+        .back-link { display: inline-block; margin-bottom: 20px; font-weight: 600; color: #2563eb; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -28,28 +29,30 @@
     <!-- GLOBALE KOPFZEILE -->
     <div id="global-header"></div>
 
-    <div class="legal-page-container">
-        <a href="index.html" class="back-link">&larr; Zurück zur Startseite</a>
-        
-        <h1>Datenschutzerklärung</h1>
+    <div style="flex: 1;">
+        <div class="legal-page-container">
+            <a href="index.html" class="back-link">&larr; Zurück zur Startseite</a>
+            
+            <h1>Datenschutzerklärung</h1>
 
-        <h2>1. Datenschutz auf einen Blick</h2>
-        <p><strong>Allgemeine Hinweise:</strong> Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.</p>
+            <h2>1. Datenschutz auf einen Blick</h2>
+            <p><strong>Allgemeine Hinweise:</strong> Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.</p>
 
-        <p><strong>Verantwortlich für die Datenverarbeitung:</strong><br>
-        Yavuz Güleç<br>
-        Stauferstr. 150<br>
-        74523 Schwäbisch Hall<br>
-        E-Mail: <a href="mailto:info@yabubest.de">info@yabubest.de</a></p>
+            <p><strong>Verantwortlich für die Datenverarbeitung:</strong><br>
+            Yavuz Güleç<br>
+            Stauferstr. 150<br>
+            74523 Schwäbisch Hall<br>
+            E-Mail: <a href="mailto:info@yabubest.de">info@yabubest.de</a></p>
 
-        <h2>2. Hosting (Cloudflare Pages / GitHub)</h2>
-        <p>Unsere Website wird über externe Dienstleister gehostet (Cloudflare / GitHub). Wenn Sie unsere Website besuchen, erfassen diese Server automatisch Logfiles (wie IP-Adresse, Datum, Uhrzeit und gerätebezogene Informationen), um die Sicherheit und Stabilität der Website zu gewährleisten.</p>
+            <h2>2. Hosting (Cloudflare Pages / GitHub)</h2>
+            <p>Unsere Website wird über externe Dienstleister gehostet (Cloudflare / GitHub). Wenn Sie unsere Website besuchen, erfassen diese Server automatisch Logfiles (wie IP-Adresse, Datum, Uhrzeit und gerätebezogene Informationen), um die Sicherheit und Stabilität der Website zu gewährleisten.</p>
 
-        <h2>3. Affiliate-Links (Amazon & AliExpress)</h2>
-        <p>Auf unserer Website nutzen wir Affiliate-Links von Amazon und AliExpress. Wenn Sie auf einen solchen Link klicken und anschließend bei dem Partner-Shop einkaufen, kann der Anbieter erkennen, dass Sie über unsere Website gekommen sind. Hierbei werden in der Regel Tracking-Cookies oder Partner-IDs (z.B. <code>ybbst-21</code>) genutzt, um Verkäufe zuzuordnen.</p>
+            <h2>3. Affiliate-Links (Amazon & AliExpress)</h2>
+            <p>Auf unserer Website nutzen wir Affiliate-Links von Amazon und AliExpress. Wenn Sie auf einen solchen Link klicken und anschließend bei dem Partner-Shop einkaufen, kann der Anbieter erkennen, dass Sie über unsere Website gekommen sind. Hierbei werden in der Regel Tracking-Cookies oder Partner-IDs (z.B. <code>ybbst-21</code>) genutzt, um Verkäufe zuzuordnen.</p>
 
-        <h2>4. Ihre Rechte</h2>
-        <p>Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung oder Löschung dieser Daten. Wenden Sie sich hierzu einfach an info@yabubest.de.</p>
+            <h2>4. Ihre Rechte</h2>
+            <p>Sie haben jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung oder Löschung dieser Daten. Wenden Sie sich hierzu einfach an info@yabubest.de.</p>
+        </div>
     </div>
 
     <!-- GLOBALE FUSSZEILE -->

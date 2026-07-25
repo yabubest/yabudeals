@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YabuDeals – Beste Deals & Rabatte entdecken</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- ABSOLUTER PFAD FÜR CLOUDFLARE CUSTOM DOMAIN -->
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
@@ -18,7 +19,7 @@
             <p>Die besten Schnäppchen von Amazon & AliExpress auf einen Blick.</p>
         </div>
 
-        <!-- FULL-WIDTH FILTERBAR (GESAMTE BREITE) -->
+        <!-- FULL-WIDTH FILTERBAR -->
         <div class="filter-section">
             <div class="single-filter-bar">
                 <!-- 1. SHOP TABS -->
@@ -28,7 +29,7 @@
                     <button class="shop-tab-btn" onclick="setShopFilter('ali', this)">🌐 AliExpress</button>
                 </div>
 
-                <!-- 2. SUCHFELD (NIMMTS DEN RESTLICHEN PLATZ EIN) -->
+                <!-- 2. SUCHFELD -->
                 <div class="search-input-wrapper">
                     <input type="text" id="searchInput" placeholder="Produkt suchen (z.B. Hülle, Stuhl)..." onkeyup="onFilterChange()">
                 </div>
@@ -56,7 +57,7 @@
     <!-- GLOBALE FUSSZEILE -->
     <div id="global-footer"></div>
 
-    <script src="components.js"></script>
+    <script src="/components.js"></script>
     <script>
         const ALL_12_CATEGORIES = [
             "Smartphones & Zubehör", "Elektronik & Foto", "Computer & Zubehör",
@@ -88,7 +89,7 @@
                 let aliDeals = [];
 
                 try {
-                    const resAmz = await fetch('deals.json');
+                    const resAmz = await fetch('/deals.json');
                     if (resAmz.ok) {
                         const amzData = await resAmz.json();
                         amazonDeals = amzData.map(d => ({ ...d, _shop: 'amazon' }));
@@ -96,7 +97,7 @@
                 } catch(e) {}
 
                 try {
-                    const resAli = await fetch('aliexpress-deals.json');
+                    const resAli = await fetch('/aliexpress-deals.json');
                     if (resAli.ok) {
                         const aliData = await resAli.json();
                         aliDeals = aliData.map(d => ({ ...d, _shop: 'ali' }));

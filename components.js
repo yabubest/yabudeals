@@ -42,9 +42,9 @@ function loadGlobalFooter() {
 
                 <!-- RECHTS: SEPARATE SEITEN -->
                 <div class="footer-right">
-                    <a href="impressum.html">Impressum</a>
+                    <a href="#" onclick="openGlobalModal('impressumModal'); return false;">Impressum</a>
                     <span class="sep">|</span>
-                    <a href="datenschutz.html">Datenschutz</a>
+                    <a href="#" onclick="openGlobalModal('datenschutzModal'); return false;">Datenschutz</a>
                 </div>
             </div>
         </footer>
