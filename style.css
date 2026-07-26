@@ -87,7 +87,7 @@ main,
 }
 
 .hero h1 {
-  font-size: clamp(1.4rem, 4vw, 2.2rem); /* Dynamic Schriftgröße je nach Bildschirm */
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
   font-weight: 800;
   margin-bottom: 6px;
 }
@@ -191,7 +191,6 @@ main,
   box-sizing: border-box;
 }
 
-/* Passt die Spalten automatisch von 1 bis n Spalten an */
 .deals-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
@@ -241,11 +240,12 @@ main,
 
 .no-deals { text-align: center; grid-column: 1 / -1; padding: 60px 20px; color: var(--text-muted); font-size: 1rem; }
 
-/* PAGINATION */
+/* PAGINATION STYLING */
 .pagination-container { display: flex; justify-content: center; align-items: center; gap: 6px; margin: 20px 0 40px; flex-wrap: wrap; }
 .page-btn { padding: 6px 12px; background: #ffffff; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; font-weight: 600; color: var(--text-dark); cursor: pointer; }
 .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); cursor: default; }
 .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.page-dots { padding: 6px 8px; color: var(--text-muted); font-weight: 700; user-select: none; }
 
 /* FOOTER ZENTRIERT UNTEN */
 #global-footer { width: 100%; margin-top: auto; }
@@ -320,7 +320,7 @@ main,
   box-sizing: border-box;
 }
 
-/* 📱 RESPONSIVE MEDIA QUERIES (ANPASSUNG AN DAS BENUTZTE GERÄT) */
+/* 📱 RESPONSIVE MEDIA QUERIES */
 
 /* Tablets & kleine Bildschirme */
 @media (max-width: 850px) {
@@ -333,7 +333,7 @@ main,
 /* Smartphones (Handys) */
 @media (max-width: 600px) {
   .deals-grid { 
-    grid-template-columns: repeat(2, 1fr); /* 2 saubere Spalten auf Smartphones */
+    grid-template-columns: repeat(2, 1fr); 
     gap: 8px; 
   }
   .img-container { height: 110px; }
@@ -347,11 +347,14 @@ main,
   .nav-links a { margin: 0 8px; font-size: 0.82rem; }
   .detail-card { grid-template-columns: 1fr; padding: 16px; }
   .legal-page-container { padding: 16px; }
+  
+  .pagination-container { gap: 4px; }
+  .page-btn { padding: 6px 10px; font-size: 0.8rem; }
 }
 
 /* Sehr kleine Smartphones */
 @media (max-width: 380px) {
   .deals-grid { 
-    grid-template-columns: 1fr; /* 1 Spalte auf sehr schmalen Handys */
+    grid-template-columns: 1fr; 
   }
 }
