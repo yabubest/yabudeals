@@ -1,9 +1,7 @@
 /* ============================================================
    YABUDEALS – GLOBALE KOMPONENTEN
-   Eingebunden auf JEDER Seite via: <script src="/components.js"></script>
    ============================================================ */
 
-/* ---------- GLOBALER HEADER ---------- */
 function loadGlobalHeader() {
     const headerContainer = document.getElementById('global-header');
     if (!headerContainer) return;
@@ -21,23 +19,14 @@ function loadGlobalHeader() {
     `;
 }
 
-/* ---------- GLOBALER FOOTER ---------- */
 function loadGlobalFooter() {
     const footerContainer = document.getElementById('global-footer');
     if (!footerContainer) return;
 
     const path = window.location.pathname.toLowerCase();
-    
-    // Prüfen, ob es sich um eine der drei Seiten handelt
-    const isMainDealsPage = path === '/' || 
-                            path === '/index.html' || 
-                            path === '/amazon.html' || 
-                            path === '/aliexpress.html';
-
-    // Prüfen, ob der Nutzer auf einem Mobilgerät ist (Bildschirmbreite <= 768px)
+    const isMainDealsPage = path === '/' || path === '/index.html' || path === '/amazon.html' || path === '/aliexpress.html';
     const isMobile = window.innerWidth <= 768;
 
-    // Auf Desktop für Hauptseiten ausblenden, bei Mobilgeräten ODER anderen Seiten anzeigen
     if (isMainDealsPage && !isMobile) {
         footerContainer.style.display = 'none';
         return;
@@ -82,7 +71,6 @@ function loadGlobalFooter() {
     `;
 }
 
-// Auch bei Fenster-Größenänderung neu auswerten
 window.addEventListener('resize', loadGlobalFooter);
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -91,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ============================================================
-   DEAL-ENGINE – Liest alle Spaltennamen flexibel aus
+   DEAL-ENGINE (Bereinigt URLs automatisch von Leerzeichen)
    ============================================================ */
 
 function formatPrice(val) {
@@ -107,10 +95,10 @@ function formatPrice(val) {
 function getDealDetailHref(deal) {
     const isAli = deal._shop === 'ali';
     if (isAli) {
-        const link = deal['Affiliate Link'] || deal['Link'] || deal['Produkt-ID / AliExpress Link'] || '';
+        const link = deal['Link'] || deal['Affiliate Link'] || deal['Produkt-ID / AliExpress Link'] || '';
         return link ? `/deal.html?shop=ali&id=${encodeURIComponent(link)}` : '#';
     }
-    const asin = deal['ASIN / Amazon Link'] || '';
+    const asin = deal['ASIN / Amazon Link'] || deal['Produkt-ID'] || '';
     return asin ? `/deal.html?shop=amazon&id=${encodeURIComponent(asin)}` : (deal['Link: ybbst-21'] || '#');
 }
 
@@ -123,7 +111,15 @@ function dealCardHTML(deal) {
     const btnClass = isAli ? 'btn-buy-ali' : 'btn-buy-amazon';
     
     const title = deal['Produkt-Titel'] || deal['Titel'] || deal.title || 'Angebot';
-    const image = deal['Bildvorschau'] || deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal.image || 'https://via.placeholder.com/200';
+    
+    // Roh-URL aus den Spalten auslesen
+    let rawImage = deal['Bild-URL (Optional)'] || deal['Bildvorschau'] || deal['Bild-URL'] || deal.image || '';
+    
+    // Entfernt versehentliche Leerzeichen im Link (wie "amazon.com /images")
+    let image = String(rawImage).replace(/\s+/g, '').trim();
+    if (!image) {
+        image = 'https://via.placeholder.com/200';
+    }
 
     const offerPriceFormatted = formatPrice(deal['Angebotspreis (€)'] || deal['Preis (€)'] || deal.offerPrice);
     const rawReg = deal['Regulärer Preis (€)'] || deal.regularPrice;
@@ -132,7 +128,7 @@ function dealCardHTML(deal) {
     const discount = deal['Rabatt (z.B. 30% Rabatt)'] || deal['Rabatt'] || deal.discount || '';
     const category = deal['Kategorie'] || deal.category || 'Angebote';
     
-    const buyLink = deal['Affiliate Link'] || deal['Link: ybbst-21'] || deal['Link'] || '#';
+    const buyLink = deal['Link: ybbst-21'] || deal['Affiliate Link'] || deal['Link'] || '#';
     const detailHref = getDealDetailHref(deal);
 
     return `
