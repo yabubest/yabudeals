@@ -25,10 +25,5 @@ jobs:
 
       - name: Cleanup-Skript ausführen
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }} # 🎯 Reicht das GitHub Secret sicher an Python weiter
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }} # Reicht das Secret sicher an Python weiter
         run: python cleanup_final.py
-
-      - name: Änderungen zurück zu GitHub pushen
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Auto-Cleanup: Alte Deployments aufgeräumt"
