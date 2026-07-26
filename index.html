@@ -5,7 +5,6 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <title>YabuDeals – Beste Deals & Rabatte entdecken</title>
  <meta name="description" content="Die besten Amazon- und AliExpress-Angebote im Überblick: täglich aktualisierte Rabatte, Schnäppchen und Deals für Küche, Haushalt, Elektronik, Wellness & mehr.">
- <!-- ABSOLUTER PFAD FÜR CLOUDFLARE CUSTOM DOMAIN -->
  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -99,13 +98,12 @@
  const rawAmazon = (resAmz.status === 'fulfilled' ? resAmz.value : []).map(d => ({ ...d, _shop: 'amazon' }));
  const rawAli = (resAli.status === 'fulfilled' ? resAli.value : []).map(d => ({ ...d, _shop: 'ali' }));
 
- // 🧹 FILTER: Schmeißt fehlerhafte n8n/Sheet-Einträge sofort raus!
+ // 🧹 FILTER: Entfernt kaputte Platzhalter-Einträge
  const isValidDeal = (deal) => {
  const title = (deal['Produkt-Titel'] || deal['Titel'] || deal.title || '').trim().toLowerCase();
  const price = String(deal['Angebotspreis (€)'] || deal['Preis (€)'] || deal.offerPrice || '').trim().toLowerCase();
  const rawImage = (deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal['Bildvorschau'] || deal.image || '').trim();
 
- // Aussortieren wenn Titel "amazon produkt" ist, Preis "n/a" / leer ist, oder Bild fehlt
  if (title === 'amazon produkt' || title === '' || price === 'n/a' || price === '' || rawImage === '') {
  return false;
  }
