@@ -1,7 +1,9 @@
 /* ============================================================
    YABUDEALS – GLOBALE KOMPONENTEN
+   Eingebunden auf JEDER Seite via: <script src="/components.js"></script>
    ============================================================ */
 
+/* ---------- GLOBALER HEADER ---------- */
 function loadGlobalHeader() {
     const headerContainer = document.getElementById('global-header');
     if (!headerContainer) return;
@@ -19,6 +21,7 @@ function loadGlobalHeader() {
     `;
 }
 
+/* ---------- GLOBALER FOOTER ---------- */
 function loadGlobalFooter() {
     const footerContainer = document.getElementById('global-footer');
     if (!footerContainer) return;
@@ -79,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ============================================================
-   DEAL-ENGINE (Bereinigt URLs automatisch von Leerzeichen)
+   DEAL-ENGINE (Greift bevorzugt auf Spalte I "Bild-URL (Optional)")
    ============================================================ */
 
 function formatPrice(val) {
@@ -95,7 +98,7 @@ function formatPrice(val) {
 function getDealDetailHref(deal) {
     const isAli = deal._shop === 'ali';
     if (isAli) {
-        const link = deal['Link'] || deal['Affiliate Link'] || deal['Produkt-ID / AliExpress Link'] || '';
+        const link = deal['Affiliate Link'] || deal['Link'] || deal['Produkt-ID / AliExpress Link'] || '';
         return link ? `/deal.html?shop=ali&id=${encodeURIComponent(link)}` : '#';
     }
     const asin = deal['ASIN / Amazon Link'] || deal['Produkt-ID'] || '';
@@ -112,10 +115,10 @@ function dealCardHTML(deal) {
     
     const title = deal['Produkt-Titel'] || deal['Titel'] || deal.title || 'Angebot';
     
-    // Roh-URL aus den Spalten auslesen
-    let rawImage = deal['Bild-URL (Optional)'] || deal['Bildvorschau'] || deal['Bild-URL'] || deal.image || '';
+    // GREIFT BEVORZUGT AUF SPALTE I ("Bild-URL (Optional)" / "Bild-URL")
+    let rawImage = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal['Bildvorschau'] || deal.image || '';
     
-    // Entfernt versehentliche Leerzeichen im Link (wie "amazon.com /images")
+    // Entfernt automatisch alle versehentlichen Leerzeichen im Link
     let image = String(rawImage).replace(/\s+/g, '').trim();
     if (!image) {
         image = 'https://via.placeholder.com/200';
