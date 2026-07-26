@@ -64,7 +64,8 @@
  let currentShop = 'all';
  let selectedCategory = '';
 
- const itemsPerPage = 27;
+ // 🎯 24 PRODUKTE PRO SEITE (Damit alle Spalten immer zu 100% gefüllt sind!)
+ const itemsPerPage = 24;
  let currentPage = 1;
 
  function parseDate(dateStr) {
@@ -98,7 +99,7 @@
  const rawAmazon = (resAmz.status === 'fulfilled' ? resAmz.value : []).map(d => ({ ...d, _shop: 'amazon' }));
  const rawAli = (resAli.status === 'fulfilled' ? resAli.value : []).map(d => ({ ...d, _shop: 'ali' }));
 
- // 🧹 FILTER: Entfernt kaputte Platzhalter-Einträge
+ // 🧹 FILTER: Schmeißt unvollständige Zeilen raus
  const isValidDeal = (deal) => {
  const title = (deal['Produkt-Titel'] || deal['Titel'] || deal.title || '').trim().toLowerCase();
  const price = String(deal['Angebotspreis (€)'] || deal['Preis (€)'] || deal.offerPrice || '').trim().toLowerCase();
