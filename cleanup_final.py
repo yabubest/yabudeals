@@ -1,115 +1,116 @@
 import os
-import requests
-import time
+import sys
+import json
+from datetime import datetime
+import gspread
+from google.oauth2.service_account import Credentials
 
-# 🔐 API Token sicher aus den GitHub Secrets laden
-API_TOKEN = os.getenv("CF_API_TOKEN")
+print("🚀 Starte automatische Sheet-Bereinigung & JSON-Aktualisierung...")
 
-# Prüfung: Bricht ab, wenn das Secret fehlt
-if not API_TOKEN:
-    print("❌ FEHLER: Das Secret 'CF_API_TOKEN' wurde nicht gefunden oder ist leer!")
-    print("Bitte erstelle 'CF_API_TOKEN' unter Settings -> Secrets and variables -> Actions in deinem GitHub Repo.")
-    exit(1)
+# 🔑 Secrets & Zugangsdaten aus GitHub Actions auslesen
+SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
+SHEET_ID = os.getenv("GOOGLE_SHEET_ID")
 
-ACCOUNT_ID = "3acbd681eee777bf83a5d0779ef47886"
-PROJECT_NAME = "yabudeals"
-KEEP_LATEST = 10
+if not SERVICE_ACCOUNT_JSON or not SHEET_ID:
+    print("⚠️ GOOGLE_SERVICE_ACCOUNT_JSON oder GOOGLE_SHEET_ID fehlt. Überspringe Sheet-Export.")
+    sys.exit(0)
 
-BASE_URL = f"https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/pages/projects/{PROJECT_NAME}/deployments"
-HEADERS = {
-    "Authorization": f"Bearer {API_TOKEN}",
-    "Content-Type": "application/json"
-}
+try:
+    creds_dict = json.loads(SERVICE_ACCOUNT_JSON)
+    scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+    creds = Credentials.from_service_account_info(creds_dict, scopes=scopes)
+    gc = gspread.authorize(creds)
+    spreadsheet = gc.open_by_key(SHEET_ID)
+    print("✅ Erfolgreich mit Google Sheets verbunden.")
+except Exception as e:
+    print(f"❌ Fehler bei der Verbindung zu Google Sheets: {e}")
+    sys.exit(1)
 
-def get_all_deployments():
-    """Holt alle Deployments ab."""
-    deployments = []
-    page = 1
-    per_page = 25
-    
-    print("Lade Cloudflare Deployments...")
-    while True:
-        try:
-            params = {"page": page, "per_page": per_page}
-            response = requests.get(BASE_URL, headers=HEADERS, params=params, timeout=30)
-            
-            if response.status_code != 200:
-                print(f"Fehler beim Abrufen: Status {response.status_code}")
-                break
-            
-            data = response.json()
-            if not data.get("success"):
-                print(f"Cloudflare API Fehler: {data.get('errors')}")
-                break
-            
-            result = data.get("result", [])
-            if not result:
-                break
-            
-            deployments.extend(result)
-            if len(result) < per_page:
-                break
-            page += 1
-            time.sleep(0.3)
-        except Exception as e:
-            print(f"Netzwerk/API Fehler: {e}")
-            break
-            
-    return deployments
+# -------------------------------------------------------------
+# 1. BEREINIGUNG VON UNVOLLSTÄNDIGEN DEALS DIREKT IM SHEET
+# -------------------------------------------------------------
 
-def delete_deployment(deployment_id):
-    """Löscht ein einzelnes Deployment."""
-    url = f"{BASE_URL}/{deployment_id}"
+def clean_worksheet(worksheet_name):
     try:
-        response = requests.delete(url, headers=HEADERS, timeout=30)
-        if response.status_code == 200:
-            return response.json().get("success", False)
-        return False
-    except Exception:
-        return False
+        ws = spreadsheet.worksheet(worksheet_name)
+        rows = ws.get_all_values()
+        
+        if not rows or len(rows) <= 1:
+            print(f"ℹ️ Tabellenblatt '{worksheet_name}' ist leer.")
+            return
 
-def main():
-    print("=" * 60)
-    print("Cloudflare Pages Deployment Cleanup (Automated)")
-    print("=" * 60)
-    
-    deployments = get_all_deployments()
-    total = len(deployments)
-    print(f"Gesamt gefunden: {total} Deployments")
-    
-    if total <= KEEP_LATEST:
-        print(f"Nur {total} Deployments vorhanden. Nichts zu löschen.")
-        return
-    
-    # Sortiere nach Erstellungsdatum (neueste zuerst)
-    deployments.sort(key=lambda x: x.get("created_on", ""), reverse=True)
-    to_delete = deployments[KEEP_LATEST:]
-    
-    print(f"Behalte: {KEEP_LATEST} neueste | Lösche: {len(to_delete)} alte")
-    print("=" * 60)
-    
-    deleted = 0
-    failed = 0
-    
-    for i, dep in enumerate(to_delete, 1):
-        dep_id = dep["id"]
-        dep_env = dep.get("environment", "unknown")
-        dep_date = dep.get("created_on", "unknown")[:19]
-        
-        print(f"[{i}/{len(to_delete)}] Lösche {dep_id[:12]}... ({dep_env}, {dep_date})", end=" ")
-        
-        if delete_deployment(dep_id):
-            print("✅")
-            deleted += 1
-        else:
-            print("❌")
-            failed += 1
+        header = rows[0]
+        valid_rows = [header]
+        deleted_count = 0
+
+        title_idx = -1
+        price_idx = -1
+        img_idx = -1
+
+        for i, col in enumerate(header):
+            col_lower = col.lower()
+            if "titel" in col_lower or "title" in col_lower:
+                title_idx = i
+            elif "preis" in col_lower or "price" in col_lower:
+                price_idx = i
+            elif "bild" in col_lower or "image" in col_lower:
+                img_idx = i
+
+        for row in rows[1:]:
+            title = row[title_idx].strip().lower() if title_idx != -1 and len(row) > title_idx else ""
+            price = str(row[price_idx]).strip().lower() if price_idx != -1 and len(row) > price_idx else ""
+            img = row[img_idx].strip() if img_idx != -1 and len(row) > img_idx else ""
+
+            if title == "amazon produkt" or title == "" or price == "n/a" or price == "" or img == "":
+                deleted_count += 1
+                continue
             
-        time.sleep(0.25)
-        
-    print("=" * 60)
-    print(f"FERTIG! Gelöscht: {deleted}, Fehler: {failed}")
-    print("=" * 60)
+            valid_rows.append(row)
 
-if __name__ == "__main__":
-    main()
+        if deleted_count > 0:
+            print(f"🧹 '{worksheet_name}': {deleted_count} fehlerhafte/unvollständige Deals gelöscht.")
+            ws.clear()
+            ws.update("A1", valid_rows)
+        else:
+            print(f"✨ '{worksheet_name}': Alle Deals sind vollständig & sauber.")
+
+    except Exception as e:
+        print(f"⚠️ Warnung bei Bereinigung von '{worksheet_name}': {e}")
+
+# Beides säubern (Amazon & AliExpress Blätter)
+clean_worksheet("AMZ")
+clean_worksheet("Aliexpress")
+
+# -------------------------------------------------------------
+# 2. EXPORT ALLER SHEET-TABELLEN ALS KORREKTE JSON-DATEIEN
+# -------------------------------------------------------------
+
+def export_json(worksheet_name, output_filename):
+    try:
+        ws = spreadsheet.worksheet(worksheet_name)
+        records = ws.get_all_records()
+        
+        # Bereinigung der String-Werte
+        clean_records = []
+        for r in records:
+            clean_item = {}
+            for k, v in r.items():
+                if isinstance(v, str):
+                    clean_item[k] = v.strip()
+                else:
+                    clean_item[k] = v
+            clean_records.append(clean_item)
+
+        with open(output_filename, "w", encoding="utf-8") as f:
+            json.dump(clean_records, f, ensure_ascii=False, indent=2)
+            
+        print(f"📄 '{output_filename}' erfolgreich exportiert ({len(clean_records)} Einträge).")
+    except Exception as e:
+        print(f"⚠️ Fehler beim Export von '{output_filename}': {e}")
+
+# Exporte ausführen
+export_json("AMZ", "deals.json")
+export_json("Aliexpress", "aliexpress-deals.json")
+export_json("Blog", "blog-posts.json")
+
+print("🎉 Fertig! Alle JSON-Dateien wurden sauber generiert.")
