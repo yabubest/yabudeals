@@ -1,0 +1,27 @@
+name: Auto Cleanup Deals
+
+on:
+  schedule:
+    # Führt das Skript alle 6 Stunden aus
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Erlaubt auch manuelles Starten per Klick
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code auschecken
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Cleanup-Skript ausführen
+        run: python cleanup_final.py
+
+      - name: Änderungen zurück zu GitHub pushen
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto-Cleanup: Alte Angebote aufgeräumt"
