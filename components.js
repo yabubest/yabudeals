@@ -128,7 +128,7 @@ function dealCardHTML(deal) {
     ${shopBadge}
     ${discount ? `<div class="badge-discount">${discount}</div>` : ''}
 
-    <!-- 🔗 BILD ÖFFNET AB JETZT DEN PARTNER-LINK (buyLink) -->
+    <!-- 🔗 KLICK AUFS BILD ÖFFNET DIREKT DEN PARTNER-LINK -->
     <a href="${buyLink}" target="_blank" rel="nofollow noopener sponsored" class="img-container" style="text-decoration:none;">
       <img src="${image}" alt="${title}" loading="lazy" style="cursor:pointer;" onerror="this.onerror=null;this.src='https://via.placeholder.com/200';">
     </a>
@@ -151,6 +151,7 @@ function dealCardHTML(deal) {
   `;
 }
 
+/* ---------- SMART PAGINATION (MAX 5 SEITEN) ---------- */
 function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage, onPageChangeFnName) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -161,8 +162,33 @@ function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage
 
   let html = `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="${onPageChangeFnName}(${currentPage - 1})">&laquo; Zurück</button>`;
 
-  for (let i = 1; i <= totalPages; i++) {
+  // Berechnet den Bereich für max 5 Buttons
+  let startPage = Math.max(1, currentPage - 2);
+  let endPage = Math.min(totalPages, startPage + 4);
+
+  if (endPage - startPage < 4) {
+    startPage = Math.max(1, endPage - 4);
+  }
+
+  // Erste Seite anzeigen, falls wir weiter hinten sind
+  if (startPage > 1) {
+    html += `<button class="page-btn" onclick="${onPageChangeFnName}(1)">1</button>`;
+    if (startPage > 2) {
+      html += `<span class="page-dots">...</span>`;
+    }
+  }
+
+  // Die max. 5 Seitennummern rendern
+  for (let i = startPage; i <= endPage; i++) {
     html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="${onPageChangeFnName}(${i})">${i}</button>`;
+  }
+
+  // Letzte Seite anzeigen, falls wir weiter vorne sind
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      html += `<span class="page-dots">...</span>`;
+    }
+    html += `<button class="page-btn" onclick="${onPageChangeFnName}(${totalPages})">${totalPages}</button>`;
   }
 
   html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="${onPageChangeFnName}(${currentPage + 1})">Weiter &raquo;</button>`;
