@@ -36,18 +36,17 @@
  }
 
  try {
- const res = await fetch('/blog-posts.json');
+ const res = await fetch('/blog-posts.json?v=' + Date.now());
  if (!res.ok) throw new Error('HTTP ' + res.status);
  const posts = await res.json();
 
- const post = posts.find(p => (p['Link'] || '') === postSlug);
+ const post = posts.find(p => (p['Link'] || '') === postSlug || (p['Link'] || '').includes(postSlug));
 
  if (!post) {
  container.innerHTML = '<p class="no-deals">Dieser Beitrag wurde nicht gefunden.</p>';
  return;
  }
 
- // Suche den passenden Affiliate-Link
  const affiliateLink = await findAffiliateLink(post);
  renderPost(post, affiliateLink);
  } catch (error) {
@@ -57,24 +56,21 @@
  }
 
  async function findAffiliateLink(post) {
- // 1. Direkt aus dem Blog-Post lesen (falls vorhanden)
  if (post['Affiliate Link'] && post['Affiliate Link'] !== '#') return post['Affiliate Link'];
  if (post['Link_Deal'] && post['Link_Deal'] !== '#') return post['Link_Deal'];
 
  const title = (post['Titel'] || '').toLowerCase();
 
  try {
- // 2. Durchsuche deals.json & aliexpress-deals.json nach passendem Produkt
  const [resAmz, resAli] = await Promise.allSettled([
- fetch('/deals.json').then(r => r.ok ? r.json() : []),
- fetch('/aliexpress-deals.json').then(r => r.ok ? r.json() : [])
+ fetch('/deals.json?v=' + Date.now()).then(r => r.ok ? r.json() : []),
+ fetch('/aliexpress-deals.json?v=' + Date.now()).then(r => r.ok ? r.json() : [])
  ]);
 
  const amazonDeals = resAmz.status === 'fulfilled' ? resAmz.value : [];
  const aliDeals = resAli.status === 'fulfilled' ? resAli.value : [];
  const allDeals = [...amazonDeals, ...aliDeals];
 
- // Vergleiche Bild-URL oder Schlüsselwörter im Titel
  const matchedDeal = allDeals.find(deal => {
  const dealImg = (deal['Bild-URL (Optional)'] || deal['Bild-URL'] || '').trim();
  const postImg = (post['Bild-URL'] || '').trim();
@@ -91,7 +87,6 @@
  console.error("Fehler beim Suchen des Affiliate Links:", e);
  }
 
- // 3. Fallback: Amazon Suche mit Partner-Tag ybbst-21
  return `https://www.amazon.de/s?k=${encodeURIComponent(post['Titel'] || '')}&tag=ybbst-21`;
  }
 
@@ -103,7 +98,16 @@
  const category = post['Kategorie'] || 'Ratgeber';
  const date = post['Datum'] || '';
  const readTime = post['Lesezeit'] ? ` • ⏱️ ${post['Lesezeit']}` : '';
- const contentHtml = post['Content_HTML'] || `<p>${post['Auszug'] || ''}</p>`;
+ 
+ // 🛠️ INTELLIGENTER CONTENT-CHECK:
+ // Falls Content_HTML leer ist oder nur "..." enthält, nimm den Auszug!
+ let rawHtml = post['Content_HTML'] || '';
+ if (rawHtml.trim() === '...' || rawHtml.trim() === '' || rawHtml.length < 10) {
+ rawHtml = `<p>${post['Auszug'] || 'Kein weiterer Text vorhanden.'}</p>`;
+ } else {
+ // Entferne störende dreifache Punkte am Ende von Absätzen
+ rawHtml = rawHtml.replace(/<p>\s*\.\.\.\s*<\/p>/gi, '').replace(/\.\.\.$/g, '');
+ }
 
  document.title = `${title} – YabuDeals`;
 
@@ -111,9 +115,9 @@
  ${image ? `<div class="blog-hero-wrapper"><img src="${image}" alt="${title}" class="blog-post-hero-img"></div>` : ''}
  <div class="blog-post-meta">${category}${readTime}${date ? ` • ${date}` : ''}</div>
  <h1 class="blog-post-title">${title}</h1>
- <div class="blog-post-content">${contentHtml}</div>
+ <div class="blog-post-content">${rawHtml}</div>
 
- <!-- 🎯 CTA-BOX MIT DIREKTEM PRODUKT-LINK -->
+ <!-- 🎯 KAUF-BUTTON AM ENDE -->
  <div class="blog-cta-box">
  <h3>Gefällt dir dieses Produkt?</h3>
  <p>Entdecke jetzt das passende Schnäppchen und sichere dir den besten Preis!</p>
