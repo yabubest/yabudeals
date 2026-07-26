@@ -162,7 +162,6 @@ function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage
 
   let html = `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="${onPageChangeFnName}(${currentPage - 1})">&laquo; Zurück</button>`;
 
-  // Berechnet den Bereich für max 5 Buttons
   let startPage = Math.max(1, currentPage - 2);
   let endPage = Math.min(totalPages, startPage + 4);
 
@@ -170,7 +169,6 @@ function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage
     startPage = Math.max(1, endPage - 4);
   }
 
-  // Erste Seite anzeigen, falls wir weiter hinten sind
   if (startPage > 1) {
     html += `<button class="page-btn" onclick="${onPageChangeFnName}(1)">1</button>`;
     if (startPage > 2) {
@@ -178,12 +176,10 @@ function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage
     }
   }
 
-  // Die max. 5 Seitennummern rendern
   for (let i = startPage; i <= endPage; i++) {
     html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="${onPageChangeFnName}(${i})">${i}</button>`;
   }
 
-  // Letzte Seite anzeigen, falls wir weiter vorne sind
   if (endPage < totalPages) {
     if (endPage < totalPages - 1) {
       html += `<span class="page-dots">...</span>`;
