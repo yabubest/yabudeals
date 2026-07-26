@@ -26,6 +26,25 @@ function loadGlobalFooter() {
     const footerContainer = document.getElementById('global-footer');
     if (!footerContainer) return;
 
+    const path = window.location.pathname.toLowerCase();
+    
+    // Prüfen, ob es sich um eine der drei Seiten handelt
+    const isMainDealsPage = path === '/' || 
+                            path === '/index.html' || 
+                            path === '/amazon.html' || 
+                            path === '/aliexpress.html';
+
+    // Prüfen, ob der Nutzer auf einem Mobilgerät ist (Bildschirmbreite <= 768px)
+    const isMobile = window.innerWidth <= 768;
+
+    // Auf Desktop für Hauptseiten ausblenden, bei Mobilgeräten ODER anderen Seiten anzeigen
+    if (isMainDealsPage && !isMobile) {
+        footerContainer.style.display = 'none';
+        return;
+    } else {
+        footerContainer.style.display = 'block';
+    }
+
     const mapsLink      = "https://www.google.com/maps/place/Yabubest/@49.1154652,9.718036,17z/data=!4m17!1m10!3m9!1s0x479851322d8befcf:0x431899f4c419a2cd!2sYabubest!8m2!3d49.1155145!4d9.7178204!10e5!14m1!1BCgIgAQ!16s%2Fg%2F11tj2bjwb7!3m5!1s0x479851322d8befcf:0x431899f4c419a2cd!8m2!3d49.1155145!4d9.7178204!16s%2Fg%2F11tj2bjwb7";
     const tiktokLink    = "https://www.tiktok.com/@yabubests";
     const instagramLink = "https://www.instagram.com/yabubests/";
@@ -63,6 +82,9 @@ function loadGlobalFooter() {
     `;
 }
 
+// Auch bei Fenster-Größenänderung neu auswerten
+window.addEventListener('resize', loadGlobalFooter);
+
 document.addEventListener('DOMContentLoaded', () => {
     loadGlobalHeader();
     loadGlobalFooter();
@@ -76,7 +98,6 @@ function formatPrice(val) {
     if (!val && val !== 0) return '';
     if (val === 'N/A' || val === 'n/a') return 'Preis auf Anfrage';
 
-    // Säubert Text-Preise wie "34,99€"
     let str = String(val).replace('€', '').trim();
     let num = parseFloat(str.replace(',', '.'));
     if (isNaN(num)) return str + ' €';
@@ -101,24 +122,16 @@ function dealCardHTML(deal) {
 
     const btnClass = isAli ? 'btn-buy-ali' : 'btn-buy-amazon';
     
-    // Titel aus allen möglichen Spaltenüberschriften lesen
     const title = deal['Produkt-Titel'] || deal['Titel'] || deal.title || 'Angebot';
-    
-    // Bilder aus allen möglichen Spaltenüberschriften lesen (Bild-URL / Bildvorschau)
-    const image = deal['Bild-URL (Optional)'] || deal['Bildvorschau'] || deal['Bild-URL'] || deal.image || 'https://via.placeholder.com/200';
+    const image = deal['Bildvorschau'] || deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal.image || 'https://via.placeholder.com/200';
 
-    // Preise bereinigen
     const offerPriceFormatted = formatPrice(deal['Angebotspreis (€)'] || deal['Preis (€)'] || deal.offerPrice);
     const rawReg = deal['Regulärer Preis (€)'] || deal.regularPrice;
     const regPriceFormatted = rawReg ? formatPrice(rawReg) : '';
 
-    // Rabatt
     const discount = deal['Rabatt (z.B. 30% Rabatt)'] || deal['Rabatt'] || deal.discount || '';
-    
-    // Kategorie (Fallback wenn leer)
     const category = deal['Kategorie'] || deal.category || 'Angebote';
     
-    // Affiliate-Link aus allen möglichen Tabellen-Spalten
     const buyLink = deal['Affiliate Link'] || deal['Link: ybbst-21'] || deal['Link'] || '#';
     const detailHref = getDealDetailHref(deal);
 
