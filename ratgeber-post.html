@@ -47,14 +47,55 @@
  return;
  }
 
- renderPost(post);
+ // Suche den passenden Affiliate-Link
+ const affiliateLink = await findAffiliateLink(post);
+ renderPost(post, affiliateLink);
  } catch (error) {
  console.error(error);
  container.innerHTML = '<p class="no-deals">Beitrag konnte nicht geladen werden.</p>';
  }
  }
 
- function renderPost(post) {
+ async function findAffiliateLink(post) {
+ // 1. Direkt aus dem Blog-Post lesen (falls vorhanden)
+ if (post['Affiliate Link'] && post['Affiliate Link'] !== '#') return post['Affiliate Link'];
+ if (post['Link_Deal'] && post['Link_Deal'] !== '#') return post['Link_Deal'];
+
+ const title = (post['Titel'] || '').toLowerCase();
+
+ try {
+ // 2. Durchsuche deals.json & aliexpress-deals.json nach passendem Produkt
+ const [resAmz, resAli] = await Promise.allSettled([
+ fetch('/deals.json').then(r => r.ok ? r.json() : []),
+ fetch('/aliexpress-deals.json').then(r => r.ok ? r.json() : [])
+ ]);
+
+ const amazonDeals = resAmz.status === 'fulfilled' ? resAmz.value : [];
+ const aliDeals = resAli.status === 'fulfilled' ? resAli.value : [];
+ const allDeals = [...amazonDeals, ...aliDeals];
+
+ // Vergleiche Bild-URL oder Schlüsselwörter im Titel
+ const matchedDeal = allDeals.find(deal => {
+ const dealImg = (deal['Bild-URL (Optional)'] || deal['Bild-URL'] || '').trim();
+ const postImg = (post['Bild-URL'] || '').trim();
+ if (dealImg && postImg && dealImg === postImg) return true;
+
+ const dealTitle = (deal['Produkt-Titel'] || '').toLowerCase();
+ return title.split(' ').some(word => word.length > 4 && dealTitle.includes(word));
+ });
+
+ if (matchedDeal) {
+ return matchedDeal['Link: ybbst-21'] || matchedDeal['Affiliate Link'] || matchedDeal['Link'] || '#';
+ }
+ } catch (e) {
+ console.error("Fehler beim Suchen des Affiliate Links:", e);
+ }
+
+ // 3. Fallback: Amazon Suche mit Partner-Tag ybbst-21
+ return `https://www.amazon.de/s?k=${encodeURIComponent(post['Titel'] || '')}&tag=ybbst-21`;
+ }
+
+ function renderPost(post, affiliateLink) {
  const container = document.getElementById('postContainer');
 
  const title = post['Titel'] || 'Blogbeitrag';
@@ -63,9 +104,6 @@
  const date = post['Datum'] || '';
  const readTime = post['Lesezeit'] ? ` • ⏱️ ${post['Lesezeit']}` : '';
  const contentHtml = post['Content_HTML'] || `<p>${post['Auszug'] || ''}</p>`;
- 
- // Affiliate Link für den CTA-Button
- const ctaLink = post['Affiliate Link'] || post['Link_Deal'] || '/';
 
  document.title = `${title} – YabuDeals`;
 
@@ -75,11 +113,11 @@
  <h1 class="blog-post-title">${title}</h1>
  <div class="blog-post-content">${contentHtml}</div>
 
- <!-- 🎯 EINLADENDE CALL-TO-ACTION BOX AM ENDE DES ARTICLES -->
+ <!-- 🎯 CTA-BOX MIT DIREKTEM PRODUKT-LINK -->
  <div class="blog-cta-box">
  <h3>Gefällt dir dieses Produkt?</h3>
- <p>Entdecke jetzt das passende Schnäppchen und sichere dir den besten Preis auf YabuDeals!</p>
- <a href="${ctaLink}" target="_blank" rel="nofollow noopener sponsored" class="blog-cta-btn">
+ <p>Entdecke jetzt das passende Schnäppchen und sichere dir den besten Preis!</p>
+ <a href="${affiliateLink}" target="_blank" rel="nofollow noopener sponsored" class="blog-cta-btn">
  👉 Jetzt Angebot ansehen & sparen &rarr;
  </a>
  </div>
