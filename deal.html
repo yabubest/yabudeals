@@ -9,6 +9,7 @@
 </head>
 <body>
 
+  <!-- GLOBALE KOPFZEILE -->
   <div id="global-header"></div>
 
   <main class="detail-wrapper">
@@ -18,6 +19,7 @@
     </div>
   </main>
 
+  <!-- GLOBALE FUSSZEILE -->
   <div id="global-footer"></div>
 
   <script src="/components.js"></script>
@@ -40,7 +42,7 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
 
-        // BEHOBEN: Flexible Schlüssel-Abfrage für AliExpress und Amazon
+        // KORREKTUR: Umfassende Identifikator-Suche
         const deal = data.find(d => {
           if (shop === 'ali') {
             const affLink = d['Affiliate Link'] || d['Link'] || d['Produkt-ID / AliExpress Link'] || '';
@@ -76,7 +78,7 @@
       const rawReg = deal['Regulärer Preis (€)'];
       const regPrice = rawReg ? formatPrice(rawReg) : '';
       const discount = deal['Rabatt (z.B. 30% Rabatt)'] || deal['Rabatt'] || '';
-      const category = deal['Kategorie'] || 'Angebot';
+      const category = deal['Kategorie'] || 'Sonstiges';
       const description = deal['Lange Beschreibung'] || deal['Beschreibung'] || '';
       const link = deal['Affiliate Link'] || deal['Link: ybbst-21'] || deal['Link'] || '#';
 
