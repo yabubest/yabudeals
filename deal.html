@@ -9,7 +9,6 @@
 </head>
 <body>
 
-  <!-- GLOBALE KOPFZEILE -->
   <div id="global-header"></div>
 
   <main class="detail-wrapper">
@@ -19,7 +18,6 @@
     </div>
   </main>
 
-  <!-- GLOBALE FUSSZEILE -->
   <div id="global-footer"></div>
 
   <script src="/components.js"></script>
@@ -42,12 +40,11 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
 
-        // KORREKTUR: Flexible Identifikator-Suche für AliExpress & Amazon
         const deal = data.find(d => {
           if (shop === 'ali') {
-            const link = d['Affiliate Link'] || d['Link'] || d['Produkt-ID / AliExpress Link'] || '';
+            const affLink = d['Affiliate Link'] || d['Link'] || d['Produkt-ID / AliExpress Link'] || '';
             const prodId = String(d['Produkt-ID'] || '');
-            return link === id || prodId === id;
+            return affLink === id || prodId === id;
           }
           const asin = d['ASIN / Amazon Link'] || d['Produkt-ID'] || d['Link: ybbst-21'] || '';
           return asin === id;
@@ -72,7 +69,7 @@
 
       const title = deal['Produkt-Titel'] || deal['Titel'] || 'Angebot';
       const rawImage = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal['Bildvorschau'] || '';
-      const image = optimizeImageUrl(String(rawImage).replace(/\s+/g, '').trim(), 500) || 'https://via.placeholder.com/400';
+      const image = optimizeImageUrl(String(rawImage).replace(/\s+/g, '').trim(), 500);
       
       const offerPrice = formatPrice(deal['Angebotspreis (€)'] || deal['Preis (€)']);
       const rawReg = deal['Regulärer Preis (€)'];
