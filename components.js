@@ -43,7 +43,7 @@ function loadGlobalFooter() {
 
         <div class="footer-center">
           <a href="${mapsLink}" target="_blank" rel="noopener noreferrer" class="social-icon" title="Google Maps" aria-label="Google Maps">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5 2.5z"/></svg>
           </a>
           <a href="${tiktokLink}" target="_blank" rel="noopener noreferrer" class="social-icon" title="TikTok" aria-label="TikTok">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68a6.34 6.34 0 0 0 10.86 4.48A6.29 6.29 0 0 0 15.84 15V8.56a8.27 8.27 0 0 0 4.75 1.51V6.69z"/></svg>
@@ -77,7 +77,7 @@ if (document.readyState === 'loading') {
   loadGlobalFooter();
 }
 
-/* ---------- DATUMS-PARSER & SORTIERUNG (WICHTIG!) ---------- */
+/* ---------- DATUMS-PARSER (WANDELT FREITEXT SAUBER UM) ---------- */
 function parseGermanDate(dateStr) {
   if (!dateStr || typeof dateStr !== 'string') return 0;
   try {
@@ -103,25 +103,34 @@ function parseGermanDate(dateStr) {
   }
 }
 
-// Wandelt unstrukturierte Datumsstrings um & sortiert absteigend
 function sortDealsByLatest(deals) {
   if (!Array.isArray(deals)) return [];
   return deals.sort((a, b) => {
     const dateA = parseGermanDate(a['DATUM'] || a['Datum'] || '');
     const dateB = parseGermanDate(b['DATUM'] || b['Datum'] || '');
-    return dateB - dateA; // Neueste Angebote immer ganz oben
+    return dateB - dateA;
   });
 }
 
-/* ---------- BILD- & PREIS-HELPER ---------- */
+/* ---------- BILD-CLEANER & OPTIMIERER ---------- */
 function optimizeImageUrl(url, size = 300) {
   const fallback = 'https://via.placeholder.com/300x300?text=Kein+Bild';
   if (!url || typeof url !== 'string') return fallback;
+
   let clean = url.trim();
   if (!clean || clean.length < 5) return fallback;
 
-  clean = clean.replace(/^https?:\/\//, '');
-  return `https://images.weserv.nl/?url=${encodeURIComponent(clean)}&w=${size}&h=${size}&fit=contain&bg=white&output=webp&q=80`;
+  // Repariert unvollständige Amazon-Pfade aus Google Sheets
+  if (clean.startsWith('//')) {
+    clean = 'https:' + clean;
+  } else if (clean.startsWith('/images/') || clean.startsWith('images/')) {
+    clean = 'https://m.media-amazon.com/' + clean.replace(/^\//, '');
+  } else if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
+    clean = 'https://' + clean;
+  }
+
+  const cleanHost = clean.replace(/^https?:\/\//, '');
+  return `https://images.weserv.nl/?url=${encodeURIComponent(cleanHost)}&w=${size}&h=${size}&fit=contain&bg=white&output=webp&q=80`;
 }
 
 function formatPrice(val) {
@@ -172,7 +181,7 @@ function dealCardHTML(deal) {
       ${discount ? `<div class="badge-discount">${discount}</div>` : ''}
 
       <a href="${detailHref}" class="img-container" style="text-decoration:none;">
-        <img src="${image}" alt="${title}" width="300" height="300" decoding="async" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/300';">
+        <img src="${image}" alt="${title}" width="300" height="300" decoding="async" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/300x300?text=Bild+Fehler';">
       </a>
 
       <div>
