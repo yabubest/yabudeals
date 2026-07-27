@@ -20,7 +20,56 @@ function loadGlobalHeader() {
   </header>
   `;
 }
+ANLEITUNG: Bild-Optimierung in components.js einbauen
+========================================================
 
+WARUM: build-ssr.js (das erste Laden / was Crawler sehen) optimiert
+Bilder jetzt automatisch. Aber sobald dein JS übernimmt (Filter,
+Suche, Kategorie-Wechsel, Pagination), rendert components.js die
+Karten NEU - mit den rohen, unoptimierten Bild-URLs. Damit es
+überall einheitlich und schnell bleibt, brauchst du denselben Trick
+dort auch.
+
+SCHRITT 1: Diese Funktion irgendwo VOR deiner dealCardHTML()-
+Funktion in components.js einfügen:
+
+--------------------------------------------------------------
+function optimizeImageUrl(url, size = 300) {
+  if (!url) return url;
+  const clean = String(url).replace(/^https?:\/\//, '').trim();
+  if (!clean) return url;
+  return `https://images.weserv.nl/?url=${encodeURIComponent(clean)}&w=${size}&h=${size}&fit=contain&bg=white&output=webp&q=80`;
+}
+--------------------------------------------------------------
+
+SCHRITT 2: In deiner bestehenden dealCardHTML()-Funktion die Zeile,
+die das Bild vorbereitet (bei dir ungefähr so:
+
+  let rawImage = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal['Bildvorschau'] || deal.image || '';
+  let image = String(rawImage).replace(/\s+/g, '').trim();
+
+) ERSETZEN durch:
+
+  let rawImage = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal['Bildvorschau'] || deal.image || '';
+  let image = optimizeImageUrl(String(rawImage).replace(/\s+/g, '').trim(), 300);
+
+SCHRITT 3: Beim <img>-Tag in derselben Funktion width/height/decoding
+ergänzen (verhindert Layout-Sprünge während des Ladens):
+
+  <img src="${image}" alt="${title}" width="300" height="300"
+       loading="lazy" decoding="async" style="cursor:pointer;"
+       onerror="this.onerror=null;this.src='https://via.placeholder.com/300';">
+
+FERTIG. Alle Bilder (egal ob von Amazon oder AliExpress, egal wie
+groß das Original ist) kommen dann einheitlich als 300x300 WebP,
+komprimiert und über ein globales CDN gecacht - spürbar schneller,
+besonders beim ersten Besuch und auf Mobilgeräten.
+
+HINWEIS: images.weserv.nl ist ein kostenloser, werbefreier Bild-Proxy-
+Dienst (kein Anthropic-Produkt, keine Abhängigkeit von mir) - falls
+du das lieber selbst hosten willst (z.B. via Cloudflare Images, das
+du laut deinem CF_API_TOKEN eh schon nutzt), sag Bescheid, dann bauen
+wir das stattdessen darüber.
 /* ---------- GLOBALER FOOTER (IMMER SICHTBAR) ---------- */
 function loadGlobalFooter() {
   const footerContainer = document.getElementById('global-footer');
