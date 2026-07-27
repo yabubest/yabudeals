@@ -1,11 +1,3 @@
-# Speicherort im Repo: .github/workflows/build-ssr.yml
-#
-# Rendert die ersten 24 Deals aus den AKTUELL im Repo liegenden
-# deals.json / aliexpress-deals.json statisch in index.html.
-#
-# Kein Python-Schritt mehr nötig (cleanup_final.py wurde gelöscht) -
-# daher werden auch KEINE Secrets benötigt.
-
 name: Build SSR Deals
 
 on:
@@ -31,7 +23,10 @@ jobs:
         with:
           node-version: 20
 
-      - name: Deals statisch in index.html rendern
+      - name: Validierung vor Build
+        run: node validate.js
+
+      - name: Deals statisch rendern
         run: node build-ssr.js
 
       - name: Änderungen committen & pushen
