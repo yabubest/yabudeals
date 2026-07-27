@@ -1,5 +1,5 @@
 /* ============================================================
-   YABUDEALS – GLOBALE KOMPONENTEN & DEAL-ENGINE
+   YABUDEALS – GLOBALE KOMPONENTEN & AUTOMATISCHE FILTER
    ============================================================ */
 
 /* ---------- GLOBALER HEADER (STICKY / IMMER SICHTBAR) ---------- */
@@ -77,7 +77,7 @@ if (document.readyState === 'loading') {
   loadGlobalFooter();
 }
 
-/* ---------- DATUMS- & PREIS-HELPER ---------- */
+/* ---------- HELFER-FUNKTIONEN ---------- */
 function parseGermanDate(dateStr) {
   if (!dateStr || typeof dateStr !== 'string') return 0;
   try {
@@ -103,30 +103,6 @@ function parseGermanDate(dateStr) {
   }
 }
 
-function parseNumericPrice(val) {
-  if (val === undefined || val === null || val === '') return 0;
-  if (typeof val === 'number') return val;
-  let str = String(val).replace('€', '').trim();
-  let num = parseFloat(str.replace(',', '.'));
-  return isNaN(num) ? 0 : num;
-}
-
-function parseDiscountPercent(val) {
-  if (!val) return 0;
-  const match = String(val).match(/(\d+)/);
-  return match ? parseInt(match[1], 10) : 0;
-}
-
-function formatPrice(val) {
-  if (!val && val !== 0) return '';
-  if (val === 'N/A' || val === 'n/a') return 'Preis auf Anfrage';
-
-  let num = parseNumericPrice(val);
-  if (num === 0) return String(val) + ' €';
-  return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
-}
-
-/* ---------- BILD-HELPER ---------- */
 function optimizeImageUrl(url, size = 300) {
   const fallback = 'https://via.placeholder.com/300x300?text=Kein+Bild';
   if (!url || typeof url !== 'string') return fallback;
@@ -150,75 +126,16 @@ function optimizeImageUrl(url, size = 300) {
   return `https://images.weserv.nl/?url=${encodeURIComponent(cleanHost)}&w=${size}&h=${size}&fit=contain&bg=white&output=webp&q=80`;
 }
 
-/* ---------- 🔍 UNIVERSAL FILTER & SORT ENGINE ---------- */
-function filterAndSortDeals(deals, config = {}) {
-  if (!Array.isArray(deals)) return [];
+function formatPrice(val) {
+  if (!val && val !== 0) return '';
+  if (val === 'N/A' || val === 'n/a') return 'Preis auf Anfrage';
 
-  const {
-    search = '',
-    category = '',
-    minDiscount = 0,
-    maxPrice = 0,
-    sortBy = 'latest'
-  } = config;
-
-  let filtered = deals.filter(deal => {
-    // 1. Suche nach Titel oder Kategorie
-    const title = (deal['Produkt-Titel'] || deal['Titel'] || deal.title || '').toLowerCase();
-    const cat = (deal['Kategorie'] || deal.category || '').toLowerCase();
-    if (search && !title.includes(search.toLowerCase()) && !cat.includes(search.toLowerCase())) {
-      return false;
-    }
-
-    // 2. Kategorie-Filter
-    if (category && (deal['Kategorie'] || deal.category) !== category) {
-      return false;
-    }
-
-    // 3. Mindestrabatt Filter (z. B. 20%)
-    if (minDiscount > 0) {
-      const discountVal = deal['Rabatt (z.B. 30% Rabatt)'] || deal['Rabatt'] || deal.discount || '';
-      if (parseDiscountPercent(discountVal) < minDiscount) {
-        return false;
-      }
-    }
-
-    // 4. Maximalpreis Filter
-    if (maxPrice > 0) {
-      const priceVal = deal['Angebotspreis (€)'] || deal['Preis (€)'] || deal.offerPrice || 0;
-      const numPrice = parseNumericPrice(priceVal);
-      if (numPrice > maxPrice) {
-        return false;
-      }
-    }
-
-    return true;
-  });
-
-  // 5. Sortierung
-  return filtered.sort((a, b) => {
-    const priceA = parseNumericPrice(a['Angebotspreis (€)'] || a['Preis (€)'] || a.offerPrice);
-    const priceB = parseNumericPrice(b['Angebotspreis (€)'] || b['Preis (€)'] || b.offerPrice);
-
-    const discA = parseDiscountPercent(a['Rabatt (z.B. 30% Rabatt)'] || a['Rabatt'] || a.discount);
-    const discB = parseDiscountPercent(b['Rabatt (z.B. 30% Rabatt)'] || b['Rabatt'] || b.discount);
-
-    if (sortBy === 'price-asc') {
-      return priceA - priceB;
-    } else if (sortBy === 'price-desc') {
-      return priceB - priceA;
-    } else if (sortBy === 'discount-desc') {
-      return discB - discA;
-    } else {
-      // Standard: Neueste zuerst
-      const dateA = parseGermanDate(a['DATUM'] || a['Datum'] || '');
-      const dateB = parseGermanDate(b['DATUM'] || b['Datum'] || '');
-      return dateB - dateA;
-    }
-  });
+  let str = String(val).replace('€', '').trim();
+  let num = parseFloat(str.replace(',', '.'));
+  if (isNaN(num)) return str + ' €';
+  return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
 }
 
-/* ---------- DEAL CARD & PAGINATION ---------- */
 function getDealDetailHref(deal) {
   const isAli = deal._shop === 'ali';
   if (isAli) {
