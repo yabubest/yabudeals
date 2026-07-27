@@ -57,6 +57,20 @@ function getDealDetailHref(deal) {
   return asin ? `/deal.html?shop=amazon&id=${encodeURIComponent(asin)}` : (deal['Link: ybbst-21'] || '#');
 }
 
+/**
+ * Leitet Produktbilder durch images.weserv.nl (kostenloser Image-Proxy/CDN):
+ * - einheitliche Größe (egal wie groß/klein das Original ist)
+ * - automatische WebP-Ausgabe (kleiner als JPG/PNG)
+ * - Qualitäts-Kompression (q=80 = kaum sichtbarer Unterschied, viel kleiner)
+ * - Ergebnis wird global gecacht, dadurch ab dem 2. Aufruf sehr schnell
+ */
+function optimizeImageUrl(url, size = 300) {
+  if (!url) return url;
+  const clean = String(url).replace(/^https?:\/\//, '').trim();
+  if (!clean) return url;
+  return `https://images.weserv.nl/?url=${encodeURIComponent(clean)}&w=${size}&h=${size}&fit=contain&bg=white&output=webp&q=80`;
+}
+
 function dealCardHTML(deal) {
   const isAli = deal._shop === 'ali';
   const shopBadge = isAli
@@ -67,8 +81,8 @@ function dealCardHTML(deal) {
   const title = deal['Produkt-Titel'] || deal['Titel'] || deal.title || 'Angebot';
 
   let rawImage = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal['Bildvorschau'] || deal.image || '';
-  let image = String(rawImage).replace(/\s+/g, '').trim();
-  if (!image) image = 'https://via.placeholder.com/200';
+  let image = optimizeImageUrl(String(rawImage).replace(/\s+/g, '').trim(), 300);
+  if (!image) image = 'https://via.placeholder.com/300';
 
   const offerPriceFormatted = formatPrice(deal['Angebotspreis (€)'] || deal['Preis (€)'] || deal.offerPrice);
   const rawReg = deal['Regulärer Preis (€)'] || deal.regularPrice;
@@ -83,7 +97,7 @@ function dealCardHTML(deal) {
       ${shopBadge}
       ${discount ? `<div class="badge-discount">${discount}</div>` : ''}
       <a href="${buyLink}" target="_blank" rel="nofollow noopener sponsored" class="img-container" style="text-decoration:none;">
-        <img src="${image}" alt="${title}" loading="lazy" style="cursor:pointer;" onerror="this.onerror=null;this.src='https://via.placeholder.com/200';">
+        <img src="${image}" alt="${title}" width="300" height="300" loading="lazy" decoding="async" style="cursor:pointer;" onerror="this.onerror=null;this.src='https://via.placeholder.com/300';">
       </a>
       <div>
         <div class="category-tag">${category}</div>
