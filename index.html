@@ -67,9 +67,11 @@
       container.innerHTML = '<div class="no-deals">Lade aktuelle Angebote...</div>';
 
       try {
+        // Cache Buster: Verhindert, dass Browser oder Cloudflare veraltete Daten cachen
+        const cacheBuster = '?v=' + new Date().getTime();
         const [amazonRes, aliRes] = await Promise.allSettled([
-          fetch('/deals.json'),
-          fetch('/aliexpress-deals.json')
+          fetch('/deals.json' + cacheBuster),
+          fetch('/aliexpress-deals.json' + cacheBuster)
         ]);
 
         let amazonData = [];
