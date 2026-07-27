@@ -65,8 +65,6 @@ function loadGlobalFooter() {
   `;
 }
 
-window.addEventListener('resize', loadGlobalFooter);
-
 document.addEventListener('DOMContentLoaded', () => {
   loadGlobalHeader();
   loadGlobalFooter();
@@ -96,8 +94,17 @@ function formatPrice(val) {
 function getDealDetailHref(deal) {
   const isAli = deal._shop === 'ali';
   if (isAli) {
-    const link = deal['Affiliate Link'] || deal['Link'] || deal['Produkt-ID / AliExpress Link'] || '';
-    return link ? `/deal.html?shop=ali&id=${encodeURIComponent(link)}` : '#';
+    // FIX: Affiliate Link als Primärschlüssel, Produkt-ID als Fallback
+    const link = deal['Affiliate Link'] || deal['Link'] || '';
+    if (link) {
+      return `/deal.html?shop=ali&id=${encodeURIComponent(link)}`;
+    }
+    // Fallback auf Produkt-ID wenn kein Link vorhanden
+    const pid = deal['Produkt-ID'] || '';
+    if (pid) {
+      return `/deal.html?shop=ali&id=${encodeURIComponent(pid)}`;
+    }
+    return '#';
   }
   const asin = deal['ASIN / Amazon Link'] || deal['Produkt-ID'] || '';
   return asin ? `/deal.html?shop=amazon&id=${encodeURIComponent(asin)}` : (deal['Link: ybbst-21'] || '#');
@@ -134,13 +141,13 @@ function dealCardHTML(deal) {
       ${discount ? `<div class="badge-discount">${discount}</div>` : ''}
 
       <a href="${detailHref}" class="img-container" style="text-decoration:none;">
-        <img src="${image}" alt="${title}" width="300" height="300" decoding="async" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/200';">
+        <img src="${image}" alt="${title.replace(/"/g, '&quot;')}" width="300" height="300" decoding="async" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/200';">
       </a>
 
       <div>
         <div class="category-tag">${category}</div>
         <a href="${detailHref}" style="text-decoration:none; color: inherit;">
-          <div class="deal-title" title="${title}">${title}</div>
+          <div class="deal-title" title="${title.replace(/"/g, '&quot;')}">${title}</div>
         </a>
       </div>
 
