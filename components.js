@@ -2,7 +2,7 @@
    YABUDEALS – GLOBALE KOMPONENTEN, STICKY HEADER & AUTO-FILTER
    ============================================================ */
 
-/* ---------- 1. GLOBALER HEADER (STICKY / IMMER OBEN) ---------- */
+/* ---------- 1. GLOBALER HEADER (STICKY / OHNE AMAZON & ALI LINKS) ---------- */
 function loadGlobalHeader() {
   const headerContainer = document.getElementById('global-header');
   if (!headerContainer) return;
@@ -13,8 +13,6 @@ function loadGlobalHeader() {
         <a href="/" class="logo">🚀 YabuDeals</a>
         <nav class="nav-links">
           <a href="/">Startseite</a>
-          <a href="/amazon.html">Amazon Deals</a>
-          <a href="/aliexpress.html">AliExpress Deals</a>
           <a href="/blog.html">Blog & Ratgeber</a>
         </nav>
       </div>
@@ -107,7 +105,7 @@ function sortDealsByLatest(deals) {
   return deals.sort((a, b) => {
     const dateA = parseGermanDate(a['DATUM'] || a['Datum'] || '');
     const dateB = parseGermanDate(b['DATUM'] || b['Datum'] || '');
-    return dateB - dateA; // NEUESTE ZUERST!
+    return dateB - dateA;
   });
 }
 
@@ -216,12 +214,10 @@ function filterDeals(deals, query = '', category = '') {
     const title = (deal['Produkt-Titel'] || deal['Titel'] || deal.title || '').toLowerCase();
     const cat = (deal['Kategorie'] || deal.category || '').toLowerCase();
 
-    // Textsuche
     if (cleanQuery && !title.includes(cleanQuery) && !cat.includes(cleanQuery)) {
       return false;
     }
 
-    // Kategorie-Filter
     if (cleanCat && (deal['Kategorie'] || deal.category) !== cleanCat) {
       return false;
     }
@@ -229,7 +225,6 @@ function filterDeals(deals, query = '', category = '') {
     return true;
   });
 
-  // Immer Neueste zuerst sortieren!
   return sortDealsByLatest(filtered);
 }
 
