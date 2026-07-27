@@ -1,5 +1,5 @@
 /* ============================================================
-   YABUDEALS – GLOBALE KOMPONENTEN & DEAL-ENGINE (VOLLSTÄNDIG)
+   YABUDEALS – GLOBALE KOMPONENTEN & DEAL-ENGINE
    ============================================================ */
 
 /* ---------- GLOBALER HEADER ---------- */
@@ -77,7 +77,7 @@ if (document.readyState === 'loading') {
   loadGlobalFooter();
 }
 
-/* ---------- DATUMS-PARSER & SORTIERUNG ---------- */
+/* ---------- DATUMS-PARSER & SORTIERUNG (WICHTIG!) ---------- */
 function parseGermanDate(dateStr) {
   if (!dateStr || typeof dateStr !== 'string') return 0;
   try {
@@ -103,11 +103,13 @@ function parseGermanDate(dateStr) {
   }
 }
 
+// Diese Funktion sortiert das Array nach dem neuesten Datum
 function sortDealsByLatest(deals) {
+  if (!Array.isArray(deals)) return [];
   return deals.sort((a, b) => {
     const dateA = parseGermanDate(a['DATUM'] || a['Datum'] || '');
     const dateB = parseGermanDate(b['DATUM'] || b['Datum'] || '');
-    return dateB - dateA;
+    return dateB - dateA; // Neueste zuerst
   });
 }
 
