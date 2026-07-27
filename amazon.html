@@ -4,22 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Amazon Deals – YabuDeals</title>
-  <meta name="description" content="Alle aktuellen Amazon-Angebote auf einen Blick: täglich aktualisierte Rabatte und Tiefpreise, kuratiert von YabuDeals.">
+  <meta name="description" content="Alle aktuellen Amazon-Angebote auf einen Blick.">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-  <!-- GLOBALE KOPFZEILE -->
   <div id="global-header"></div>
 
   <main style="flex: 1;">
-    <!-- HERO -->
     <div class="hero">
       <h1>📦 Alle aktuellen Amazon Angebote</h1>
       <p>Täglich automatisch aktualisierte Tiefpreise und Rabattaktionen von Amazon.de.</p>
     </div>
 
-    <!-- FILTERBAR -->
     <div class="filter-section">
       <div class="single-filter-bar">
         <div class="shop-tabs">
@@ -27,7 +24,7 @@
         </div>
 
         <div class="search-input-wrapper">
-          <input type="text" id="searchInput" placeholder="Produkt suchen (z.B. Hülle, Stuhl)..." onkeyup="onFilterChange()">
+          <input type="text" id="searchInput" placeholder="Produkt suchen..." onkeyup="onFilterChange()">
         </div>
 
         <div class="category-select-wrapper">
@@ -38,18 +35,15 @@
       </div>
     </div>
 
-    <!-- DEALS GRID -->
     <div class="deals-grid-container">
       <div class="deals-grid" id="dealsContainer">
         <div class="no-deals">Lade aktuelle Angebote...</div>
       </div>
     </div>
 
-    <!-- PAGINIERUNG -->
     <div class="pagination-container" id="paginationContainer"></div>
   </main>
 
-  <!-- GLOBALE FUSSZEILE -->
   <div id="global-footer"></div>
 
   <script src="/components.js"></script>
@@ -65,10 +59,9 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
         
-        // Data Mappen
         allDeals = data.map(d => ({ ...d, _shop: 'amazon' }));
 
-        // HIER WIRD SORTIERT: Neueste Angebote (Uhrzeit & Datum) nach oben!
+        // HIER WIRD DIE SORTIERUNG DURCHGEFÜHRT!
         allDeals = sortDealsByLatest(allDeals);
 
         populateCategorySelect(document.getElementById('categoryFilter'), allDeals);
