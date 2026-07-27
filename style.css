@@ -6,7 +6,13 @@
   --text-dark: #0f172a;
   --text-muted: #64748b;
   --border: #e2e8f0;
-  --max-content-width: 1400px;
+  /* GEÄNDERT: von 1400px auf fluid fast-volle Breite, damit keine
+     seitlichen Leerstellen mehr auf breiten Bildschirmen entstehen.
+     Wirkt sich NUR auf Header/Footer/Homepage-Wrapper aus - Blog- und
+     Rechtsseiten behalten ihre eigene, lesbare Breite (siehe .blog-post-container,
+     .legal-page-container, .detail-wrapper weiter unten - deren eigene
+     max-width-Regel überschreibt diese Variable). */
+  --max-content-width: 98vw;
 }
 
 body {
@@ -221,23 +227,17 @@ main,
 .badge-discount { position: absolute; top: 8px; right: 8px; background: #ef4444; color: white; padding: 2px 6px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; z-index: 2; }
 .badge-shop-amazon { position: absolute; top: 8px; left: 8px; background: #fff3e6; color: #d97706; padding: 2px 6px; border-radius: 6px; font-size: 0.68rem; font-weight: 700; border: 1px solid #fde68a; z-index: 2; }
 .badge-shop-ali { position: absolute; top: 8px; left: 8px; background: #fef2f2; color: #dc2626; padding: 2px 6px; border-radius: 6px; font-size: 0.68rem; font-weight: 700; border: 1px solid #fecaca; z-index: 2; }
-
 .img-container { width: 100%; height: 130px; display: flex; align-items: center; justify-content: center; margin: 14px 0 8px; }
 .img-container img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; }
-
 .category-tag { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .deal-title { font-size: 0.82rem; font-weight: 600; line-height: 1.3; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.6em; color: var(--text-dark); }
-
 .price-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
 .offer-price { font-size: 1.1rem; font-weight: 800; color: #b91c1c; }
 .regular-price { font-size: 0.75rem; color: var(--text-muted); text-decoration: line-through; }
-
 .btn-buy-amazon { display: block; width: 100%; text-align: center; background: #ffd814; color: #0f1111; text-decoration: none; padding: 8px 0; border-radius: 8px; font-size: 0.8rem; font-weight: 700; border: 1px solid #fcd200; box-sizing: border-box; }
 .btn-buy-amazon:hover { background: #f7ca00; }
-
 .btn-buy-ali { display: block; width: 100%; text-align: center; background: #ff4747; color: #ffffff; text-decoration: none; padding: 8px 0; border-radius: 8px; font-size: 0.8rem; font-weight: 700; border: 1px solid #e03131; box-sizing: border-box; }
 .btn-buy-ali:hover { background: #e03131; }
-
 .no-deals { text-align: center; grid-column: 1 / -1; padding: 60px 20px; color: var(--text-muted); font-size: 1rem; }
 
 /* PAGINATION STYLING */
@@ -279,11 +279,10 @@ main,
 .footer-right a:hover { color: #ffffff; }
 .footer-right .sep { margin: 0 4px; color: #334155; }
 
-/* RECHTLICHE SEITEN & DETAILSEITEN */
+/* RECHTLICHE SEITEN & DETAILSEITEN - eigene, lesbare Breite (unverändert) */
 .detail-wrapper { max-width: 1000px; margin: 30px auto; padding: 0 20px; flex: 1; width: 100%; box-sizing: border-box; }
 .back-link { display: inline-block; margin-bottom: 20px; font-weight: 600; color: var(--primary); text-decoration: none; font-size: 0.88rem; }
 .back-link:hover { text-decoration: underline; }
-
 .detail-card {
   background: #ffffff;
   border: 1px solid var(--border);
@@ -311,7 +310,7 @@ main,
   box-sizing: border-box;
 }
 
-/* 📖 BLOG-DETAILSEITE OPTIMIERUNG */
+/* 📖 BLOG-DETAILSEITE OPTIMIERUNG - eigene, lesbare Breite (unverändert) */
 .blog-post-container {
   max-width: 850px;
   margin: 30px auto;
@@ -334,7 +333,6 @@ main,
   box-sizing: border-box;
 }
 
-/* Behebt das Riesenbild-Problem im Blog */
 .blog-post-hero-img {
   max-width: 100%;
   max-height: 380px;
@@ -403,31 +401,29 @@ main,
 }
 
 @media (max-width: 600px) {
-  .deals-grid { 
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 8px; 
+  .deals-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
   .img-container { height: 110px; }
-  .footer-container { 
-    flex-direction: column !important; 
-    gap: 8px; 
-    text-align: center; 
+  .footer-container {
+    flex-direction: column !important;
+    gap: 8px;
+    text-align: center;
   }
   .footer-left { text-align: center; white-space: normal; }
   .header-container { justify-content: center; text-align: center; }
   .nav-links a { margin: 0 8px; font-size: 0.82rem; }
   .detail-card { grid-template-columns: 1fr; padding: 16px; }
   .legal-page-container { padding: 16px; }
-  
   .pagination-container { gap: 4px; }
   .page-btn { padding: 6px 10px; font-size: 0.8rem; }
-  
   .blog-post-hero-img { max-height: 250px; }
   .blog-cta-box { padding: 18px; }
 }
 
 @media (max-width: 380px) {
-  .deals-grid { 
-    grid-template-columns: 1fr; 
+  .deals-grid {
+    grid-template-columns: 1fr;
   }
 }
