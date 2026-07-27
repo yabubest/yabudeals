@@ -103,13 +103,13 @@ function parseGermanDate(dateStr) {
   }
 }
 
-// Diese Funktion sortiert das Array nach dem neuesten Datum
+// Wandelt unstrukturierte Datumsstrings um & sortiert absteigend
 function sortDealsByLatest(deals) {
   if (!Array.isArray(deals)) return [];
   return deals.sort((a, b) => {
     const dateA = parseGermanDate(a['DATUM'] || a['Datum'] || '');
     const dateB = parseGermanDate(b['DATUM'] || b['Datum'] || '');
-    return dateB - dateA; // Neueste zuerst
+    return dateB - dateA; // Neueste Angebote immer ganz oben
   });
 }
 
