@@ -2,13 +2,13 @@
    YABUDEALS – GLOBALE KOMPONENTEN & DEAL-ENGINE
    ============================================================ */
 
-/* ---------- GLOBALER HEADER ---------- */
+/* ---------- GLOBALER HEADER (IMMER SICHTBAR / STICKY) ---------- */
 function loadGlobalHeader() {
   const headerContainer = document.getElementById('global-header');
   if (!headerContainer) return;
 
   headerContainer.innerHTML = `
-    <header class="site-header">
+    <header class="site-header" style="position: sticky; top: 0; z-index: 9999; background-color: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.08); width: 100%;">
       <div class="header-container">
         <a href="/" class="logo">🚀 YabuDeals</a>
         <nav class="nav-links">
@@ -120,7 +120,6 @@ function optimizeImageUrl(url, size = 300) {
   let clean = url.trim();
   if (!clean || clean.length < 5) return fallback;
 
-  // Repariere unvollständige Amazon-Bild-Pfade
   if (clean.startsWith('//')) {
     clean = 'https:' + clean;
   } else if (clean.startsWith('/images/') || clean.startsWith('images/')) {
@@ -129,7 +128,6 @@ function optimizeImageUrl(url, size = 300) {
     clean = 'https://' + clean;
   }
 
-  // Amazon blockiert den Proxy weserv.nl -> Amazon-Bilder direkt laden!
   if (clean.includes('media-amazon.com') || clean.includes('amazon.com') || clean.includes('ssl-images-amazon.com')) {
     return clean;
   }
@@ -232,7 +230,7 @@ function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage
 
   if (endPage < totalPages) {
     if (endPage < totalPages - 1) html += `<span class="page-dots">...</span>`;
-    html += `<button class="page-btn" onclick="${onPageChangeFnName}(${onPageChangeFnName === 'goToPage' ? totalPages : totalPages})">${totalPages}</button>`;
+    html += `<button class="page-btn" onclick="${onPageChangeFnName}(${totalPages})">${totalPages}</button>`;
   }
 
   html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="${onPageChangeFnName}(${currentPage + 1})">Weiter &raquo;</button>`;
