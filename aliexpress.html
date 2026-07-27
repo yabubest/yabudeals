@@ -4,22 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AliExpress Deals – YabuDeals</title>
-  <meta name="description" content="Alle aktuellen AliExpress-Angebote auf einen Blick: täglich aktualisierte Schnäppchen, kuratiert von YabuDeals.">
+  <meta name="description" content="Alle aktuellen AliExpress-Angebote auf einen Blick.">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-  <!-- GLOBALE KOPFZEILE -->
   <div id="global-header"></div>
 
   <main style="flex: 1;">
-    <!-- HERO -->
     <div class="hero">
       <h1>🌐 Alle aktuellen AliExpress Angebote</h1>
       <p>Täglich automatisch aktualisierte Schnäppchen von AliExpress.</p>
     </div>
 
-    <!-- FILTERBAR -->
     <div class="filter-section">
       <div class="single-filter-bar">
         <div class="shop-tabs">
@@ -38,18 +35,15 @@
       </div>
     </div>
 
-    <!-- DEALS GRID -->
     <div class="deals-grid-container">
       <div class="deals-grid" id="dealsContainer">
         <div class="no-deals">Lade aktuelle Angebote...</div>
       </div>
     </div>
 
-    <!-- PAGINIERUNG -->
     <div class="pagination-container" id="paginationContainer"></div>
   </main>
 
-  <!-- GLOBALE FUSSZEILE -->
   <div id="global-footer"></div>
 
   <script src="/components.js"></script>
@@ -65,10 +59,9 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
         
-        // Data Mappen
         allDeals = data.map(d => ({ ...d, _shop: 'ali' }));
-        
-        // HIER WIRD SORTIERT: Neueste Angebote (Uhrzeit & Datum) nach oben!
+
+        // HIER WIRD DIE SORTIERUNG DURCHGEFÜHRT!
         allDeals = sortDealsByLatest(allDeals);
 
         populateCategorySelect(document.getElementById('categoryFilter'), allDeals);
