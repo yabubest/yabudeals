@@ -1,0 +1,62 @@
+# Speicherort im Repo: .github/workflows/update-deals.yml
+#
+# Reihenfolge ist entscheidend:
+#   1) cleanup_final.py  -> bereinigt Google Sheet, exportiert
+#      deals.json / aliexpress-deals.json / blog-posts.json
+#   2) build-ssr.js       -> rendert die ersten 24 Deals aus GENAU
+#      diesen frischen JSON-Dateien statisch in index.html
+#
+# ⚠️ WICHTIG: Falls bei dir bereits eine andere Action existiert,
+# die cleanup_final.py separat ausführt (frag im Zweifel im
+# Actions-Tab auf GitHub nach, da ich das nicht einsehen kann),
+# lösche die alte Datei oder deaktiviere sie - zwei Workflows,
+# die beide committen, verursachen sonst Merge-Konflikte.
+
+name: Update Deals & Rebuild SSR
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 6,14 * * *'   # 08:00 & 16:00 Uhr (MEZ) - 2x täglich
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Python-Abhängigkeiten installieren
+        run: pip install gspread google-auth
+
+      - name: 1) Sheet bereinigen & JSON exportieren
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+        run: python cleanup_final.py
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 2) Deals statisch in index.html rendern
+        run: node build-ssr.js
+
+      - name: Änderungen committen & pushen
+        run: |
+          git config user.name "yabudeals-bot"
+          git config user.email "actions@github.com"
+          git add deals.json aliexpress-deals.json blog-posts.json index.html
+          git diff --quiet --cached || git commit -m "chore: Deals aktualisiert & SSR neu gerendert [skip ci]"
+          git push
