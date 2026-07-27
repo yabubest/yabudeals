@@ -1,6 +1,6 @@
 /* ============================================================
- YABUDEALS – GLOBALE KOMPONENTEN & DEAL-ENGINE
- ============================================================ */
+   YABUDEALS – GLOBALE KOMPONENTEN & DEAL-ENGINE (VOLLSTÄNDIG)
+   ============================================================ */
 
 /* ---------- GLOBALER HEADER ---------- */
 function loadGlobalHeader() {
@@ -25,7 +25,7 @@ function loadGlobalHeader() {
 /* ---------- GLOBALER FOOTER ---------- */
 function loadGlobalFooter() {
   const footerContainer = document.getElementById('global-footer');
-  if (!footerContainer) return;
+  if (!footerContainer || footerContainer.dataset.rendered === "true") return;
 
   footerContainer.style.display = 'block';
 
@@ -64,9 +64,9 @@ function loadGlobalFooter() {
       </div>
     </footer>
   `;
+  footerContainer.dataset.rendered = "true";
 }
 
-// Sicheres Laden nach DOM-Bereitschaft
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     loadGlobalHeader();
@@ -77,11 +77,48 @@ if (document.readyState === 'loading') {
   loadGlobalFooter();
 }
 
-/* ---------- HELPER & DEAL ENGINE ---------- */
+/* ---------- DATUMS-PARSER & SORTIERUNG ---------- */
+function parseGermanDate(dateStr) {
+  if (!dateStr || typeof dateStr !== 'string') return 0;
+  try {
+    const cleanStr = dateStr.replace('Uhr', '').trim();
+    const [datePart, timePart] = cleanStr.split(',');
+    if (!datePart) return 0;
+
+    const [day, month, year] = datePart.trim().split('.');
+    let hours = '00', minutes = '00', seconds = '00';
+
+    if (timePart) {
+      const times = timePart.trim().split(':');
+      hours = times[0] || '00';
+      minutes = times[1] || '00';
+      seconds = times[2] || '00';
+    }
+
+    const isoString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`;
+    const timestamp = new Date(isoString).getTime();
+    return isNaN(timestamp) ? 0 : timestamp;
+  } catch (e) {
+    return 0;
+  }
+}
+
+function sortDealsByLatest(deals) {
+  return deals.sort((a, b) => {
+    const dateA = parseGermanDate(a['DATUM'] || a['Datum'] || '');
+    const dateB = parseGermanDate(b['DATUM'] || b['Datum'] || '');
+    return dateB - dateA;
+  });
+}
+
+/* ---------- BILD- & PREIS-HELPER ---------- */
 function optimizeImageUrl(url, size = 300) {
-  if (!url) return 'https://via.placeholder.com/300';
-  const clean = String(url).replace(/^https?:\/\//, '').trim();
-  if (!clean) return 'https://via.placeholder.com/300';
+  const fallback = 'https://via.placeholder.com/300x300?text=Kein+Bild';
+  if (!url || typeof url !== 'string') return fallback;
+  let clean = url.trim();
+  if (!clean || clean.length < 5) return fallback;
+
+  clean = clean.replace(/^https?:\/\//, '');
   return `https://images.weserv.nl/?url=${encodeURIComponent(clean)}&w=${size}&h=${size}&fit=contain&bg=white&output=webp&q=80`;
 }
 
@@ -166,9 +203,7 @@ function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage
   let startPage = Math.max(1, currentPage - 2);
   let endPage = Math.min(totalPages, startPage + 4);
 
-  if (endPage - startPage < 4) {
-    startPage = Math.max(1, endPage - 4);
-  }
+  if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
 
   if (startPage > 1) {
     html += `<button class="page-btn" onclick="${onPageChangeFnName}(1)">1</button>`;
