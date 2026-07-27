@@ -12,18 +12,20 @@
   <!-- GLOBALE KOPFZEILE -->
   <div id="global-header"></div>
 
-  <div style="flex: 1;">
+  <main style="flex: 1;">
+    <!-- HERO -->
     <div class="hero">
       <h1>Blog & Ratgeber</h1>
       <p>Tipps, Produkttests und Empfehlungen rund um die besten Deals.</p>
     </div>
 
+    <!-- BLOG POSTS GRID -->
     <div class="blog-post-container">
       <div id="blogGrid" class="deals-grid">
         <div class="no-deals">Lade Beiträge...</div>
       </div>
     </div>
-  </div>
+  </main>
 
   <!-- GLOBALE FUSSZEILE -->
   <div id="global-footer"></div>
@@ -44,23 +46,25 @@
 
         grid.innerHTML = posts.map(post => {
           const title = post['Titel'] || 'Ratgeber-Beitrag';
-          const image = post['Bild-URL'] || 'https://via.placeholder.com/300x200';
+          const rawImg = post['Bild-URL'] || '';
+          // BEHOBEN: Nutzung des WebP-Bild-Optimierers für schnelle Ladezeiten
+          const image = optimizeImageUrl(rawImg, 400); 
           const category = post['Kategorie'] || 'Ratgeber';
           const excerpt = post['Auszug'] || '';
           const link = post['Link'] ? `/ratgeber-post.html?post=${encodeURIComponent(post['Link'])}` : '#';
 
           return `
-            <div class="deal-card">
+            <article class="deal-card">
               <a href="${link}" style="text-decoration:none; color:inherit;">
                 <div class="img-container">
-                  <img src="${image}" alt="${title}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/300x200';">
+                  <img src="${image}" alt="${title}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://via.placeholder.com/300x200?text=Bild+Fehler';">
                 </div>
                 <div class="category-tag">${category}</div>
                 <div class="deal-title" style="height:auto; min-height:2.6em;">${title}</div>
                 <p style="font-size:0.8rem; color:var(--text-muted); line-height:1.4; margin:8px 0 14px; display:-webkit-box; -webkit-line-clamp:3; line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">${excerpt}</p>
               </a>
               <a href="${link}" class="btn-buy-amazon" style="background:var(--primary); color:#ffffff; border-color:var(--primary);">Beitrag lesen &rarr;</a>
-            </div>
+            </article>
           `;
         }).join('');
 
