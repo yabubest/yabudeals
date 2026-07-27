@@ -1,118 +1,124 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AliExpress Deals – YabuDeals</title>
-    <meta name="description" content="Alle aktuellen AliExpress-Angebote auf einen Blick: täglich aktualisierte Schnäppchen, kuratiert von YabuDeals.">
-    <link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AliExpress Deals – YabuDeals</title>
+  <meta name="description" content="Alle aktuellen AliExpress-Angebote auf einen Blick: täglich aktualisierte Schnäppchen, kuratiert von YabuDeals.">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-    <!-- GLOBALE KOPFZEILE -->
-    <div id="global-header"></div>
+  <!-- GLOBALE KOPFZEILE -->
+  <div id="global-header"></div>
 
-    <div style="flex: 1;">
-        <!-- HERO -->
-        <div class="hero">
-            <h1>🌐 Alle aktuellen AliExpress Angebote</h1>
-            <p>Täglich automatisch aktualisierte Schnäppchen von AliExpress.</p>
-        </div>
-
-        <!-- FILTERBAR (OHNE SHOP-TABS, DA FEST AUF ALIEXPRESS) -->
-        <div class="filter-section">
-            <div class="single-filter-bar">
-                <div class="shop-tabs">
-                    <span class="shop-tab-btn active">🌐 AliExpress</span>
-                </div>
-
-                <div class="search-input-wrapper">
-                    <input type="text" id="searchInput" placeholder="Produkt suchen..." onkeyup="onFilterChange()">
-                </div>
-
-                <div class="category-select-wrapper">
-                    <select id="categoryFilter" onchange="onFilterChange()">
-                        <option value="">Alle Kategorien</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- DEALS GRID -->
-        <div class="deals-grid-container">
-            <div class="deals-grid" id="dealsContainer">
-                <div class="no-deals">Lade aktuelle Angebote...</div>
-            </div>
-        </div>
-
-        <!-- PAGINIERUNG -->
-        <div class="pagination-container" id="paginationContainer"></div>
+  <main style="flex: 1;">
+    <!-- HERO -->
+    <div class="hero">
+      <h1>🌐 Alle aktuellen AliExpress Angebote</h1>
+      <p>Täglich automatisch aktualisierte Schnäppchen von AliExpress.</p>
     </div>
 
-    <!-- GLOBALE FUSSZEILE -->
-    <div id="global-footer"></div>
+    <!-- FILTERBAR -->
+    <div class="filter-section">
+      <div class="single-filter-bar">
+        <div class="shop-tabs">
+          <span class="shop-tab-btn active">🌐 AliExpress</span>
+        </div>
 
-    <script src="/components.js"></script>
-    <script>
-        let allDeals = [];
-        let filteredDeals = [];
-        const itemsPerPage = 27;
-        let currentPage = 1;
+        <div class="search-input-wrapper">
+          <input type="text" id="searchInput" placeholder="Produkt suchen..." onkeyup="onFilterChange()">
+        </div>
 
-        async function fetchDeals() {
-            try {
-                const res = await fetch('/aliexpress-deals.json');
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const data = await res.json();
-                allDeals = data.map(d => ({ ...d, _shop: 'ali' }));
-                populateCategorySelect(document.getElementById('categoryFilter'), allDeals);
-                onFilterChange();
-            } catch (error) {
-                console.error("AliExpress Deals konnten nicht geladen werden:", error);
-                document.getElementById('dealsContainer').innerHTML =
-                    '<div class="no-deals">Aktuell sind keine AliExpress-Deals erreichbar.</div>';
-            }
-        }
+        <div class="category-select-wrapper">
+          <select id="categoryFilter" onchange="onFilterChange()">
+            <option value="">Alle Kategorien</option>
+          </select>
+        </div>
+      </div>
+    </div>
 
-        function onFilterChange() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const selectedCategory = document.getElementById('categoryFilter').value;
+    <!-- DEALS GRID -->
+    <div class="deals-grid-container">
+      <div class="deals-grid" id="dealsContainer">
+        <div class="no-deals">Lade aktuelle Angebote...</div>
+      </div>
+    </div>
 
-            filteredDeals = allDeals.filter(deal => {
-                const title = (deal['Produkt-Titel'] || '').toLowerCase();
-                const category = deal['Kategorie'] || '';
-                const matchesSearch = title.includes(searchTerm);
-                const matchesCategory = selectedCategory === '' || category.toLowerCase().includes(selectedCategory.toLowerCase());
-                return matchesSearch && matchesCategory;
-            });
+    <!-- PAGINIERUNG -->
+    <div class="pagination-container" id="paginationContainer"></div>
+  </main>
 
-            currentPage = 1;
-            renderCurrentPage();
-        }
+  <!-- GLOBALE FUSSZEILE -->
+  <div id="global-footer"></div>
 
-        function renderCurrentPage() {
-            const startIdx = (currentPage - 1) * itemsPerPage;
-            const pageItems = filteredDeals.slice(startIdx, startIdx + itemsPerPage);
-            renderDeals(pageItems);
-            renderPaginationHTML(document.getElementById('paginationContainer'), filteredDeals.length, itemsPerPage, currentPage, 'goToPage');
-        }
+  <script src="/components.js"></script>
+  <script>
+    let allDeals = [];
+    let filteredDeals = [];
+    const itemsPerPage = 27;
+    let currentPage = 1;
 
-        function renderDeals(deals) {
-            const container = document.getElementById('dealsContainer');
-            if (!deals || deals.length === 0) {
-                container.innerHTML = '<div class="no-deals">Keine passenden Deals gefunden.</div>';
-                return;
-            }
-            container.innerHTML = deals.map(dealCardHTML).join('');
-        }
+    async function fetchDeals() {
+      try {
+        const res = await fetch('/aliexpress-deals.json');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        
+        // Data Mappen
+        allDeals = data.map(d => ({ ...d, _shop: 'ali' }));
+        
+        // HIER WIRD SORTIERT: Neueste Angebote (Uhrzeit & Datum) nach oben!
+        allDeals = sortDealsByLatest(allDeals);
 
-        function goToPage(page) {
-            currentPage = page;
-            renderCurrentPage();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        populateCategorySelect(document.getElementById('categoryFilter'), allDeals);
+        onFilterChange();
+      } catch (error) {
+        console.error("AliExpress Deals konnten nicht geladen werden:", error);
+        document.getElementById('dealsContainer').innerHTML =
+          '<div class="no-deals">Aktuell sind keine AliExpress-Deals erreichbar.</div>';
+      }
+    }
 
-        fetchDeals();
-    </script>
+    function onFilterChange() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+      const selectedCategory = document.getElementById('categoryFilter').value;
+
+      filteredDeals = allDeals.filter(deal => {
+        const title = (deal['Produkt-Titel'] || deal['Titel'] || '').toLowerCase();
+        const category = deal['Kategorie'] || '';
+        const matchesSearch = !searchTerm || title.includes(searchTerm);
+        const matchesCategory = !selectedCategory || category.toLowerCase() === selectedCategory.toLowerCase();
+        return matchesSearch && matchesCategory;
+      });
+
+      currentPage = 1;
+      renderCurrentPage();
+    }
+
+    function renderCurrentPage() {
+      const startIdx = (currentPage - 1) * itemsPerPage;
+      const pageItems = filteredDeals.slice(startIdx, startIdx + itemsPerPage);
+      renderDeals(pageItems);
+      renderPaginationHTML(document.getElementById('paginationContainer'), filteredDeals.length, itemsPerPage, currentPage, 'goToPage');
+    }
+
+    function renderDeals(deals) {
+      const container = document.getElementById('dealsContainer');
+      if (!deals || deals.length === 0) {
+        container.innerHTML = '<div class="no-deals">Keine passenden Deals gefunden.</div>';
+        return;
+      }
+      container.innerHTML = deals.map(dealCardHTML).join('');
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderCurrentPage();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    fetchDeals();
+  </script>
 </body>
 </html>
