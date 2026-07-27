@@ -42,7 +42,7 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
 
-        // KORREKTUR: Umfassende Identifikator-Suche
+        // BEHOBEN: Flexible Identifikator-Suche für AliExpress & Amazon
         const deal = data.find(d => {
           if (shop === 'ali') {
             const affLink = d['Affiliate Link'] || d['Link'] || d['Produkt-ID / AliExpress Link'] || '';
@@ -72,8 +72,9 @@
 
       const title = deal['Produkt-Titel'] || deal['Titel'] || 'Angebot';
       const rawImage = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal['Bildvorschau'] || '';
+      // BEHOBEN: Nutzen des Bild-Optimierers für saubere WebP-Darstellung
       const image = optimizeImageUrl(String(rawImage).replace(/\s+/g, '').trim(), 500);
-      
+
       const offerPrice = formatPrice(deal['Angebotspreis (€)'] || deal['Preis (€)']);
       const rawReg = deal['Regulärer Preis (€)'];
       const regPrice = rawReg ? formatPrice(rawReg) : '';
