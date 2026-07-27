@@ -1,235 +1,163 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YabuDeals – Beste Deals & Rabatte entdecken</title>
-<meta name="description" content="Die besten Amazon- und AliExpress-Angebote im Überblick: täglich aktualisierte Rabatte, Schnäppchen und Deals für Küche, Haushalt, Elektronik, Wellness & mehr.">
-
-<!-- NEU: Canonical-Tag (kritischer Fehler #1) -->
-<link rel="canonical" href="https://www.yabubest.de/">
-
-<!-- NEU: Open Graph / Social Tags (kritischer Fehler #2) -->
-<meta property="og:title" content="YabuDeals – Beste Deals & Rabatte entdecken">
-<meta property="og:description" content="Täglich aktualisierte Amazon- und AliExpress-Angebote für Küche, Haushalt, Elektronik, Wellness & mehr.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.yabubest.de/">
-<meta property="og:image" content="https://www.yabubest.de/assets/og-image.jpg">
-<meta property="og:locale" content="de_DE">
-
-<link rel="stylesheet" href="/style.css">
-<style>
-  /* Nur sichtbar wenn JS deaktiviert ist (Crawler-Fallback) - passend zum bestehenden Design */
-  .static-nav-fallback { padding: 10px 20px; background:#fff; border-bottom:1px solid #e2e8f0; }
-  .static-nav-fallback a { color:#64748b; text-decoration:none; font-weight:600; font-size:0.9rem; margin-right:20px; }
-  .static-footer-fallback { background:#0f172a; color:#94a3b8; font-size:0.72rem; padding:12px 20px; text-align:center; }
-  .static-footer-fallback a { color:#94a3b8; text-decoration:none; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YabuDeals – Beste Deals & Rabatte entdecken</title>
+  <meta name="description" content="Die besten Schnäppchen von Amazon & AliExpress auf einen Blick. Täglich aktualisierte Angebote.">
+  <link rel="stylesheet" href="/style.css">
 </head>
-
 <body>
 
-<!-- GLOBALE KOPFZEILE (JS-Header bleibt für Design/Funktion, aber jetzt mit statischem Fallback darunter) -->
-<div id="global-header"></div>
+  <!-- GLOBALE KOPFZEILE -->
+  <div id="global-header"></div>
 
-<!-- NEU: Statische Nav-Links direkt im HTML (werden von JS-Header optisch überlagert/ersetzt,
-     aber Crawler sehen sie sofort ohne JS auszuführen) -->
-<noscript>
-  <nav class="static-nav-fallback">
-    <a href="/">Startseite</a>
-    <a href="/blog.html">Blog & Ratgeber</a>
-  </nav>
-</noscript>
+  <main style="flex: 1;">
+    <!-- HERO SECTION -->
+    <div class="hero">
+      <h1>Beste Deals & Rabatte entdecken</h1>
+      <p>Die besten Schnäppchen von Amazon & AliExpress auf einen Blick.</p>
+    </div>
 
-<div style="flex: 1;">
+    <!-- FILTER BEREICH -->
+    <div class="filter-section">
+      <div class="single-filter-bar">
+        <div class="shop-tabs">
+          <button class="shop-tab-btn active" id="tab-all" onclick="setShopFilter('all')">📁 Alle</button>
+          <button class="shop-tab-btn" id="tab-amazon" onclick="setShopFilter('amazon')">📦 Amazon</button>
+          <button class="shop-tab-btn" id="tab-ali" onclick="setShopFilter('ali')">🌐 AliExpress</button>
+        </div>
 
-  <!-- HERO -->
-  <div class="hero">
-    <h1>Beste Deals & Rabatte entdecken</h1>
-    <p>Die besten Schnäppchen von Amazon & AliExpress auf einen Blick.</p>
-  </div>
+        <div class="search-input-wrapper">
+          <input type="text" id="searchInput" placeholder="Produkt suchen (z.B. Hülle, Stuhl)..." onkeyup="onFilterChange()">
+        </div>
 
-  <!-- NEU: Kompakter Content-Block für Seitenqualität (echter Text + interne Links, wenig Höhe) -->
-  <section class="intro-text" style="max-width:800px;margin:0 auto;padding:8px 20px 4px;text-align:center;">
-    <p style="font-size:0.85rem;line-height:1.5;color:#64748b;margin:0;">
-      YabuDeals sammelt <strong>mehrmals täglich</strong> die besten Rabatte von
-      <strong>Amazon</strong> &amp; <strong>AliExpress</strong> für Küche, Haushalt, Elektronik,
-      Wellness &amp; Smart Home. Mehr bei
-      <a href="/amazon.html">Amazon-Deals</a>,
-      <a href="/aliexpress.html">AliExpress-Angeboten</a> oder im
-      <a href="/blog.html">Blog</a>.
-    </p>
-  </section>
-
-  <!-- FULL-WIDTH FILTERBAR -->
-  <div class="filter-section">
-    <div class="single-filter-bar">
-      <!-- 1. SHOP TABS -->
-      <div class="shop-tabs">
-        <button class="shop-tab-btn active" onclick="setShopFilter('all', this)">🛍️ Alle</button>
-        <button class="shop-tab-btn" onclick="setShopFilter('amazon', this)">📦 Amazon</button>
-        <button class="shop-tab-btn" onclick="setShopFilter('ali', this)">🌐 AliExpress</button>
-      </div>
-      <!-- 2. SUCHFELD -->
-      <div class="search-input-wrapper">
-        <input type="text" id="searchInput" placeholder="Produkt suchen (z.B. Hülle, Stuhl)..." onkeyup="onFilterChange()">
-      </div>
-      <!-- 3. KATEGORIE DROPDOWN -->
-      <div class="category-select-wrapper">
-        <select id="categoryFilter" onchange="onFilterChange()">
-          <option value="">Alle Kategorien</option>
-        </select>
+        <div class="category-select-wrapper">
+          <select id="categoryFilter" onchange="onFilterChange()">
+            <option value="">Alle Kategorien</option>
+          </select>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- DEALS GRID -->
-  <div class="deals-grid-container">
-    <div class="deals-grid" id="dealsContainer">
-      <!-- SSR_DEALS_START -->
-      <div class="no-deals">Lade aktuelle Angebote...</div>
-      <!-- SSR_DEALS_END -->
+    <!-- DEALS GRID -->
+    <div class="deals-grid-container">
+      <div class="deals-grid" id="dealsContainer">
+        <div class="no-deals">Lade Angebote...</div>
+      </div>
     </div>
-  </div>
 
-  <!-- PAGINIERUNG -->
-  <div class="pagination-container" id="paginationContainer"></div>
+    <!-- PAGINIERUNG -->
+    <div class="pagination-container" id="paginationContainer"></div>
+  </main>
 
-</div>
+  <!-- GLOBALE FUSSZEILE -->
+  <div id="global-footer"></div>
 
-<!-- GLOBALE FUSSZEILE -->
-<div id="global-footer"></div>
+  <script src="/components.js"></script>
+  <script>
+    let allDeals = [];
+    let filteredDeals = [];
+    let currentShop = 'all';
+    const itemsPerPage = 27;
+    let currentPage = 1;
 
-<!-- NEU: Statischer Footer-Fallback (nur für Crawler/No-JS sichtbar, kein Duplikat für normale Nutzer) -->
-<noscript>
-<footer class="static-footer-fallback">
-  © 2026 YabuDeals ·
-  <a href="/">Startseite</a> |
-  <a href="/blog.html">Blog & Ratgeber</a> |
-  <a href="/amazon.html">Amazon Deals</a> |
-  <a href="/aliexpress.html">AliExpress Deals</a> |
-  <a href="/impressum.html">Impressum</a> |
-  <a href="/datenschutz.html">Datenschutz</a>
-</footer>
-</noscript>
+    async function loadAllDeals() {
+      const container = document.getElementById('dealsContainer');
+      container.innerHTML = '<div class="no-deals">Lade aktuelle Angebote...</div>';
 
-<script src="/components.js"></script>
-<script>
-let allDeals = [];
-let filteredDeals = [];
-let currentShop = 'all';
-let selectedCategory = '';
-const itemsPerPage = 24;
-let currentPage = 1;
+      try {
+        const [amazonRes, aliRes] = await Promise.allSettled([
+          fetch('/deals.json'),
+          fetch('/aliexpress-deals.json')
+        ]);
 
-function parseDate(dateStr) {
-  if (!dateStr) return 0;
-  try {
-    const clean = String(dateStr).replace('Uhr', '').trim();
-    const parts = clean.split(',');
-    const dateParts = parts[0].trim().split('.');
-    const timeParts = parts[1] ? parts[1].trim().split(':') : [0, 0, 0];
-    const day = parseInt(dateParts[0], 10);
-    const month = parseInt(dateParts[1], 10) - 1;
-    const year = parseInt(dateParts[2], 10);
-    const hour = parseInt(timeParts[0] || 0, 10);
-    const min = parseInt(timeParts[1] || 0, 10);
-    const sec = parseInt(timeParts[2] || 0, 10);
-    return new Date(year, month, day, hour, min, sec).getTime();
-  } catch (e) {
-    return 0;
-  }
-}
+        let amazonData = [];
+        let aliData = [];
 
-async function fetchAllDeals() {
-  try {
-    const [resAmz, resAli] = await Promise.allSettled([
-      fetch('/deals.json?v=' + Date.now()).then(r => r.ok ? r.json() : []),
-      fetch('/aliexpress-deals.json?v=' + Date.now()).then(r => r.ok ? r.json() : [])
-    ]);
-    const rawAmazon = (resAmz.status === 'fulfilled' ? resAmz.value : []).map(d => ({ ...d, _shop: 'amazon' }));
-    const rawAli = (resAli.status === 'fulfilled' ? resAli.value : []).map(d => ({ ...d, _shop: 'ali' }));
+        if (amazonRes.status === 'fulfilled' && amazonRes.value.ok) {
+          amazonData = await amazonRes.value.json();
+          amazonData = amazonData.map(d => ({ ...d, _shop: 'amazon' }));
+        }
 
-    const isValidDeal = (deal) => {
-      const title = (deal['Produkt-Titel'] || deal['Titel'] || deal.title || '').trim().toLowerCase();
-      const price = String(deal['Angebotspreis (€)'] || deal['Preis (€)'] || deal.offerPrice || '').trim().toLowerCase();
-      const rawImage = (deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal['Bildvorschau'] || deal.image || '').trim();
-      if (title === 'amazon produkt' || title === '' || price === 'n/a' || price === '' || rawImage === '') {
-        return false;
+        if (aliRes.status === 'fulfilled' && aliRes.value.ok) {
+          aliData = await aliRes.value.json();
+          aliData = aliData.map(d => ({ ...d, _shop: 'ali' }));
+        }
+
+        allDeals = [...amazonData, ...aliData];
+
+        if (allDeals.length === 0) {
+          container.innerHTML = '<div class="no-deals">Aktuell sind keine Deals erreichbar.</div>';
+          return;
+        }
+
+        populateCategorySelect(document.getElementById('categoryFilter'), allDeals);
+        onFilterChange();
+      } catch (err) {
+        console.error("Fehler beim Laden der Deals:", err);
+        container.innerHTML = '<div class="no-deals">Fehler beim Laden der Angebote.</div>';
       }
-      return true;
-    };
+    }
 
-    const cleanAmazon = rawAmazon.filter(isValidDeal);
-    const cleanAli = rawAli.filter(isValidDeal);
+    function setShopFilter(shop) {
+      currentShop = shop;
+      document.querySelectorAll('.shop-tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      if (shop === 'all') document.getElementById('tab-all').classList.add('active');
+      if (shop === 'amazon') document.getElementById('tab-amazon').classList.add('active');
+      if (shop === 'ali') document.getElementById('tab-ali').classList.add('active');
 
-    allDeals = [...cleanAmazon, ...cleanAli].sort((a, b) => {
-      const timeA = parseDate(a['DATUM'] || a['Datum']);
-      const timeB = parseDate(b['DATUM'] || b['Datum']);
-      return timeB - timeA;
-    });
+      onFilterChange();
+    }
 
-    populateCategorySelect(document.getElementById('categoryFilter'), allDeals);
-    onFilterChange();
-  } catch (error) {
-    console.error("Fehler beim Laden der Deals:", error);
-    document.getElementById('dealsContainer').innerHTML =
-      '<div class="no-deals">Aktuell sind keine Deals erreichbar.</div>';
-  }
-}
+    function onFilterChange() {
+      const searchVal = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+      const catVal = document.getElementById('categoryFilter').value;
 
-function setShopFilter(shop, element) {
-  currentShop = shop;
-  document.querySelectorAll('.shop-tab-btn').forEach(b => b.classList.remove('active'));
-  if (element) element.classList.add('active');
-  onFilterChange();
-}
+      filteredDeals = allDeals.filter(deal => {
+        const matchesShop = (currentShop === 'all') || (deal._shop === currentShop);
+        const title = (deal['Produkt-Titel'] || deal['Titel'] || '').toLowerCase();
+        const matchesSearch = !searchVal || title.includes(searchVal);
+        const category = deal['Kategorie'] || '';
+        const matchesCat = !catVal || category.toLowerCase() === catVal.toLowerCase();
 
-function onFilterChange() {
-  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-  selectedCategory = document.getElementById('categoryFilter').value;
-  filteredDeals = allDeals.filter(deal => {
-    if (currentShop === 'amazon' && deal._shop !== 'amazon') return false;
-    if (currentShop === 'ali' && deal._shop !== 'ali') return false;
-    const title = (deal['Produkt-Titel'] || deal.title || '').toLowerCase();
-    const category = deal['Kategorie'] || deal.category || '';
-    const matchesSearch = title.includes(searchTerm);
-    const matchesCategory = selectedCategory === '' || category.toLowerCase().includes(selectedCategory.toLowerCase());
-    return matchesSearch && matchesCategory;
-  });
-  currentPage = 1;
-  renderCurrentPage();
-}
+        return matchesShop && matchesSearch && matchesCat;
+      });
 
-function renderCurrentPage() {
-  const startIdx = (currentPage - 1) * itemsPerPage;
-  const endIdx = startIdx + itemsPerPage;
-  const pageItems = filteredDeals.slice(startIdx, endIdx);
-  renderDeals(pageItems);
-  renderPaginationHTML(document.getElementById('paginationContainer'), filteredDeals.length, itemsPerPage, currentPage, 'goToPage');
-}
+      currentPage = 1;
+      renderCurrentPage();
+    }
 
-function renderDeals(deals) {
-  const container = document.getElementById('dealsContainer');
-  if (!deals || deals.length === 0) {
-    container.innerHTML = '<div class="no-deals">Keine passenden Deals gefunden.</div>';
-    return;
-  }
-  container.innerHTML = deals.map(dealCardHTML).join('');
-}
+    function renderCurrentPage() {
+      const container = document.getElementById('dealsContainer');
+      const startIdx = (currentPage - 1) * itemsPerPage;
+      const pageItems = filteredDeals.slice(startIdx, startIdx + itemsPerPage);
 
-function goToPage(page) {
-  currentPage = page;
-  renderCurrentPage();
-  const filterEl = document.querySelector('.filter-section');
-  if (filterEl) {
-    filterEl.scrollIntoView({ behavior: 'smooth' });
-  } else {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-}
+      if (pageItems.length === 0) {
+        container.innerHTML = '<div class="no-deals">Keine passenden Deals gefunden.</div>';
+        document.getElementById('paginationContainer').innerHTML = '';
+        return;
+      }
 
-fetchAllDeals();
-</script>
+      container.innerHTML = pageItems.map(dealCardHTML).join('');
+      renderPaginationHTML(
+        document.getElementById('paginationContainer'),
+        filteredDeals.length,
+        itemsPerPage,
+        currentPage,
+        'goToPage'
+      );
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderCurrentPage();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Start-Initialisierung
+    loadAllDeals();
+  </script>
 </body>
 </html>
