@@ -1,5 +1,5 @@
 /* ============================================================
-   YABUDEALS – UNIFIED DARK DESIGN, FIXES & SMARTFILTER
+   YABUDEALS – LIGHT & RESPONSIVE FULLSCREEN DESIGN SYSTEM
    ============================================================ */
 
 /* Globaler Datenspeicher */
@@ -13,124 +13,123 @@ function injectGlobalStyles() {
   const style = document.createElement('style');
   style.id = 'yabudeals-global-styles';
   style.textContent = `
-    /* 1. KORREKTUR: Platzhalter für Header & Dark Mode für GANZE Seite */
+    /* HELLES GRUND-LAYOUT & PLATZHALTER FÜR FIXED BARS */
     body {
-      padding-top: 100px !important; /* Schiebt die Überschrift sauber unter den Header */
-      background-color: #0b0f19 !important; /* Echter Dark Mode Hintergrund */
-      color: #f1f5f9 !important; /* Helle Schrift für bessere Lesbarkeit */
+      padding-top: 70px !important;
+      padding-bottom: 45px !important;
+      background-color: #f8fafc !important; /* Helles, augenschonendes Off-White */
+      color: #0f172a !important; /* Dunkle, perfekt lesbare Schrift */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+      margin: 0 !important;
+      width: 100% !important;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Überschriften im Dark Mode sichtbar machen */
-    h1, h2, h3, h4, h5, h6 {
-      color: #ffffff !important;
-    }
-    p, span, div {
-      color: #94a3b8; /* Dezentes Grau für Fließtexte */
+    /* GESAMTE BILDSCHIRMBREITE NUTZEN */
+    .container, main, section, .page-wrapper {
+      width: 100% !important;
+      max-width: 98vw !important; /* Nutzt fast die volle Monitorbreite */
+      margin: 0 auto !important;
+      padding: 0 10px !important;
+      box-sizing: border-box !important;
     }
 
-    /* 2. KORREKTUR: Filter-Leiste & Suchfeld an Dark Mode anpassen */
+    h1, h2, h3, h4, h5, h6 { color: #0f172a !important; font-weight: 800 !important; }
+
+    /* SYMMETRISCHE FILTER-LEISTE */
     #filter-bar, .filter-container {
-      background-color: #151c2c !important;
-      border: 1px solid #2a364f !important;
-      border-radius: 8px !important;
-      padding: 10px !important;
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 10px !important;
+      padding: 10px 14px !important;
+      display: flex !important;
+      gap: 10px !important;
+      flex-wrap: wrap !important;
+      align-items: center !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03) !important;
+      margin-bottom: 15px !important;
     }
+
+    /* EINHEITLICHE EINGABEFELDER */
     input[type="text"], input[placeholder*="suchen"], select, #category-select {
-      background-color: #0f172a !important;
-      color: #ffffff !important;
-      border: 1px solid #2a364f !important;
-      border-radius: 6px !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 10px !important;
       padding: 8px 12px !important;
+      font-size: 13px !important;
       outline: none !important;
+      transition: border-color 0.2s ease !important;
+      flex-grow: 1 !important;
     }
     input[type="text"]:focus, select:focus {
-      border-color: #3b82f6 !important;
-    }
-    .btn-filter, button.filter-btn, .page-btn {
-      background-color: #1e293b !important;
-      color: #94a3b8 !important;
-      border: 1px solid #2a364f !important;
-      border-radius: 6px !important;
-    }
-    .btn-filter.active, button.filter-btn.active, .page-btn.active {
-      background-color: #3b82f6 !important;
-      color: #ffffff !important;
-      border-color: #3b82f6 !important;
+      border-color: #2563eb !important;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15) !important;
     }
 
-    /* EINHEITLICHES 9-SPALTEN GRID (DEALS & BLOG) */
+    /* OEN-BUTTONS & PAGINATION */
+    .btn-filter, button.filter-btn, .page-btn {
+      background: #ffffff !important;
+      color: #475569 !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 10px !important;
+      padding: 8px 14px !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+    }
+    .btn-filter.active, button.filter-btn.active, .page-btn.active {
+      background: #2563eb !important;
+      color: #ffffff !important;
+      border-color: #2563eb !important;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25) !important;
+    }
+
+    /* ULTRA-RESPONSIVES GRID (FULLSCREEN DESKTOP & PERFECT MOBILE) */
     .deals-grid, .blog-grid, #deals-grid, #blog-grid, #blog-posts-container {
       display: grid !important;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)) !important;
       gap: 12px !important;
       width: 100% !important;
       margin-top: 15px !important;
     }
 
-    @media (min-width: 1200px) {
+    @media (min-width: 1400px) {
       .deals-grid, .blog-grid, #deals-grid, #blog-grid, #blog-posts-container {
-        grid-template-columns: repeat(9, 1fr) !important;
+        grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)) !important;
       }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
+      body {
+        padding-top: 60px !important;
+        padding-bottom: 40px !important;
+      }
       .deals-grid, .blog-grid, #deals-grid, #blog-grid, #blog-posts-container {
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+        grid-template-columns: repeat(2, 1fr) !important; /* Perfekte 2 Spalten auf Smartphones */
         gap: 8px !important;
       }
     }
 
-    /* MODERN DARK KARTEN */
+    /* KARTEN-DESIGN (HARMONISCH & CLEAN) */
     .deal-card, .blog-card, article.card {
-      background: #151c2c !important;
-      border: 1px solid #2a364f !important;
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
       border-radius: 10px !important;
-      padding: 8px !important;
+      padding: 10px !important;
       display: flex !important;
       flex-direction: column !important;
-      justify-content: space-between !important;
       position: relative !important;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03) !important;
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
       box-sizing: border-box !important;
       height: 100% !important;
     }
-
     .deal-card:hover, .blog-card:hover {
       transform: translateY(-3px) !important;
-      border-color: #3b82f6 !important;
-      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25) !important;
-    }
-
-    /* BADGES */
-    .badge-shop-amazon, .badge-shop-ali, .badge-blog {
-      position: absolute !important;
-      top: 6px !important;
-      left: 6px !important;
-      font-size: 8px !important;
-      font-weight: 800 !important;
-      padding: 2px 6px !important;
-      border-radius: 4px !important;
-      z-index: 2 !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.5px !important;
-    }
-    .badge-shop-amazon { background: rgba(245, 158, 11, 0.2) !important; color: #fbbf24 !important; border: 1px solid #f59e0b !important; }
-    .badge-shop-ali { background: rgba(239, 68, 68, 0.2) !important; color: #f87171 !important; border: 1px solid #ef4444 !important; }
-    .badge-blog { background: rgba(99, 102, 241, 0.2) !important; color: #818cf8 !important; border: 1px solid #6366f1 !important; }
-
-    .badge-discount {
-      position: absolute !important;
-      top: 6px !important;
-      right: 6px !important;
-      background: #dc2626 !important;
-      color: #ffffff !important;
-      font-size: 9px !important;
-      font-weight: 800 !important;
-      padding: 2px 5px !important;
-      border-radius: 4px !important;
-      z-index: 2 !important;
-      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.5) !important;
+      border-color: #cbd5e1 !important;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.08) !important;
     }
 
     /* BILD CONTAINER */
@@ -140,93 +139,111 @@ function injectGlobalStyles() {
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      overflow: hidden !important;
-      margin-bottom: 6px !important;
-      background: #ffffff !important;
-      border-radius: 6px !important;
-      padding: 4px !important;
+      background: #f1f5f9 !important;
+      border-radius: 10px !important;
+      padding: 6px !important;
+      margin-bottom: 8px !important;
       box-sizing: border-box !important;
     }
-
     .img-container img {
       max-width: 100% !important;
       max-height: 100% !important;
       object-fit: contain !important;
     }
 
-    /* TITEL & KATEGORIE */
-    .category-tag {
+    /* BADGES */
+    .badge-top-left, .badge-top-right {
+      position: absolute !important;
+      top: 8px !important;
       font-size: 8.5px !important;
-      color: #94a3b8 !important;
-      text-transform: uppercase !important;
       font-weight: 700 !important;
-      margin-bottom: 2px !important;
+      padding: 3px 6px !important;
+      border-radius: 6px !important;
+      z-index: 2 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.3px !important;
+    }
+    .badge-top-left { left: 8px !important; }
+    .badge-top-right { right: 8px !important; }
+
+    .shop-amazon { background: #fff3e0 !important; color: #d97706 !important; border: 1px solid #fcd34d !important; }
+    .shop-ali { background: #eff6ff !important; color: #2563eb !important; border: 1px solid #93c5fd !important; }
+    .shop-blog { background: #f3e8ff !important; color: #7e22ce !important; border: 1px solid #d8b4fe !important; }
+    .badge-discount { background: #dc2626 !important; color: #ffffff !important; }
+
+    /* TEXT & TITEL */
+    .category-tag {
+      font-size: 9.5px !important;
+      color: #64748b !important;
+      text-transform: uppercase !important;
+      font-weight: 600 !important;
+      margin-bottom: 3px !important;
       white-space: nowrap !important;
       overflow: hidden !important;
       text-overflow: ellipsis !important;
     }
-
-    .deal-title, .blog-title {
-      font-size: 11px !important;
-      font-weight: 700 !important;
-      color: #f1f5f9 !important;
-      line-height: 1.3 !important;
-      height: 2.6em !important;
+    .card-title {
+      font-size: 11.5px !important;
+      font-weight: 600 !important;
+      color: #0f172a !important;
+      line-height: 1.35 !important;
+      height: 2.7em !important;
       overflow: hidden !important;
       display: -webkit-box !important;
       -webkit-line-clamp: 2 !important;
       -webkit-box-orient: vertical !important;
-      margin-bottom: 6px !important;
+      margin-bottom: 8px !important;
     }
 
-    /* PREISE & BUTTONS */
+    /* PERFEKTE SYMMETRIE (UNTERER BEREICH AN DESIGN-BODEN GEBUNDEN) */
+    .card-bottom-wrapper {
+      margin-top: auto !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 6px !important;
+    }
+
     .price-row {
       display: flex !important;
       align-items: baseline !important;
-      gap: 4px !important;
-      margin-bottom: 6px !important;
+      gap: 5px !important;
       flex-wrap: wrap !important;
     }
-
     .offer-price {
-      font-size: 12px !important;
+      font-size: 13.5px !important;
       font-weight: 800 !important;
-      color: #f87171 !important;
+      color: #b91c1c !important;
     }
-
     .regular-price {
-      font-size: 9px !important;
-      color: #64748b !important;
+      font-size: 9.5px !important;
+      color: #94a3b8 !important;
       text-decoration: line-through !important;
     }
 
-    .btn-buy-amazon, .btn-buy-ali, .btn-read-blog {
+    /* KAUF-BUTTONS */
+    .btn-action {
       display: block !important;
       width: 100% !important;
-      padding: 6px 0 !important;
+      padding: 7px 0 !important;
       text-align: center !important;
-      font-size: 10px !important;
-      font-weight: 800 !important;
-      border-radius: 6px !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      border-radius: 10px !important;
       text-decoration: none !important;
-      transition: all 0.2s !important;
+      transition: filter 0.2s ease !important;
       box-sizing: border-box !important;
       border: none !important;
     }
+    .btn-action:hover { filter: brightness(0.92) !important; }
 
-    .btn-buy-amazon { background: linear-gradient(135deg, #f59e0b, #d97706) !important; color: #0f172a !important; }
-    .btn-buy-amazon:hover { filter: brightness(1.1) !important; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4) !important; }
-    
-    .btn-buy-ali { background: linear-gradient(135deg, #ef4444, #b91c1c) !important; color: #ffffff !important; }
-    .btn-buy-ali:hover { filter: brightness(1.1) !important; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4) !important; }
-    
-    .btn-read-blog { background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important; color: #ffffff !important; }
-    .btn-read-blog:hover { filter: brightness(1.1) !important; box-shadow: 0 0 10px rgba(59, 130, 246, 0.4) !important; }
+    .bg-amazon { background: #f59e0b !important; color: #000000 !important; }
+    .bg-ali { background: #ef4444 !important; color: #ffffff !important; }
+    .bg-blog { background: #2563eb !important; color: #ffffff !important; }
   `;
   document.head.appendChild(style);
 }
 
-/* ---------- 2. GLOBALER HEADER (GLASSMORPHISM FIXED + SOCIALS RECHTS) ---------- */
+/* ---------- 2. SCHLANKE, FESTE KOPFZEILE (DESKTOP & MOBILE) ---------- */
 function loadGlobalHeader() {
   const headerContainer = document.getElementById('global-header');
   if (!headerContainer) return;
@@ -237,21 +254,23 @@ function loadGlobalHeader() {
   const youtubeLink = "https://www.youtube.com/channel/UC7HEbymVzO__iHO1touYN-Q";
 
   headerContainer.innerHTML = `
-    <header class="site-header" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 99999; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-      <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
-        <a href="/" class="logo" style="font-size: 1.3rem; font-weight: 800; text-decoration: none; background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; color: transparent;">🚀 YabuDeals</a>
+    <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 99999; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); border-bottom: 1px solid #e2e8f0; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+      <div style="width: 100%; max-width: 98vw; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; box-sizing: border-box;">
+        <a href="/" style="font-size: 1.25rem; font-weight: 800; text-decoration: none; color: #0f172a; letter-spacing: -0.5px;">
+          🚀 YabuDeals
+        </a>
 
-        <div style="display: flex; align-items: center; gap: 20px;">
-          <nav style="display: flex; gap: 18px;">
-            <a href="/" style="text-decoration: none; color: #f1f5f9; font-size: 0.9rem; font-weight: 600; transition: color 0.2s;">Startseite</a>
-            <a href="/blog.html" style="text-decoration: none; color: #f1f5f9; font-size: 0.9rem; font-weight: 600; transition: color 0.2s;">Blog & Ratgeber</a>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <nav style="display: flex; gap: 14px;">
+            <a href="/" style="text-decoration: none; color: #334155; font-size: 0.88rem; font-weight: 600;">Startseite</a>
+            <a href="/blog.html" style="text-decoration: none; color: #334155; font-size: 0.88rem; font-weight: 600;">Blog</a>
           </nav>
 
-          <!-- SOCIAL ICONS RECHTS IN DER KOPFZEILE -->
-          <div style="display: flex; gap: 12px; align-items: center; border-left: 1px solid rgba(255, 255, 255, 0.15); padding-left: 15px;">
-            <a href="${mapsLink}" target="_blank" rel="noopener" style="color:#94a3b8; text-decoration:none; display:flex;" title="Google Maps"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5 2.5z"/></svg></a>
-            <a href="${tiktokLink}" target="_blank" rel="noopener" style="color:#94a3b8; text-decoration:none; display:flex;" title="TikTok"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68a6.34 6.34 0 0 0 10.86 4.48A6.29 6.29 0 0 0 15.84 15V8.56a8.27 8.27 0 0 0 4.75 1.51V6.69z"/></svg></a>
-            <a href="${instagramLink}" target="_blank" rel="noopener" style="color:#94a3b8; text-decoration:none; display:flex;" title="Instagram"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+          <div style="display: flex; gap: 10px; align-items: center; border-left: 1px solid #cbd5e1; padding-left: 12px;">
+            <a href="${mapsLink}" target="_blank" rel="noopener" style="color:#64748b; text-decoration:none; display:flex;" title="Google Maps"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5 2.5z"/></svg></a>
+            <a href="${tiktokLink}" target="_blank" rel="noopener" style="color:#64748b; text-decoration:none; display:flex;" title="TikTok"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68a6.34 6.34 0 0 0 10.86 4.48A6.29 6.29 0 0 0 15.84 15V8.56a8.27 8.27 0 0 0 4.75 1.51V6.69z"/></svg></a>
+            <a href="${instagramLink}" target="_blank" rel="noopener" style="color:#64748b; text-decoration:none; display:flex;" title="Instagram"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+            <a href="${youtubeLink}" target="_blank" rel="noopener" style="color:#64748b; text-decoration:none; display:flex;" title="YouTube"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 0 12s0 3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
           </div>
         </div>
       </div>
@@ -259,7 +278,7 @@ function loadGlobalHeader() {
   `;
 }
 
-/* ---------- 3. GLOBALER FOOTER (MINIMALISTISCH EINZEILIG) ---------- */
+/* ---------- 3. SCHLANKE, FESTE FUSSZEILE (UNTERER RAND) ---------- */
 function loadGlobalFooter() {
   const footerContainer = document.getElementById('global-footer');
   if (!footerContainer || footerContainer.dataset.rendered === "true") return;
@@ -267,15 +286,15 @@ function loadGlobalFooter() {
   footerContainer.style.display = 'block';
 
   footerContainer.innerHTML = `
-    <footer style="background: #030712; color: #64748b; padding: 12px 20px; font-size: 11px; margin-top: 40px; border-top: 1px solid #1e293b;">
-      <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-        <div style="text-align: left;">
+    <footer style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 99999; background: #ffffff; border-top: 1px solid #e2e8f0; padding: 6px 15px; font-size: 11px; color: #64748b; box-shadow: 0 -2px 8px rgba(0,0,0,0.03);">
+      <div style="width: 100%; max-width: 98vw; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; box-sizing: border-box;">
+        <div style="text-align: left; font-weight: 500;">
           © 2026 YabuDeals · Inkl. MwSt. zzgl. Versand · Partnerprogramm
         </div>
 
         <div style="text-align: right;">
-          <a href="/impressum.html" style="color:#94a3b8; text-decoration:none;">Impressum</a> | 
-          <a href="/datenschutz.html" style="color:#94a3b8; text-decoration:none;">Datenschutz</a>
+          <a href="/impressum.html" style="color:#0f172a; text-decoration:none; margin-right: 12px; font-weight: 600;">Impressum</a>
+          <a href="/datenschutz.html" style="color:#0f172a; text-decoration:none; font-weight: 600;">Datenschutz</a>
         </div>
       </div>
     </footer>
@@ -323,23 +342,16 @@ function sortItemsByLatest(items) {
 
 /* ---------- 5. BILD- & PREIS-OPTIMIERUNG ---------- */
 function optimizeImageUrl(url, size = 300) {
-  const fallback = 'https://via.placeholder.com/300x300?text=Kein+Bild';
+  const fallback = 'https://via.placeholder.com/300x300?text=Bild';
   if (!url || typeof url !== 'string') return fallback;
 
   let clean = url.trim();
   if (!clean || clean.length < 5) return fallback;
 
-  if (clean.startsWith('//')) {
-    clean = 'https:' + clean;
-  } else if (clean.startsWith('/images/') || clean.startsWith('images/')) {
-    clean = 'https://m.media-amazon.com/' + clean.replace(/^\//, '');
-  } else if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
-    clean = 'https://' + clean;
-  }
+  if (clean.startsWith('//')) clean = 'https:' + clean;
+  else if (clean.startsWith('/images/') || clean.startsWith('images/')) clean = 'https://m.media-amazon.com/' + clean.replace(/^\//, '');
 
-  if (clean.includes('media-amazon.com') || clean.includes('amazon.com') || clean.includes('ssl-images-amazon.com')) {
-    return clean;
-  }
+  if (clean.includes('media-amazon.com') || clean.includes('amazon.com') || clean.includes('ssl-images-amazon.com')) return clean;
 
   const cleanHost = clean.replace(/^https?:\/\//, '');
   return `https://images.weserv.nl/?url=${encodeURIComponent(cleanHost)}&w=${size}&h=${size}&fit=contain&bg=white&output=webp&q=80`;
@@ -348,7 +360,6 @@ function optimizeImageUrl(url, size = 300) {
 function formatPrice(val) {
   if (!val && val !== 0) return '';
   if (val === 'N/A' || val === 'n/a') return 'Preis auf Anfrage';
-
   let str = String(val).replace('€', '').trim();
   let num = parseFloat(str.replace(',', '.'));
   if (isNaN(num)) return str + ' €';
@@ -365,16 +376,15 @@ function getDealDetailHref(deal) {
   return asin ? `/deal.html?shop=amazon&id=${encodeURIComponent(asin)}` : '#';
 }
 
-/* ---------- 6. KARTEN-GENERATOREN ---------- */
+/* ---------- 6. DIE PERFEKT SYMMETRISCHEN KARTEN ---------- */
 function dealCardHTML(deal) {
   const isAli = deal._shop === 'ali';
-  const shopBadge = isAli
-    ? `<div class="badge-shop-ali">🌐 AliExpress</div>`
-    : `<div class="badge-shop-amazon">📦 Amazon</div>`;
-
-  const btnClass = isAli ? 'btn-buy-ali' : 'btn-buy-amazon';
+  
+  const shopClass = isAli ? 'shop-ali' : 'shop-amazon';
+  const shopName = isAli ? 'AliExpress' : 'Amazon';
+  const btnClass = isAli ? 'bg-ali' : 'bg-amazon';
+  
   const title = deal['Produkt-Titel'] || deal['Titel'] || deal.title || 'Angebot';
-
   let rawImage = deal['Bild-URL (Optional)'] || deal['Bild-URL'] || deal['Bildvorschau'] || deal.image || '';
   let image = optimizeImageUrl(String(rawImage).replace(/\s+/g, '').trim(), 300);
 
@@ -390,26 +400,24 @@ function dealCardHTML(deal) {
 
   return `
     <article class="deal-card">
-      ${shopBadge}
-      ${discount ? `<div class="badge-discount">${discount}</div>` : ''}
+      <div class="badge-top-left ${shopClass}">${shopName}</div>
+      ${discount ? `<div class="badge-top-right badge-discount">${discount}</div>` : ''}
 
       <a href="${detailHref}" class="img-container" style="text-decoration:none;">
-        <img src="${image}" alt="${title}" width="300" height="300" decoding="async" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/300x300?text=Bild+Fehler';">
+        <img src="${image}" alt="${title}" width="300" height="300" decoding="async" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/300x300?text=Bild';">
       </a>
 
-      <div>
-        <div class="category-tag">${category}</div>
-        <a href="${detailHref}" style="text-decoration:none; color: inherit;">
-          <div class="deal-title" title="${title}">${title}</div>
-        </a>
-      </div>
+      <div class="category-tag">${category}</div>
+      <a href="${detailHref}" style="text-decoration:none;">
+        <div class="card-title" title="${title}">${title}</div>
+      </a>
 
-      <div>
+      <div class="card-bottom-wrapper">
         <div class="price-row">
           <span class="offer-price">${offerPriceFormatted}</span>
           ${regPriceFormatted ? `<span class="regular-price">statt ${regPriceFormatted}</span>` : ''}
         </div>
-        <a href="${buyLink}" target="_blank" rel="nofollow noopener sponsored" class="${btnClass}">Zum Angebot &rarr;</a>
+        <a href="${buyLink}" target="_blank" rel="nofollow noopener sponsored" class="btn-action ${btnClass}">Zum Angebot</a>
       </div>
     </article>
   `;
@@ -424,27 +432,25 @@ function blogCardHTML(post) {
 
   return `
     <article class="blog-card">
-      <div class="badge-blog">📖 RATGEBER</div>
+      <div class="badge-top-left shop-blog">Ratgeber</div>
 
       <a href="${detailHref}" class="img-container" style="text-decoration:none;">
-        <img src="${image}" alt="${title}" width="300" height="300" decoding="async" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/300x300?text=Blog+Bild';">
+        <img src="${image}" alt="${title}" width="300" height="300" decoding="async" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/300x300?text=Bild';">
       </a>
 
-      <div>
-        <div class="category-tag">${category}</div>
-        <a href="${detailHref}" style="text-decoration:none; color: inherit;">
-          <div class="blog-title" title="${title}">${title}</div>
-        </a>
-      </div>
+      <div class="category-tag">${category}</div>
+      <a href="${detailHref}" style="text-decoration:none;">
+        <div class="card-title" title="${title}">${title}</div>
+      </a>
 
-      <div>
-        <a href="${detailHref}" class="btn-read-blog">Beitrag lesen &rarr;</a>
+      <div class="card-bottom-wrapper">
+        <a href="${detailHref}" class="btn-action bg-blog">Beitrag lesen</a>
       </div>
     </article>
   `;
 }
 
-/* ---------- 7. FILTER- ENGINE ---------- */
+/* ---------- 7. ECHTZEIT-SMARTFILTER ---------- */
 function filterDeals(deals, query = '', category = '') {
   if (!Array.isArray(deals)) return [];
 
@@ -455,14 +461,8 @@ function filterDeals(deals, query = '', category = '') {
     const title = (deal['Produkt-Titel'] || deal['Titel'] || deal.title || '').toLowerCase();
     const cat = (deal['Kategorie'] || deal.category || '').toLowerCase();
 
-    if (cleanQuery && !title.includes(cleanQuery) && !cat.includes(cleanQuery)) {
-      return false;
-    }
-
-    if (cleanCat && (deal['Kategorie'] || deal.category) !== cleanCat) {
-      return false;
-    }
-
+    if (cleanQuery && !title.includes(cleanQuery) && !cat.includes(cleanQuery)) return false;
+    if (cleanCat && (deal['Kategorie'] || deal.category) !== cleanCat) return false;
     return true;
   });
 
@@ -472,7 +472,6 @@ function filterDeals(deals, query = '', category = '') {
 function initSmartFilters() {
   const searchInput = document.querySelector('input[type="text"], input[placeholder*="suchen"], #search-input');
   const categorySelect = document.querySelector('select, #category-select');
-  
   const dealsGrid = document.querySelector('.deals-grid, #deals-grid, #deals-container');
   const blogGrid = document.querySelector('.blog-grid, #blog-grid, #blog-posts-container');
 
@@ -486,7 +485,7 @@ function initSmartFilters() {
       let filteredDeals = filterDeals(window.allLoadedDeals, query, selectedCat);
 
       if (filteredDeals.length === 0) {
-        dealsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8; font-size: 13px;">Keine passenden Angebote gefunden.</div>`;
+        dealsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b; font-size: 14px;">Keine passenden Angebote gefunden.</div>`;
       } else {
         dealsGrid.innerHTML = filteredDeals.slice(0, 36).map(d => dealCardHTML(d)).join('');
       }
@@ -505,7 +504,7 @@ function initSmartFilters() {
       filteredPosts = sortDealsByLatest(filteredPosts);
 
       if (filteredPosts.length === 0) {
-        blogGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8; font-size: 13px;">Keine passenden Beiträge gefunden.</div>`;
+        blogGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b; font-size: 14px;">Keine passenden Beiträge gefunden.</div>`;
       } else {
         blogGrid.innerHTML = filteredPosts.map(p => blogCardHTML(p)).join('');
       }
@@ -532,7 +531,7 @@ function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage
 
   if (startPage > 1) {
     html += `<button class="page-btn" onclick="${onPageChangeFnName}(1)">1</button>`;
-    if (startPage > 2) html += `<span class="page-dots" style="color:#64748b; margin:0 4px;">...</span>`;
+    if (startPage > 2) html += `<span style="color:#64748b; margin:0 4px;">...</span>`;
   }
 
   for (let i = startPage; i <= endPage; i++) {
@@ -540,7 +539,7 @@ function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage
   }
 
   if (endPage < totalPages) {
-    if (endPage < totalPages - 1) html += `<span class="page-dots" style="color:#64748b; margin:0 4px;">...</span>`;
+    if (endPage < totalPages - 1) html += `<span style="color:#64748b; margin:0 4px;">...</span>`;
     html += `<button class="page-btn" onclick="${onPageChangeFnName}(${totalPages})">${totalPages}</button>`;
   }
 
