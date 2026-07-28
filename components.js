@@ -13,16 +13,11 @@ function injectGlobalStyles() {
   const style = document.createElement('style');
   style.id = 'yabudeals-global-styles';
   style.textContent = `
-    /* Body Platzhalter für festen Header */
-    body {
-      padding-top: 60px !important;
-    }
-
     /* EINHEITLICHES 9-SPALTEN GRID (DEALS & BLOG) */
     .deals-grid, .blog-grid, #deals-grid, #blog-grid, #blog-posts-container {
       display: grid !important;
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
-      gap: 10px !important;
+      gap: 12px !important;
       width: 100% !important;
       margin-top: 15px !important;
     }
@@ -40,25 +35,26 @@ function injectGlobalStyles() {
       }
     }
 
-    /* UNIFIED CARD STYLING */
+    /* MODERN DARK KARTEN */
     .deal-card, .blog-card, article.card {
-      background: #ffffff !important;
-      border: 1px solid #e2e8f0 !important;
-      border-radius: 8px !important;
+      background: #151c2c !important;
+      border: 1px solid #2a364f !important;
+      border-radius: 10px !important;
       padding: 8px !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: space-between !important;
       position: relative !important;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-      transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
       box-sizing: border-box !important;
       height: 100% !important;
     }
 
     .deal-card:hover, .blog-card:hover {
-      transform: translateY(-2px) !important;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+      transform: translateY(-3px) !important;
+      border-color: #3b82f6 !important;
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25) !important;
     }
 
     /* BADGES */
@@ -66,16 +62,17 @@ function injectGlobalStyles() {
       position: absolute !important;
       top: 6px !important;
       left: 6px !important;
-      font-size: 9px !important;
-      font-weight: bold !important;
-      padding: 2px 5px !important;
+      font-size: 8px !important;
+      font-weight: 800 !important;
+      padding: 2px 6px !important;
       border-radius: 4px !important;
       z-index: 2 !important;
       text-transform: uppercase !important;
+      letter-spacing: 0.5px !important;
     }
-    .badge-shop-amazon { background: #fff3e0 !important; color: #d97706 !important; border: 1px solid #fcd34d !important; }
-    .badge-shop-ali { background: #eff6ff !important; color: #2563eb !important; border: 1px solid #93c5fd !important; }
-    .badge-blog { background: #f3e8ff !important; color: #7e22ce !important; border: 1px solid #d8b4fe !important; }
+    .badge-shop-amazon { background: rgba(245, 158, 11, 0.2) !important; color: #fbbf24 !important; border: 1px solid #f59e0b !important; }
+    .badge-shop-ali { background: rgba(239, 68, 68, 0.2) !important; color: #f87171 !important; border: 1px solid #ef4444 !important; }
+    .badge-blog { background: rgba(99, 102, 241, 0.2) !important; color: #818cf8 !important; border: 1px solid #6366f1 !important; }
 
     .badge-discount {
       position: absolute !important;
@@ -84,10 +81,11 @@ function injectGlobalStyles() {
       background: #dc2626 !important;
       color: #ffffff !important;
       font-size: 9px !important;
-      font-weight: bold !important;
+      font-weight: 800 !important;
       padding: 2px 5px !important;
       border-radius: 4px !important;
       z-index: 2 !important;
+      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.5) !important;
     }
 
     /* BILD CONTAINER */
@@ -99,8 +97,10 @@ function injectGlobalStyles() {
       justify-content: center !important;
       overflow: hidden !important;
       margin-bottom: 6px !important;
-      background: #fafafa !important;
-      border-radius: 4px !important;
+      background: #ffffff !important;
+      border-radius: 6px !important;
+      padding: 4px !important;
+      box-sizing: border-box !important;
     }
 
     .img-container img {
@@ -111,10 +111,10 @@ function injectGlobalStyles() {
 
     /* TITEL & KATEGORIE */
     .category-tag {
-      font-size: 9px !important;
-      color: #64748b !important;
+      font-size: 8.5px !important;
+      color: #94a3b8 !important;
       text-transform: uppercase !important;
-      font-weight: 600 !important;
+      font-weight: 700 !important;
       margin-bottom: 2px !important;
       white-space: nowrap !important;
       overflow: hidden !important;
@@ -124,7 +124,7 @@ function injectGlobalStyles() {
     .deal-title, .blog-title {
       font-size: 11px !important;
       font-weight: 700 !important;
-      color: #1e293b !important;
+      color: #f1f5f9 !important;
       line-height: 1.3 !important;
       height: 2.6em !important;
       overflow: hidden !important;
@@ -146,39 +146,42 @@ function injectGlobalStyles() {
     .offer-price {
       font-size: 12px !important;
       font-weight: 800 !important;
-      color: #b91c1c !important;
+      color: #f87171 !important;
     }
 
     .regular-price {
       font-size: 9px !important;
-      color: #94a3b8 !important;
+      color: #64748b !important;
       text-decoration: line-through !important;
     }
 
     .btn-buy-amazon, .btn-buy-ali, .btn-read-blog {
       display: block !important;
       width: 100% !important;
-      padding: 5px 0 !important;
+      padding: 6px 0 !important;
       text-align: center !important;
       font-size: 10px !important;
-      font-weight: 700 !important;
-      border-radius: 4px !important;
+      font-weight: 800 !important;
+      border-radius: 6px !important;
       text-decoration: none !important;
-      transition: background 0.2s !important;
+      transition: all 0.2s !important;
       box-sizing: border-box !important;
+      border: none !important;
     }
 
-    .btn-buy-amazon { background: #f59e0b !important; color: #000000 !important; }
-    .btn-buy-amazon:hover { background: #d97706 !important; }
-    .btn-buy-ali { background: #ef4444 !important; color: #ffffff !important; }
-    .btn-buy-ali:hover { background: #dc2626 !important; }
-    .btn-read-blog { background: #2563eb !important; color: #ffffff !important; }
-    .btn-read-blog:hover { background: #1d4ed8 !important; }
+    .btn-buy-amazon { background: linear-gradient(135deg, #f59e0b, #d97706) !important; color: #0f172a !important; }
+    .btn-buy-amazon:hover { filter: brightness(1.1) !important; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4) !important; }
+    
+    .btn-buy-ali { background: linear-gradient(135deg, #ef4444, #b91c1c) !important; color: #ffffff !important; }
+    .btn-buy-ali:hover { filter: brightness(1.1) !important; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4) !important; }
+    
+    .btn-read-blog { background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important; color: #ffffff !important; }
+    .btn-read-blog:hover { filter: brightness(1.1) !important; box-shadow: 0 0 10px rgba(59, 130, 246, 0.4) !important; }
   `;
   document.head.appendChild(style);
 }
 
-/* ---------- 2. GLOBALER HEADER (FIXED OBEN + SOCIAL ICONS) ---------- */
+/* ---------- 2. GLOBALER HEADER (GLASSMORPHISM FIXED + SOCIALS RECHTS) ---------- */
 function loadGlobalHeader() {
   const headerContainer = document.getElementById('global-header');
   if (!headerContainer) return;
@@ -189,22 +192,22 @@ function loadGlobalHeader() {
   const youtubeLink = "https://www.youtube.com/channel/UC7HEbymVzO__iHO1touYN-Q";
 
   headerContainer.innerHTML = `
-    <header class="site-header" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 99999; background-color: #ffffff; box-shadow: 0 1px 5px rgba(0,0,0,0.08);">
+    <header class="site-header" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 99999; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
       <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
-        <a href="/" class="logo" style="font-size: 1.3rem; font-weight: 800; text-decoration: none; color: #0f172a;">🚀 YabuDeals</a>
+        <a href="/" class="logo" style="font-size: 1.3rem; font-weight: 800; text-decoration: none; background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; color: transparent;">🚀 YabuDeals</a>
 
         <div style="display: flex; align-items: center; gap: 20px;">
           <nav style="display: flex; gap: 18px;">
-            <a href="/" style="text-decoration: none; color: #334155; font-size: 0.9rem; font-weight: 600;">Startseite</a>
-            <a href="/blog.html" style="text-decoration: none; color: #334155; font-size: 0.9rem; font-weight: 600;">Blog & Ratgeber</a>
+            <a href="/" style="text-decoration: none; color: #f1f5f9; font-size: 0.9rem; font-weight: 600; transition: color 0.2s;">Startseite</a>
+            <a href="/blog.html" style="text-decoration: none; color: #f1f5f9; font-size: 0.9rem; font-weight: 600; transition: color 0.2s;">Blog & Ratgeber</a>
           </nav>
 
           <!-- SOCIAL ICONS RECHTS IN DER KOPFZEILE -->
-          <div style="display: flex; gap: 12px; align-items: center; border-left: 1px solid #e2e8f0; padding-left: 15px;">
-            <a href="${mapsLink}" target="_blank" rel="noopener" style="color:#64748b; text-decoration:none; display:flex;" title="Google Maps"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5 2.5z"/></svg></a>
-            <a href="${tiktokLink}" target="_blank" rel="noopener" style="color:#64748b; text-decoration:none; display:flex;" title="TikTok"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68a6.34 6.34 0 0 0 10.86 4.48A6.29 6.29 0 0 0 15.84 15V8.56a8.27 8.27 0 0 0 4.75 1.51V6.69z"/></svg></a>
-            <a href="${instagramLink}" target="_blank" rel="noopener" style="color:#64748b; text-decoration:none; display:flex;" title="Instagram"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-            <a href="${youtubeLink}" target="_blank" rel="noopener" style="color:#64748b; text-decoration:none; display:flex;" title="YouTube"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 0 12s0 3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+          <div style="display: flex; gap: 12px; align-items: center; border-left: 1px solid rgba(255, 255, 255, 0.15); padding-left: 15px;">
+            <a href="${mapsLink}" target="_blank" rel="noopener" style="color:#94a3b8; text-decoration:none; display:flex;" title="Google Maps"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5 2.5z"/></svg></a>
+            <a href="${tiktokLink}" target="_blank" rel="noopener" style="color:#94a3b8; text-decoration:none; display:flex;" title="TikTok"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68a6.34 6.34 0 0 0 10.86 4.48A6.29 6.29 0 0 0 15.84 15V8.56a8.27 8.27 0 0 0 4.75 1.51V6.69z"/></svg></a>
+            <a href="${instagramLink}" target="_blank" rel="noopener" style="color:#94a3b8; text-decoration:none; display:flex;" title="Instagram"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+            <a href="${youtubeLink}" target="_blank" rel="noopener" style="color:#94a3b8; text-decoration:none; display:flex;" title="YouTube"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 0 12s0 3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
           </div>
         </div>
       </div>
@@ -212,7 +215,7 @@ function loadGlobalHeader() {
   `;
 }
 
-/* ---------- 3. GLOBALER FOOTER (EINZEILIG & SCHLANK) ---------- */
+/* ---------- 3. GLOBALER FOOTER (MINIMALISTISCH EINZEILIG) ---------- */
 function loadGlobalFooter() {
   const footerContainer = document.getElementById('global-footer');
   if (!footerContainer || footerContainer.dataset.rendered === "true") return;
@@ -220,7 +223,7 @@ function loadGlobalFooter() {
   footerContainer.style.display = 'block';
 
   footerContainer.innerHTML = `
-    <footer style="background: #0f172a; color: #94a3b8; padding: 10px 20px; font-size: 11px; margin-top: 30px; border-top: 1px solid #1e293b;">
+    <footer style="background: #030712; color: #64748b; padding: 12px 20px; font-size: 11px; margin-top: 40px; border-top: 1px solid #1e293b;">
       <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
         <div style="text-align: left;">
           © 2026 YabuDeals · Inkl. MwSt. zzgl. Versand · Partnerprogramm
@@ -236,7 +239,7 @@ function loadGlobalFooter() {
   footerContainer.dataset.rendered = "true";
 }
 
-/* ---------- 4. DATUMS- & SORTIER-FUNKTIONEN (WICHTIG FÜR LADE-SKRIPT) ---------- */
+/* ---------- 4. DATUMS- & SORTIER-FUNKTIONEN ---------- */
 function parseGermanDate(dateStr) {
   if (!dateStr || typeof dateStr !== 'string') return 0;
   try {
@@ -439,7 +442,7 @@ function initSmartFilters() {
       let filteredDeals = filterDeals(window.allLoadedDeals, query, selectedCat);
 
       if (filteredDeals.length === 0) {
-        dealsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b; font-size: 13px;">Keine passenden Angebote gefunden.</div>`;
+        dealsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8; font-size: 13px;">Keine passenden Angebote gefunden.</div>`;
       } else {
         dealsGrid.innerHTML = filteredDeals.slice(0, 36).map(d => dealCardHTML(d)).join('');
       }
@@ -458,7 +461,7 @@ function initSmartFilters() {
       filteredPosts = sortDealsByLatest(filteredPosts);
 
       if (filteredPosts.length === 0) {
-        blogGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b; font-size: 13px;">Keine passenden Beiträge gefunden.</div>`;
+        blogGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8; font-size: 13px;">Keine passenden Beiträge gefunden.</div>`;
       } else {
         blogGrid.innerHTML = filteredPosts.map(p => blogCardHTML(p)).join('');
       }
@@ -485,7 +488,7 @@ function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage
 
   if (startPage > 1) {
     html += `<button class="page-btn" onclick="${onPageChangeFnName}(1)">1</button>`;
-    if (startPage > 2) html += `<span class="page-dots">...</span>`;
+    if (startPage > 2) html += `<span class="page-dots" style="color:#64748b; margin:0 4px;">...</span>`;
   }
 
   for (let i = startPage; i <= endPage; i++) {
@@ -493,7 +496,7 @@ function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage
   }
 
   if (endPage < totalPages) {
-    if (endPage < totalPages - 1) html += `<span class="page-dots">...</span>`;
+    if (endPage < totalPages - 1) html += `<span class="page-dots" style="color:#64748b; margin:0 4px;">...</span>`;
     html += `<button class="page-btn" onclick="${onPageChangeFnName}(${totalPages})">${totalPages}</button>`;
   }
 
