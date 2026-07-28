@@ -1,5 +1,5 @@
 /* ============================================================
-   YABUDEALS – UNIFIED DESIGN SYSTEM, SMARTFILTER & FIXED HEADER
+   YABUDEALS – UNIFIED DESIGN SYSTEM, FIXES & SMARTFILTER
    ============================================================ */
 
 /* Globaler Datenspeicher */
@@ -13,12 +13,12 @@ function injectGlobalStyles() {
   const style = document.createElement('style');
   style.id = 'yabudeals-global-styles';
   style.textContent = `
-    /* Header Fixierung & Platzhalter */
+    /* Body Platzhalter für festen Header */
     body {
       padding-top: 60px !important;
     }
 
-    /* EINHEITLICHES GRID FÜR DEALS & BLOGS */
+    /* EINHEITLICHES 9-SPALTEN GRID (DEALS & BLOG) */
     .deals-grid, .blog-grid, #deals-grid, #blog-grid, #blog-posts-container {
       display: grid !important;
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
@@ -40,7 +40,7 @@ function injectGlobalStyles() {
       }
     }
 
-    /* UNIFIED CARD STYLING (DEALS & BLOG) */
+    /* UNIFIED CARD STYLING */
     .deal-card, .blog-card, article.card {
       background: #ffffff !important;
       border: 1px solid #e2e8f0 !important;
@@ -199,7 +199,7 @@ function loadGlobalHeader() {
             <a href="/blog.html" style="text-decoration: none; color: #334155; font-size: 0.9rem; font-weight: 600;">Blog & Ratgeber</a>
           </nav>
 
-          <!-- SOCIAL ICONS IN DER KOPFZEILE -->
+          <!-- SOCIAL ICONS RECHTS IN DER KOPFZEILE -->
           <div style="display: flex; gap: 12px; align-items: center; border-left: 1px solid #e2e8f0; padding-left: 15px;">
             <a href="${mapsLink}" target="_blank" rel="noopener" style="color:#64748b; text-decoration:none; display:flex;" title="Google Maps"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5 2.5z"/></svg></a>
             <a href="${tiktokLink}" target="_blank" rel="noopener" style="color:#64748b; text-decoration:none; display:flex;" title="TikTok"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68a6.34 6.34 0 0 0 10.86 4.48A6.29 6.29 0 0 0 15.84 15V8.56a8.27 8.27 0 0 0 4.75 1.51V6.69z"/></svg></a>
@@ -212,7 +212,7 @@ function loadGlobalHeader() {
   `;
 }
 
-/* ---------- 3. GLOBALER FOOTER (ULTRA-MINIMALISTISCH EINZEILIG) ---------- */
+/* ---------- 3. GLOBALER FOOTER (EINZEILIG & SCHLANK) ---------- */
 function loadGlobalFooter() {
   const footerContainer = document.getElementById('global-footer');
   if (!footerContainer || footerContainer.dataset.rendered === "true") return;
@@ -222,12 +222,10 @@ function loadGlobalFooter() {
   footerContainer.innerHTML = `
     <footer style="background: #0f172a; color: #94a3b8; padding: 10px 20px; font-size: 11px; margin-top: 30px; border-top: 1px solid #1e293b;">
       <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-        <!-- LINKSBÜNDIG -->
         <div style="text-align: left;">
           © 2026 YabuDeals · Inkl. MwSt. zzgl. Versand · Partnerprogramm
         </div>
 
-        <!-- RECHTSBÜNDIG -->
         <div style="text-align: right;">
           <a href="/impressum.html" style="color:#94a3b8; text-decoration:none;">Impressum</a> | 
           <a href="/datenschutz.html" style="color:#94a3b8; text-decoration:none;">Datenschutz</a>
@@ -238,7 +236,7 @@ function loadGlobalFooter() {
   footerContainer.dataset.rendered = "true";
 }
 
-/* ---------- 4. HELFERFUNKTIONEN ---------- */
+/* ---------- 4. DATUMS- & SORTIER-FUNKTIONEN (WICHTIG FÜR LADE-SKRIPT) ---------- */
 function parseGermanDate(dateStr) {
   if (!dateStr || typeof dateStr !== 'string') return 0;
   try {
@@ -263,15 +261,20 @@ function parseGermanDate(dateStr) {
   }
 }
 
-function sortItemsByLatest(items) {
-  if (!Array.isArray(items)) return [];
-  return items.sort((a, b) => {
+function sortDealsByLatest(deals) {
+  if (!Array.isArray(deals)) return [];
+  return deals.sort((a, b) => {
     const dateA = parseGermanDate(a['DATUM'] || a['Datum'] || a.date || '');
     const dateB = parseGermanDate(b['DATUM'] || b['Datum'] || b.date || '');
     return dateB - dateA;
   });
 }
 
+function sortItemsByLatest(items) {
+  return sortDealsByLatest(items);
+}
+
+/* ---------- 5. BILD- & PREIS-OPTIMIERUNG ---------- */
 function optimizeImageUrl(url, size = 300) {
   const fallback = 'https://via.placeholder.com/300x300?text=Kein+Bild';
   if (!url || typeof url !== 'string') return fallback;
@@ -305,7 +308,17 @@ function formatPrice(val) {
   return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
 }
 
-/* ---------- 5. KARTEN-GENERATOREN ---------- */
+function getDealDetailHref(deal) {
+  const isAli = deal._shop === 'ali';
+  if (isAli) {
+    const link = deal['Affiliate Link'] || deal['Link'] || deal['Produkt-ID / AliExpress Link'] || deal['Produkt-ID'] || '';
+    return link ? `/deal.html?shop=ali&id=${encodeURIComponent(link)}` : '#';
+  }
+  const asin = deal['ASIN / Amazon Link'] || deal['Produkt-ID'] || deal['Link: ybbst-21'] || '';
+  return asin ? `/deal.html?shop=amazon&id=${encodeURIComponent(asin)}` : '#';
+}
+
+/* ---------- 6. KARTEN-GENERATOREN ---------- */
 function dealCardHTML(deal) {
   const isAli = deal._shop === 'ali';
   const shopBadge = isAli
@@ -326,10 +339,7 @@ function dealCardHTML(deal) {
   const category = deal['Kategorie'] || deal.category || 'Angebote';
 
   const buyLink = deal['Affiliate Link'] || deal['Link: ybbst-21'] || deal['Link'] || '#';
-  const asin = deal['ASIN / Amazon Link'] || deal['Produkt-ID'] || '';
-  const detailHref = isAli 
-    ? `/deal.html?shop=ali&id=${encodeURIComponent(buyLink)}` 
-    : `/deal.html?shop=amazon&id=${encodeURIComponent(asin)}`;
+  const detailHref = getDealDetailHref(deal);
 
   return `
     <article class="deal-card">
@@ -387,7 +397,31 @@ function blogCardHTML(post) {
   `;
 }
 
-/* ---------- 6. UNIVERSAL ECHTZEIT-SMARTFILTER ---------- */
+/* ---------- 7. FILTER- ENGINE ---------- */
+function filterDeals(deals, query = '', category = '') {
+  if (!Array.isArray(deals)) return [];
+
+  const cleanQuery = query.toLowerCase().trim();
+  const cleanCat = category.trim();
+
+  let filtered = deals.filter(deal => {
+    const title = (deal['Produkt-Titel'] || deal['Titel'] || deal.title || '').toLowerCase();
+    const cat = (deal['Kategorie'] || deal.category || '').toLowerCase();
+
+    if (cleanQuery && !title.includes(cleanQuery) && !cat.includes(cleanQuery)) {
+      return false;
+    }
+
+    if (cleanCat && (deal['Kategorie'] || deal.category) !== cleanCat) {
+      return false;
+    }
+
+    return true;
+  });
+
+  return sortDealsByLatest(filtered);
+}
+
 function initSmartFilters() {
   const searchInput = document.querySelector('input[type="text"], input[placeholder*="suchen"], #search-input');
   const categorySelect = document.querySelector('select, #category-select');
@@ -401,18 +435,8 @@ function initSmartFilters() {
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const selectedCat = categorySelect ? categorySelect.value.trim() : '';
 
-    /* DEALS FILTERN */
     if (dealsGrid && window.allLoadedDeals && window.allLoadedDeals.length > 0) {
-      let filteredDeals = window.allLoadedDeals.filter(deal => {
-        const title = (deal['Produkt-Titel'] || deal['Titel'] || deal.title || '').toLowerCase();
-        const cat = (deal['Kategorie'] || deal.category || '').toLowerCase();
-
-        if (query && !title.includes(query) && !cat.includes(query)) return false;
-        if (selectedCat && (deal['Kategorie'] || deal.category) !== selectedCat) return false;
-        return true;
-      });
-
-      filteredDeals = sortItemsByLatest(filteredDeals);
+      let filteredDeals = filterDeals(window.allLoadedDeals, query, selectedCat);
 
       if (filteredDeals.length === 0) {
         dealsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b; font-size: 13px;">Keine passenden Angebote gefunden.</div>`;
@@ -421,7 +445,6 @@ function initSmartFilters() {
       }
     }
 
-    /* BLOG FILTERN */
     if (blogGrid && window.allLoadedBlogPosts && window.allLoadedBlogPosts.length > 0) {
       let filteredPosts = window.allLoadedBlogPosts.filter(post => {
         const title = (post.title || post['Titel'] || '').toLowerCase();
@@ -432,7 +455,7 @@ function initSmartFilters() {
         return true;
       });
 
-      filteredPosts = sortItemsByLatest(filteredPosts);
+      filteredPosts = sortDealsByLatest(filteredPosts);
 
       if (filteredPosts.length === 0) {
         blogGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b; font-size: 13px;">Keine passenden Beiträge gefunden.</div>`;
@@ -444,6 +467,39 @@ function initSmartFilters() {
 
   if (searchInput) searchInput.addEventListener('input', executeFilter);
   if (categorySelect) categorySelect.addEventListener('change', executeFilter);
+}
+
+function renderPaginationHTML(containerEl, totalItems, itemsPerPage, currentPage, onPageChangeFnName) {
+  if (!containerEl) return;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  if (totalPages <= 1) {
+    containerEl.innerHTML = '';
+    return;
+  }
+
+  let html = `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="${onPageChangeFnName}(${currentPage - 1})">&laquo; Zurück</button>`;
+  let startPage = Math.max(1, currentPage - 2);
+  let endPage = Math.min(totalPages, startPage + 4);
+
+  if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+
+  if (startPage > 1) {
+    html += `<button class="page-btn" onclick="${onPageChangeFnName}(1)">1</button>`;
+    if (startPage > 2) html += `<span class="page-dots">...</span>`;
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="${onPageChangeFnName}(${i})">${i}</button>`;
+  }
+
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) html += `<span class="page-dots">...</span>`;
+    html += `<button class="page-btn" onclick="${onPageChangeFnName}(${totalPages})">${totalPages}</button>`;
+  }
+
+  html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="${onPageChangeFnName}(${currentPage + 1})">Weiter &raquo;</button>`;
+
+  containerEl.innerHTML = html;
 }
 
 function populateCategorySelect(selectEl, items) {
@@ -466,7 +522,7 @@ function populateCategorySelect(selectEl, items) {
   });
 }
 
-/* ---------- 7. AUTOMATISCHER START ---------- */
+/* ---------- 8. AUTOMATISCHER START ---------- */
 function initGlobalComponents() {
   injectGlobalStyles();
   loadGlobalHeader();
